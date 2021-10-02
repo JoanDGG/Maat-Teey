@@ -1,0 +1,667 @@
+Nombre,Estadistica,Boosteo,Mejora,Estropeo,Espacio,Usos,Cantidad,Precio
+Campamento,,,,,,,,
+Cabana,,,,,,,,
+Telefono,--,0,Telefono con senal infinita,Walkie Talkie,1,1,5,5
+Botella,H,10,3 Botella,Basura,1,1,1,1
+Brujula,I,1,GPS,Hierro,1,0,1,1
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Disfraz,S,1,Traje de buzo,Capa,5,0,1,1
+Simbolo comunidad,C,2,Amuleto,Pin de bob esponja,0.25,0,1,0
+Navaja,F,1,Cuchillo,Hierro,1,0,1,2
+Linterna,I,2,Casco con linterna,2 Pila,1,0,1,2
+Jabon,--,0,Aceite,Basura,0.5,1,2,0
+Control de la tele,--,0,Control universal,2 Pila,1,0,1,2
+Balon,F,1,20 Owo,Balon ponchado,2,0,1,2
+Mochila,P,18,Mochila campista,Cubeta,0,0,5,15
+Comedor,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Gaytorade,E,1,Pocion energia I,Botella,1,1,33,2
+Cuchillo,F,2,Espada,Navaja,1,0,5,4
+Dinero,C,1,3 Dinero,Papel,0,1,10,1
+Alcohol,C,1,Aceite,Botella,1,1,5,1
+Hielo,--,0,Hielo infinito,Botella,0,1,10000,0
+Sarten,F,2,Escudo,Hierro,3,0,3,4
+Almacen,,,,,,,,
+Gaytorade,E,1,Pocion energia I,Botella,1,1,4,2
+Hacha,F,3,Hacha mejorada,Martillo,3,0,2,6
+Cuerda,--,0,Cadena,Hilo,2,0,1,2
+Lena,--,0,Lena grande,Rama,4,1,3,1
+Clavo,--,0,Tornillo,Tornillo,0.1,1,10,0
+Martillo,F,2,Mazo,Rama,2,0,2,4
+Linterna,I,1,Casco con linterna,2 Pila,1,0,2,1
+Fosforo,--,0,Encendedor,Rama,0.1,1,10000,0
+Cabanas vecinas,,,,,,,,
+Botella,H,10,3 Botella,Basura,1,1,50,1
+Gaytorade,E,1,Pocion energia I,Botella,1,1,5,2
+Control de la tele,--,0,Control universal,2 Pila,1,0,3,2
+Jabon,--,0,Aceite,Basura,0.5,1,50,0
+Simbolo comunidad,C,2,Amuleto,Pin de bob esponja,0.25,0,50,0
+Mochila,P,18,Mochila campista,Cubeta,0,0,5,15
+Dinero,C,1,3 Dinero,Papel,0,1,50,1
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Puesto de seguridad,,,,,,,,
+Binoculares,I,2,Mira de rifle,Lupa,1,0,1,2
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Linterna,I,2,Casco con linterna,2 Pila,1,0,1,2
+Magnum,F,4,Pistola laser,Cartucho de magnum,1,0,1,8
+Taxer,F,1,Pistola laser,2 Pila,1,0,1,4
+Cartucho de magnum,--,0,Cartucho de sniper,Bala de magnum,1,1,3,3
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Bosque,,,,,,,,
+Aire libre,,,,,,,,
+Rama,F,1,Lena,Basura,0.8,1,10000,0
+Comida,H,5,Pocion salud I,Veneno I,1,1,10000,1
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Flecha,--,0,Flecha emplumada,Flecha primitiva,0.8,1,10000,2
+Arco,F,3,Arco mejorado,Lena,20,0,5,6
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,5,4
+Lodo,--,0,Lodo,Lodo,0,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Planta naranja,--,0,Planta naranja,Planta naranja,0,1,10000,0
+Cabana de guardabosques,,,,,,,,
+Fragmento de libro de secretos,Habilidad,0,Fragmento de libro de secretos,Papel,0,1,1,300
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Rifle,F,6,Sniper,Arco mejorado,12,0,1,12
+Sombrero,C,5,Casco,Peluca,4,0,1,5
+Trampa de osos,I,2,Jaula,Hierro,5,1,2,2
+Cartucho de sniper,--,0,2 Cartucho de sniper,Bala de Sniper,2,1,2,5
+Carnada,I,1,Comida,Basura,0.3,1,20,1
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Entrada mina bosque,,,,,,,,
+Casco con linterna,R,1,Pocion resistencia I,%Casco/Linterna,6,0,12,3
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,12,4
+Traje de obrero,C,2,Traje de buzo,Disfraz,6,0,12,2
+Walkie talkie,I,3,Telefono,2 Pila,1,1,12,3
+Pradera,,,,,,,,
+Comida,H,5,Pocion salud I,Veneno I,1,1,10000,1
+Lodo,--,0,Lodo,Lodo,0,1,10000,0
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Planta naranja,--,0,Planta naranja,Planta naranja,0,1,10000,0
+Corazon del bosque,,,,,,,,
+Rama,F,1,Lena,Basura,0.8,1,10000,0
+Comida,H,5,Pocion salud I,Veneno I,1,1,10000,1
+Hongo,E,5,Pocion energia II,Comida,0.5,1,100000,0
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Flecha,--,0,Flecha emplumada,Flecha primitiva,0.8,1,10000,2
+Arco,F,3,Arco mejorado,Lena,20,0,5,6
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,5,4
+Lodo,--,0,Lodo,Lodo,0,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Planta naranja,--,0,Planta naranja,Planta naranja,0,1,10000,0
+Esencia de bida,Revivir,0,Esencia de bida,SCP 427,1,1,1,14
+Carretera,,,,,,,,
+Gasolina,--,0,Pocion velocidad I,Aceite,4,1,5,5
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,5,4
+Pueblo,,,,,,,,
+Comunidad,,,,,,,,
+Dinero,C,1,3 Dinero,Papel,0,1,10000,1
+Comida,H,15,Pocion salud I,Veneno I,1,1,10000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Gaytorade,E,1,Pocion energia I,Botella,1,1,24,2
+Bate,F,3,Mazo,Lena,3,0,5,6
+Maleta,P,36,Mochila campista,Mochila,0,0,2,20
+Desodorante,C,1,Alcohol,Basura,1,1,3,1
+Casa de chaman,,,,,,,,
+Fragmento de libro de secretos,Habilidad,0,Fragmento de libro de secretos,Papel,0,1,1,300
+Pocion salud II,Mitad salud,0,Pocion salud III,Pocion salud I,1,1,5,1
+Antidoto II,Saludable II,0,Antidoto III,Antidoto I,1,1,5,1
+Hongo,E,5,Pocion energia II,Comida,0.5,1,20,0
+Pocion fuerza II,F,4,Pocion fuerza III,Pocion fuerza  I,1,1,5,1
+Pocion resistencia II,R,4,Pocion resistencia III,Pocion resistencia I,1,1,5,1
+Pocion carisma II,C,4,Pocion carisma III,Pocion carisma I,1,1,5,1
+Pocion inteligencia II,I,4,Pocion inteligencia III,Pocion inteligencia I,1,1,5,1
+Pocion sabiduria II,S,4,Pocion sabiduria III,Pocion sabiduria I,1,1,5,1
+Pocion invisibilidad II,Invisible,0,Pocion invisibilidad III,Pocion invisibilidad I,1,1,5,1
+Pocion velocidad II,V,2,Pocion velocidad III,Pocion velocidad I,1,1,5,1
+Pocion energia II,E,4,Pocion energia III,Pocion energia I,1,1,5,1
+Veneno II,Envenenado II,6,Veneno III,Veneno I,1,1,5,1
+Ojo de vaca,Envenenado I,9,Veneno I,Comida,1,1,10,0
+Amuleto,--,0,3 Amuleto,Pin de bob esponja,0.25,1,5,20
+Ayuntamiento,,,,,,,,
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Dinero,C,1,3 Dinero,Papel,0,1,10000,1
+Comida,H,15,Pocion salud I,Veneno I,1,1,10000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Entrada mina pueblo,,,,,,,,
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,5,10
+Oro,C,2,2 Oro,Basura,0.2,1,2,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10,5
+Mercado,,,,,,,,
+Mercado,,,,,,,,
+Fragmento de libro de secretos,Habilidad,0,Fragmento de libro de secretos,Papel,0,1,3,300
+Casco,R,2,Casco con linterna,Sombrero,5,0,10000,4
+Pechera,R,3,Escudo,Chaqueta de cuero,8,0,10000,6
+Pantalones,R,2,Pechera,Shorts,7,0,10000,4
+Botas,R,2,Pantalones,Crocks,4,0,10000,4
+Fosforo,--,0,Encendedor,Rama,0.1,1,10000,0
+Flecha,--,0,Flecha emplumada,Flecha primitiva,0.8,1,10000,2
+Arco,F,3,Arco mejorado,Lena,20,0,10000,6
+Trampa de osos,I,2,Jaula,Hierro,5,1,10000,2
+Carnada,I,1,Comida,Basura,0.3,1,10000,1
+Gasolina,--,0,Pocion velocidad I,Aceite,4,1,10000,5
+Llave inglesa,F,2,Bate,Martillo,2,0,10000,4
+Gaytorade,E,1,Pocion energia I,Botella,1,1,10000,2
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,10000,4
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,10000,1
+Clavo,--,0,Tornillo,Tornillo,0.1,1,10000,0
+Tornillo,--,0,Clavo,Clavo,0.1,1,10000,0
+Brujula,I,1,GPS,Hierro,1,0,10000,1
+Dinero,C,1,3 Dinero,Papel,0,1,10000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Espada,F,4,Espada mejorada,%Cuchillo/Daga,4,0,10000,8
+Amuleto,--,0,3 Amuleto,Pin de bob esponja,0.25,1,10000,20
+Escudo,R,2,Escudo mejorado,Pechera,10,0,10000,4
+Capa,C,2,Disfraz,Tela,1,0,10000,2
+Disfraz,C,1,Traje de buzo,Capa,5,0,10000,1
+Sombrero,C,5,Casco,Peluca,4,0,10000,5
+Cuerda,--,0,Cadena,Hilo,2,0,10000,2
+Hacha,F,1,Hacha de guerra,Martillo,3,0,10000,2
+Aceite,--,0,Gasolina,Alcohol,1,1,10000,2
+Linterna,I,2,Casco con linterna,2 Pila,1,0,10000,2
+Mochila campista,P,54,Mochila mejorada,Maleta,0,0,10000,30
+Mapa,I,1,GPS,Papel,0.5,0,10000,5
+Binoculares,I,2,Mira de rifle,Lupa,1,0,10000,2
+Martillo,F,1,Mazo,Rama,2,0,10000,2
+Cuchillo,F,1,Espada,Navaja,1,0,10000,2
+Comida,H,15,Pocion salud I,Veneno I,1,1,10000,1
+Remo,F,2,Remo mejorado,Lena grande,4,0,10000,4
+Anzuelo,I,2,Cana,Clavo,0.5,1,10000,2
+Cana,I,1,Cana mejorada,Anzuelo,12,0,10000,1
+Cubeta,P,9,Mochila,Hierro,10,0,10000,2
+Banco,,,,,,,,
+Dinero,C,1,3 Dinero,Papel,0,1,10000,1
+Oro,C,2,2 Oro,Basura,0.2,1,30,40
+Nota de acoso,C,-2,Nota amenazante,Nota de burla,0,1,5,0
+Nota amenazante,H,-100,XXX,Nota de acoso,0,1,1,0
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Mina,,,,,,,,
+Zona de exploracion I,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Zona de exploracion II,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,--,-25,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Tunel de exploracion I,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel de exploracion II,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel salida bosque,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel salida pueblo,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel salida pantano,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel salida deshuesadero,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel ???,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Tunel derrumbado,,,,,,,,
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Puestos de trabajo,,,,,,,,
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,20,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,10,14
+Antorcha,I,1,Linterna,Rama,2,0,10000,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Zona clausurada,,,,,,,,
+Hueso,F,1,Cadaver del usuario,Basura,2,0,10000,0
+Carne humana,H,5,Comida,Carne seca humana,1,1,10000,0
+Pico de hierro,F,2,Pico reforzado,%Lena/Hierro,4,0,5,4
+Dinamita,F,7,2 Dinamita,Polvora,1,1,1,14
+Antorcha,I,1,Linterna,Rama,2,0,1,0
+Carbon,--,0,2 Carbon,Piedra,0.2,1,10000,5
+Hierro,--,0,2 Hierro,Basura,0.2,1,10000,10
+Oro,C,2,2 Oro,Basura,0.2,1,50,40
+Polvora,--,0,Dinamita,Basura,0.2,1,10000,5
+Diamante,C,3,2 Diamante,Piedra,0.2,1,10,100
+Edificio Abandonado,,,,,,,,
+Entrada,,,,,,,,
+Y909,Confusion,2,2 Y909 ,Veneno III,1,1,10000,0
+Maquina,,,,,,,,
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Palanca,--,0,Palanca,Palanca,0,1,1,0
+Escalera,,,,,,,,
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+SCP 053,--,0,SCP 053,SCP 053,1000,1,1,0
+Barandal,--,0,Barandal,Barandal,0,1,1,0
+Laboratorio,,,,,,,,
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Llave inglesa,F,2,Bate,Martillo,2,0,10,4
+Tornillo,--,0,Clavo,Clavo,0.1,1,50,0
+Y909,Confusion,2,2 Y909 ,Veneno III,1,1,10000,0
+Gasolina,--,0,Pocion velocidad I,Aceite,4,1,5,5
+Mazo,F,2,Hacha,Martillo,4,0,5,4
+Pistola laser,F,6,Pistola laser mejorada,Magnum,1,0,1,12
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Sala de investigacion,,,,,,,,
+SCP 079,--,0,SCP 079,SCP 079,5000,0,1,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Llave inglesa,F,2,Bate,Martillo,2,0,5,4
+Tornillo,--,0,Clavo,Clavo,0.1,1,50,0
+Y909,Confusion,2,2 Y909 ,Veneno III,1,1,10000,0
+Gasolina,--,0,Pocion velocidad I,Aceite,4,1,5,5
+Mazo,F,2,Hacha,Martillo,4,0,1,4
+Puerto,,,,,,,,
+Bahia,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Remo,F,2,Remo mejorado,Lena grande,4,0,10,4
+Anzuelo,I,2,Cana,Clavo,0.5,1,10,2
+Cana,I,1,Cana mejorada,Anzuelo,12,0,2,1
+Cubeta,P,9,Mochila,Hierro,10,0,10,2
+Carguero,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Remo,F,2,Remo mejorado,Lena grande,4,0,10,4
+Anzuelo,I,2,Cana,Clavo,0.5,1,10,2
+Cana,I,1,Cana mejorada,Anzuelo,12,0,2,1
+Cubeta,P,9,Mochila,Hierro,10,0,10,2
+Aceite de pecao,--,0,Gasolina de pecao,Aceite,1,1,10000,3
+Normancueva,,,,,,,,
+Entrada mistica,,,,,,,,
+Nota de burla,--,0,Nota de acoso,Nota de consejo,0,1,10000,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Sala principal,,,,,,,,
+Fragmento de libro de secretos,Habilidad,0,Fragmento de libro de secretos,Papel,0,1,1,300
+Nota de burla,--,0,Nota de acoso,Nota de consejo,0,1,10000,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Montana,,,,,,,,
+Cabana doctor,,,,,,,,
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Sustancia misteriosa II,--,0,Sustancia misteriosa III,Sustancia misteriosa I,1,1,10,0
+Abrigo,R,1,Disfraz,Capa,1.25,0,1,2
+Mochila campista,P,54,Mochila campista mejorada,Maleta,0,0,1,30
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10,0
+SCP 500,Salud maxima,0,SCP 427,Pocion salud III,0.03,1,10,0
+Shaed,--,0,Shaed mejorado,Capa,1,0,1,3
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Cima,,,,,,,,
+Piedra,F,1,Carbon,Basura,1,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Subida,,,,,,,,
+Piedra,F,1,Carbon,Basura,1,1,10000,0
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Pantano,,,,,,,,
+Zona de control,,,,,,,,
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+SCP 682,--,0,SCP 682,SCP 682,10000,1,1,0
+Cartucho de magnum,--,0,Cartucho de sniper,Bala de magnum,1,1,10000,3
+Tarjeta de identificacion I,--,0,Tarjeta de identificacion II,Tarjeta de identificacion 0,0.25,0,10000,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Exterior,,,,,,,,
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Amuleto,--,0,3 Amuleto,Pin de bob esponja,0.25,1,10,20
+Casa ogro,,,,,,,,
+Amuleto,--,0,3 Amuleto,Pin de bob esponja,0.25,1,10,20
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10,0
+Cartucho de magnum,--,0,Cartucho de sniper,Bala de magnum,1,1,10,3
+Tarjeta de identificacion,--,0,Tarjeta de identificacion II,Tarjeta de identificacion 0,0.25,1,10,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Entrada mina pantano,,,,,,,,
+Lodo,--,0,Lodo,Lodo,0,1,10000,0
+Deshuesadero,,,,,,,,
+Casa,,,,,,,,
+Carne seca humana,H,5,Carne humana,Basura,1,1,10000,0
+Daga,F,2,Espada,Cuchillo,2,0,3,4
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Sotano,,,,,,,,
+Cuerda,--,0,Cadena,Hilo,2,0,1,2
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Carniceria,,,,,,,,
+Hueso,F,1,Cadaver del usuario,Basura,2,0,20,0
+Carne humana,H,5,Comida,Carne seca humana,1,1,10000,0
+Mashete,F,4,Eshpada,Cushillo,3,0,1,8
+Carne seca humana,H,5,Carne humana,Basura,1,1,10000,0
+Daga,F,2,Espada,Cuchillo,2,0,2,4
+Cuerda,--,0,Cadena,Hilo,2,0,1,2
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Lector de poder,I,5,Lector de poder mejorado,Lentes,1,0,1,5
+Basurero,,,,,,,,
+Hueso,F,1,Cadaver del usuario,Basura,2,0,10000,0
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Alacena,,,,,,,,
+Hueso,F,1,Cadaver del usuario,Basura,2,0,10000,0
+Carne humana,H,5,Comida,Carne seca humana,1,1,10000,0
+Cuerda,--,0,Cadena,Hilo,2,0,1,2
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Entrada mina deshuesadero,,,,,,,,
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Fondo del mar,,,,,,,,
+Submarino,,,,,,,,
+Fragmento de libro de secretos,Habilidad,0,Fragmento de libro de secretos,Papel,0,1,1,300
+Traje de buzo,--,0,Traje de buzo mejorado,Traje de obrero,8,0,32,7
+Tridente,F,7,Tridente mejorado,Tenedor,4,0,1,14
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,1,0
+Mar,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Cuerda,--,0,Cadena,Hilo,2,0,3,2
+Rama,F,1,Lena,Basura,0.8,1,5000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Basura,--,0,Bashura,--,2,1,10000,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Profundidades,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Queso,H,10,6 Queso,3 Queso,1,1,100000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Dinero,C,1,3 Dinero,Papel,0,1,10000,1
+Cuerda,--,0,Cadena,Hilo,2,0,4,2
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Basura,--,0,Bashura,--,2,1,10000,0
+Owo,--,0,5 Owo,Basura,0,1,10000,0
+Traje de buzo,--,0,Traje de buzo mejorado,Traje de obrero,8,0,5,7
+Hueso,F,1,Cadaver del usuario,Basura,2,0,10000,0
+Rama,F,1,Lena,Basura,0.8,1,5000,0
+Tridente,F,7,Tridente mejorado,Tenedor,4,0,1,14
+Puerta,,,,,,,,
+campamento,,,,,,,,
+camion,,,,,,,,
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+cabana,,,,,,,,
+comedor,,,,,,,,
+Comida,H,10,Pocion salud I,Veneno I,1,1,10000,1
+Botella,H,10,3 Botella,Basura,1,1,10000,1
+Hongo,E,5,Pocion energia II,Comida,0.5,1,10000,0
+Cuchillo,F,2,Espada,Navaja,1,0,1,4
+Dinero,C,1,3 Dinero,Papel,0,1,1,1
+Alcohol,C,1,Aceite,Botella,1,1,1,1
+Hielo,--,0,Hielo infinito,Botella,0,1,1,0
+Sarten,F,2,Escudo,Hierro,3,0,1,4
+almacen,,,,,,,,
+Hacha,F,3,Hacha mejorada,Martillo,3,0,1,6
+Cuerda,--,0,Cadena,Hilo,2,0,1,2
+Lena,--,0,Lena grande,Rama,4,1,1,1
+Clavo,--,0,Tornillo,Tornillo,0.1,1,1,0
+Martillo,F,2,Mazo,Rama,2,0,1,4
+Linterna,I,1,Casco con linterna,2 Pila,1,0,1,1
+Fosforo,--,0,Encendedor,Rama,0.1,1,1,0
+cabanas vecinas,,,,,,,,
+Botella,H,10,3 Botella,Basura,1,1,1,1
+Control de la tele,--,0,Control universal,2 Pila,1,0,1,2
+Jabon,--,0,Aceite,Basura,0.5,1,1,0
+Simbolo comunidad,C,2,Amuleto,Pin de bob esponja,0.25,0,1,0
+Dinero,C,1,3 Dinero,Papel,0,1,1,1
+puesto de seguridad,,,,,,,,
+Binoculares,I,2,Mira de rifle,Lupa,1,0,1,2
+Mapa,I,1,GPS,Papel,0.5,0,1,5
+Linterna,I,2,Casco con linterna,2 Pila,1,0,1,2
+Magnum,F,4,Pistola laser,Cartucho de magnum,1,0,1,8
+Taxer,F,1,Pistola laser,2 Pila,1,0,1,4
+Cartucho de magnum,--,0,Cartucho de sniper,Bala de magnum,1,1,1,3
+aire libre,,,,,,,,
+Rama,F,1,Lena,Basura,0.8,1,5000,0
+Comida,H,5,Pocion salud I,Veneno I,1,1,5000,1
+Antorcha,I,1,Linterna,Rama,2,0,5000,0
+Flecha,--,0,Flecha emplumada,Flecha primitiva,0.8,1,5000,2
+Arco,F,3,Arco mejorado,Lena,20,0,1,6
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,1,4
+Lodo,--,0,Lodo,Lodo,0,1,5000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,5000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,5000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,5000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,5000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,5000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,5000,0
+Planta naranja,--,0,Planta naranja,Planta naranja,0,1,5000,0
+pradera,,,,,,,,
+Comida,H,5,Pocion salud I,Veneno I,1,1,10000,1
+Lodo,--,0,Lodo,Lodo,0,1,10000,0
+Planta azul,--,0,Planta azul,Planta azul,0,1,10000,0
+Planta blanca,--,0,Planta blanca,Planta blanca,0,1,10000,0
+Planta roja,--,0,Planta roja,Planta roja,0,1,10000,0
+Planta verde,--,0,Planta verde,Planta verde,0,1,10000,0
+Planta morada,--,0,Planta morada,Planta morada,0,1,10000,0
+Planta amarilla,--,0,Planta amarilla,Planta amarilla,0,1,10000,0
+Planta naranja,--,0,Planta naranja,Planta naranja,0,1,10000,0
+carretera,,,,,,,,
+Gasolina,--,0,Pocion velocidad I,Aceite,4,1,5,5
+Chaqueta de cuero,R,2,Pechera,Carne humana,1.25,0,5,4
+entrada,,,,,,,,
+Mejoras,,,,,,,,
+Bate con clavos,F,4,Bate con clavos,Bate,4,0,10000,7
+Queso lunar,H,40,XXX,Queso,-2,0,10000,317
+Padalustro,F,500,XXX,50 Owo,-4,0,10000,1000
+Pistola laser mejorada,F,8,Pistola laser mejorada,Pistola laser,1,0,10000,20
+Mochila mejorada,P,63,Mochila mejorada,Mochila campista,0,0,10000,50
+Balon ponchado,--,0,Balon,Basura,0.5,0,10000,0
+Control universal,--,0,Control universal,Control de la tele,1,0,10000,3
+GPS,--,0,Telefono,Mapa,1,0,10000,1
+Pin de bob esponja,C,10,Simbolo comunidad,Basura,0,0,10000,0
+Pila,--,0,%Telefono/GPS/Control de la tele/Walkie talkie,Basura,0.17,1,10000,4
+Cadena,F,2,Alambre de puas,Cuerda,2,0,10000,0
+Hilo,--,0,Cuerda,Basura,1,1,10000,1
+Encendedor,--,0,Antorcha,Fosforo,0.5,0,10000,7
+Mira de rifle,--,0,Mira de rifle,Binoculares,0.5,0,10000,5
+Flecha emplumada,--,0,2 Flecha emplumadas,Flecha,0.8,1,10000,0
+Flecha primitiva,--,0,Flecha,Rama,0.8,1,10000,5
+Jaula,--,0,Jaula mas grande,Trampa de osos,69,1,10000,0
+Nota de consejo,C,1,2 Nota de consejo,Nota de burla,0,0,10000,0
+Nota de acoso,C,-2,Nota amenazante,Nota de burla,0,1,10000,0
+Nota amenazante,H,-3000,XXX,Nota de acoso,0,1,10000,21
+SCP 427,FRH,2,Esencia de bida,SCP 500,0.25,1,10000,0
+Esencia de bida,Revivir,0,Esencia de bida,SCP 427,1,1,10000,14
+Eshpada,F,7,Eshpada mejorada,Mashete,4,0,10000,6
+Cushillo,F,3,Mashete,Bashura,2,0,10000,10
+Traje de buzo mejorado,V,5,Traje de buzo mejorado,Traje de buzo,6,0,10000,10
+Telefono con senal infinita,--,0,Telefono con senal infinita,Telefono,1,0,10000,0
+Basura,--,0,Bashura,Basura,2,1,10000,0
+Papel,--,0,Mapa,Basura,0.5,1,10000,0
+Hielo infinito,--,0,Hielo infinito,Hielo,0,0,10000,10
+Hacha mejorada,F,5,Hacha de guerra,Hacha,3,0,10000,2
+Lena grande,--,0,Lena grande,Lena,8,1,10000,2
+Lupa,S,2,Binoculares,Lentes,1,0,10000,0
+Bala de magnum,--,0,Cartucho de magnum,Polvora,0.0625,1,10000,10
+Bala de sniper,--,0,Cartucho de sniper,Polvora,0.0625,1,10000,10
+Arco mejorado,F,5,Rifle,Arco,20,0,10000,16
+Sniper,F,8,Sniper,Rifle,12,0,10000,3
+Peluca,C,3,Sombrero,Hilo,0.5,0,10000,6
+Pico reforzado,F,3,Hacha,Pico,4,0,10000,2
+Shorts,R,1,Pantalones,Hierro,3,0,10000,4
+Crocks,C,2,Botas,Basura,2,0,10000,12
+Espada mejorada,F,6,Eshpada,Espada,4,0,10000,8
+Escudo mejorado,R,4,Escudo mejorado,Escudo,10,0,10000,14
+Hacha de guerra,F,7,Hacha de guerra,Hacha mejorada,3,0,10000,0
+Tela,--,0,%Capa/Peluca,Hilo,1,1,10000,0
+Cadaver del usuario,C,-3,2 Cadaver del usuario,Hueso,20,0,10000,8
+Remo mejorado,F,4,2 Remo,Remo,4,0,10000,2
+Cana mejorada,I,2,2 Cana,Cana,12,0,10000,6
+Gasolina de pecao,--,0,Pocion velocidad I,Aceite de pecao,4,1,10000,0
+Sustancia misteriosa III,salud dados 2,0,Sustancia misteriosa III,Sustancia misteriosa II,1,1,10000,0
+Sustancia misteriosa I,salud dados 0,0,Sustancia misteriosa II,Botella,1,1,10000,4
+Shaed mejorado,S,7,Shaed mejorado,Shaed,1,0,10000,0
+Tarjeta de identificacion II,--,0,Tarjeta de identificacion II,Tarjeta de identificacion I,0.25,0,10000,0
+Tarjeta de identificacion 0,--,0,Tarjeta de identificacion I,Papel,0.25,0,10000,7
+Lector de poder mejorado,I,7,Lector de poder mejorado,Lector de poder,1,0,10000,1
+Lentes,I,1,Lupa,Basura,1,0,10000,18
+Tridente mejorado,F,9,Tridente,Tridente,4,0,10000,2
+Tenedor,F,1,Tridente,Nota de burla,1,0,10000,10
+Jaula mas grande,--,0,XXX,Jaula,420,1,10000,1
+Bashura,--,0,10 Owo,Basura,2,1,10000,0
+Pocion salud I,Cuarto salud,0,Pocion salud II,Pocion salud I,1,1,10000,0
+Antidoto I,Saludable I,0,Antidoto II,Antidoto I,1,1,10000,0
+Pocion fuerza I,F,2,Pocion fuerza II,Pocion fuerza I,1,1,10000,0
+Pocion resistencia I,R,2,Pocion resistencia II,Pocion resistencia I,1,1,10000,0
+Pocion carisma I,C,2,Pocion carisma II,Pocion carisma I,1,1,10000,0
+Pocion inteligencia I,I,2,Pocion inteligencia II,Pocion inteligencia I,1,1,10000,0
+Pocion sabiduria I,S,2,Pocion sabiduria II,Pocion sabiduria I,1,1,10000,0
+Pocion invisibilidad I,Invisible,0,Pocion invisibilidad II,Pocion invisibilidad I,1,1,10000,0
+Pocion velocidad I,V,1,Pocion velocidad II,Pocion velocidad I,1,1,10000,0
+Pocion energia I,E,2,Pocion energia II,Pocion energia I,1,1,10000,0
+Veneno I,Envenenado I,9,Veneno II,Veneno I,1,1,10000,0
+Pocion salud III,Tres cuartos salud,0,Pocion salud III,Pocion salud II,1,1,10000,0
+Antidoto III,Saludable III,0,Antidoto III,Antidoto II,1,1,10000,0
+Pocion fuerza III,F,6,Pocion fuerza III,Pocion fuerza II,1,1,10000,0
+Pocion resistencia III,R,6,Pocion resistencia III,Pocion resistencia II,1,1,10000,0
+Pocion carisma III,C,6,Pocion carisma III,Pocion carisma II,1,1,10000,0
+Pocion inteligencia III,I,6,Pocion inteligencia III,Pocion inteligencia II,1,1,10000,0
+Pocion sabiduria III,S,6,Pocion sabiduria III,Pocion sabiduria II,1,1,10000,0
+Pocion invisibilidad III,Invisible,0,Pocion invisibilidad III,Pocion invisibilidad II,1,1,10000,0
+Pocion velocidad III,V,3,Pocion velocidad III,Pocion velocidad II,1,1,10000,0
+Pocion energia III,E,6,Pocion energia III,Pocion energia II,1,1,10000,0
+Veneno III,Envenenado III,3,Veneno III,Veneno II,1,1,10000,0
+Dropeos,,,,,,,,
+Pelaje,--,0,Pelaje,Pelaje,0,1,1,0
+HDMI,--,0,HDMI,HDMI,0,1,1,0
+Diario,--,0,Diario,Diario,0,1,1,0
+Lengua,--,0,Lengua,Lengua,0,1,1,0
+Curita wendiguito,--,0,Curita wendiguito,Curita wendiguito,0,1,1,0
+Colmillo,--,0,Colmillo,Colmillo,0,1,1,0
+Oreja,--,0,Oreja,Oreja,0,1,1,0
+Pico,--,0,Pico,Pico,0,1,1,0
+Cuerno,--,0,Cuerno,Cuerno,0,1,1,0
+Tentaculito,--,0,Tentaculito,Tentaculito,0,1,1,0
+Pelo,--,0,Pelo,Pelo,0,1,1,0
+Tecla,--,0,Tecla,Tecla,0,1,1,0
+Escama,--,0,Escama,Escama,0,1,1,0
+Cadaver de Mirek,C,-3,2 Cadaver de Mirek,Hueso,20,0,1,0
+Cadaver de Sebas,C,-3,2 Cadaver de Sebas,Hueso,20,0,1,0
+Cadaver de Ruben,C,-3,2 Cadaver de Ruben,Hueso,20,0,1,0
+Cadaver de Turati,C,-3,2 Cadaver de Turati,Hueso,20,0,1,0
+Cadaver de Norman,C,-3,2 Cadaver de Norman,Hueso,20,0,1,0
+Esencia salud I,--,0,Esencia salud II,Planta blanca,0,1,10000,0
+Esencia fuerza I,--,0,Esencia fuerza II,Planta roja,0,1,10000,0
+Esencia sabiduria I,--,0,Esencia sabiduria II,Planta morada,0,1,10000,0
+Esencia carisma I,--,0,Esencia carisma II,Planta amarilla,0,1,10000,0
+Esencia inteligencia I,--,0,Esencia inteligencia II,Planta verde,0,1,10000,0
+Esencia resistencia I,--,0,Esencia resistencia II,Planta azul,0,1,10000,0
+Esencia velocidad I,--,0,Esencia velocidad II,%Planta azul/Planta blanca/Planta roja,0,1,10000,0
+Esencia energia I,--,0,Esencia energia II,Planta naranja,0,1,10000,0
+Esencia invisibilidad I,--,0,Esencia invisibilidad II,%Planta azul/Planta verde/Planta morada,0,1,10000,0
+Esencia salud II,--,0,Esencia salud III,Esencia salud I,0,1,10000,0
+Esencia fuerza II,--,0,Esencia fuerza III,Esencia fuerza I,0,1,10000,0
+Esencia sabiduria II,--,0,Esencia sabiduria III,Esencia sabiduria I,0,1,10000,0
+Esencia carisma II,--,0,Esencia carisma III,Esencia carisma I,0,1,10000,0
+Esencia inteligencia II,--,0,Esencia inteligencia III,Esencia inteligencia I,0,1,10000,0
+Esencia resistencia II,--,0,Esencia resistencia III,Esencia resistencia I,0,1,10000,0
+Esencia velocidad II,--,0,Esencia velocidad III,Esencia velocidad I,0,1,10000,0
+Esencia energia II,--,0,Esencia energia III,Esencia energia I,0,1,10000,0
+Esencia invisibilidad II,--,0,Esencia invisibilidad III,Esencia invisibilidad I,0,1,10000,0
+Esencia salud III,--,0,Esencia salud III,Esencia salud II,0,1,10000,0
+Esencia fuerza III,--,0,Esencia fuerza III,Esencia fuerza II,0,1,10000,0
+Esencia sabiduria III,--,0,Esencia sabiduria III,Esencia sabiduria II,0,1,10000,0
+Esencia carisma III,--,0,Esencia carisma III,Esencia carisma II,0,1,10000,0
+Esencia inteligencia III,--,0,Esencia inteligencia III,Esencia inteligencia II,0,1,10000,0
+Esencia resistencia III,--,0,Esencia resistencia III,Esencia resistencia II,0,1,10000,0
+Esencia velocidad III,--,0,Esencia velocidad III,Esencia velocidad II,0,1,10000,0
+Esencia energia III,--,0,Esencia energia III,Esencia energia II,0,1,10000,0
+Esencia invisibilidad III,--,0,Esencia invisibilidad III,Esencia invisibilidad II,0,1,10000,0
