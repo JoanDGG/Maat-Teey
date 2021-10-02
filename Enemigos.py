@@ -1,6 +1,5 @@
 # -*- coding: ISO-8859-1 -*-
 import Game_Manager as gm
-from Personajes import Personaje
 from Individuos import Individuo
 
 class Enemigo(Individuo):
@@ -50,7 +49,7 @@ class Enemigo(Individuo):
     
     def huir(self, turnos):
         for p in range(0, len(turnos)):
-            if(type(turnos[p]) == Personaje):
+            if(turnos[p] in gm.personajes):
                 break
         if(self.velocidad >= turnos[p].velocidad):
             return self.mover_enemigo(turnos[p].zona)
@@ -79,15 +78,15 @@ class Enemigo(Individuo):
         elif(self.carisma > self.fuerza):
             return Enemigo.ataque_carisma(self, p_presentes, hist, turnos_aux, defensas)
         else:
-            if(presentes.count(0) > len(presentes)//2 and self.nombre in jefes.keys() and self.energia >= 2):
+            if(presentes.count(0) > len(presentes)//2 and self.nombre in gm.jefes.keys() and self.energia >= 2):
                 # -------------------------Mayoria de objetivos posibles se defiende
                 return Enemigo.ataque_especial(self, p_presentes)
             return Enemigo.atacar(self, p_presentes, hist, turnos_aux, defensas)
     
     def ataque_carisma(self, p_presentes = None, hist = None, turnos_aux = None, defensas = None, objetivo = None):
-        daño = self.carisma
+        dano = self.carisma
         if(self.rango >= 5):
-            daño *= 2
+            dano *= 2
         if(objetivo == None):
             if("Confundido" in self.condicion):
                 no_faccion = turnos_aux
@@ -100,33 +99,33 @@ class Enemigo(Individuo):
                 no_faccion = p_presentes.copy()
                 for t in turnos_aux:
                     # Si sus categorias no son iguales             Si es animal y el otro tambien                                     Si es scp y el otro tambien                              si el objetivo no es un jefe    si el objetivo no esta en la lista aun
-                    if(t not in personajes) and (t.categoria != self.categoria) and (((self.categoria == "Animal") and (self.categoria == "Animal")) or ((self.categoria == "SCP") and (self.categoria == "SCP"))) and (t.nombre not in jefes.keys()) and (t not in p_presentes):
+                    if(t not in gm.personajes) and (t.categoria != self.categoria) and (((self.categoria == "Animal") and (self.categoria == "Animal")) or ((self.categoria == "SCP") and (self.categoria == "SCP"))) and (t.nombre not in gm.jefes.keys()) and (t not in gm.p_presentes):
                         no_faccion.append(t)
                         # animales, scp y no jefes
                         
             if(self.inteligencia <= 9):
                 #------------------------------------------ataque aleatorio a cualquiera
                 objetivos = turnos_aux
-                if(self.nombre in jefes):
+                if(self.nombre in gm.jefes):
                     objetivos = p_presentes
                 n = gm.dados(1, len(objetivos))[0]
                 objetivo = objetivos[n-1]
             elif(self.inteligencia > 9 and self.inteligencia <= 19):
                 #-----------------------------------ataque aleatorio a rival o el ultimo
                 objetivos = no_faccion
-                if(self.nombre in jefes):
+                if(self.nombre in gm.jefes):
                     objetivos = p_presentes
                 n = gm.dados(1, len(objetivos))[0]
                 objetivo = objetivos[n-1]
                 
                 for i in reversed(hist):                  # Si eres jefe, revisa si el atacante es personaje, si no, no
-                    if(i[1].nombre == self.nombre and (((self.nombre in jefes)and(i[0] in personajes))or(self.nombre not in jefes))):
+                    if(i[1].nombre == self.nombre and (((self.nombre in gm.jefes)and(i[0] in gm.personajes))or(self.nombre not in gm.jefes))):
                         objetivo = i[0]
                         break    
             elif(self.inteligencia > 19):
                 #----------------------------------------------ataque al rival mas debil
                 objetivos = no_faccion
-                if(self.nombre in jefes):
+                if(self.nombre in gm.jefes):
                     objetivos = p_presentes
                 objetivo = objetivos[0]
                 for i in objetivos:
@@ -134,44 +133,44 @@ class Enemigo(Individuo):
                         objetivo = i
         tirada = gm.dados(1, 10)[0]
         if(tirada >= 5):
-            daño += 5
+            dano += 5
         elif(tirada >= 3):
-            daño += 3
+            dano += 3
         else:
-            daño += 1
-        daño -= gm.dados(1, daño/10)[0]
+            dano += 1
+        dano -= gm.dados(1, dano/10)[0]
         if(objetivo.nombre == "Mirek" and self.categoria == "Animal" and objetivo.arbol["B1"][0] == 1):
             if(len(p_presentes) > 1):
                 p_presentes.remove(objetivo)
                 self.ataque_carisma(self, p_presentes, hist, turnos_aux, defensas)
             else:
-                daño = 0
+                dano = 0
         if("Indefenso" in self.condicion):
             return [objetivo, 0]
         if("Indefenso" in objetivo.condicion):
             return self.atacar(self, p_presentes, hist, turnos_aux, defensas)
         self.condicion.update({"Atacando con carisma": 1})
-        return [objetivo, daño]
+        return [objetivo, dano]
     
     def ataque_especial(self, p_presentes):
         print(f"{self.nombre} ha usado su habilidad especial!!")
-        daño = self.fuerza + gm.dados(1, 10)[0]
+        dano = self.fuerza + gm.dados(1, 10)[0]
         if(len(p_presentes) == 1):
-             daño *= 2
+             dano *= 2
         
         if("Bloqueado" in self.condicion):
-            daño -= self.condicion["Bloqueado"]
-            if(daño < 0):
-                daño = 0
+            dano -= self.condicion["Bloqueado"]
+            if(dano < 0):
+                dano = 0
         self.energia -= 2
         self.condicion.update({"Atacando especial": 1})
-        return [p_presentes, daño]
+        return [p_presentes, dano]
 
     def atacar(self, p_presentes, hist, turnos_aux, defensas):
         #DEBUG
 #    print("---------------------------------------------------------Metodo atacar")
         objetivo = ""
-        daño = self.fuerza + gm.dados(1, 10)[0]
+        dano = self.fuerza + gm.dados(1, 10)[0]
         no_faccion = []
         if("Confundido" in self.condicion):
             no_faccion = turnos_aux
@@ -183,34 +182,34 @@ class Enemigo(Individuo):
             no_faccion = p_presentes.copy()
             for t in turnos_aux:
                 # Si sus categorias no son iguales             Si es animal y el otro tambien                                     Si es scp y el otro tambien                              si el objetivo no es un jefe    si el objetivo no esta en la lista aun
-                if(t not in personajes) and (t.categoria != self.categoria) and (((self.categoria == "Animal") and (self.categoria == "Animal")) or ((self.categoria == "SCP") and (self.categoria == "SCP"))) and (t.nombre not in jefes.keys()) and (t not in p_presentes):
+                if(t not in gm.personajes) and (t.categoria != self.categoria) and (((self.categoria == "Animal") and (self.categoria == "Animal")) or ((self.categoria == "SCP") and (self.categoria == "SCP"))) and (t.nombre not in gm.jefes.keys()) and (t not in p_presentes):
                     no_faccion.append(t)
                     # animales, scp y no jefes
         
         if(self.inteligencia <= 9):
             #------------------------------------------ataque aleatorio a cualquiera
             objetivos = turnos_aux
-            if(self.nombre in jefes):
+            if(self.nombre in gm.jefes):
                 objetivos = p_presentes
             n = gm.dados(1, len(objetivos))[0]
             objetivo = objetivos[n-1]
         elif(self.inteligencia > 9 and self.inteligencia <= 19):
             #-----------------------------------ataque aleatorio a rival o el ultimo
             objetivos = no_faccion
-            if(self.nombre in jefes):
+            if(self.nombre in gm.jefes):
                 objetivos = p_presentes
             n = gm.dados(1, len(objetivos))[0]
             objetivo = objetivos[n-1]
             
             for i in reversed(hist):                  # Si eres jefe, revisa si el atacante es personaje, si no, no
-                if(i[1].nombre == self.nombre and (((self.nombre in jefes)and(i[0] in personajes))or(self.nombre not in jefes))):
+                if(i[1].nombre == self.nombre and (((self.nombre in gm.jefes)and(i[0] in gm.personajes))or(self.nombre not in gm.jefes))):
                     objetivo = i[0]
                     break
                 
         elif(self.inteligencia > 19):
             #----------------------------------------------ataque al rival mas debil
             objetivos = no_faccion
-            if(self.nombre in jefes):
+            if(self.nombre in gm.jefes):
                 objetivos = p_presentes
             objetivo = objetivos[0]
             for i in objetivos:
@@ -227,20 +226,20 @@ class Enemigo(Individuo):
                 p_presentes.remove(objetivo)
                 self.atacar(self, p_presentes, hist, turnos_aux, defensas)
             else:
-                daño = 0
+                dano = 0
         elif(objetivo.nombre == "Sebas" and "Ultra instinto" in objetivo.condicion):
-            daño = 0
+            dano = 0
         elif(objetivo.nombre == "Sebas" and "Kaio ken" in objetivo.condicion):
-            daño *= 2
+            dano *= 2
         if("Cegado" in self.condicion):
             tirada = gm.dados(1, 10)[0]
             if(tirada >= 8):
-                daño = 0
+                dano = 0
                 print(f"{self.nombre} ha fallado el ataque!")
         if(defensas[turnos_aux.index(objetivo)] > 0 and self.energia >= 1): 
             #--------------------------------------------------Atacar si se defiende
             print(f"{self.nombre} ha usado un ataque de energia!")
-            daño *= 1.25
+            dano *= 1.25
             self.energia -= 1
         else:
             self.energia += self.energia_max * 0.2
@@ -253,11 +252,11 @@ class Enemigo(Individuo):
                     objetivo = p
                     break
         if("Bloqueado" in self.condicion):
-            daño -= self.condicion["Bloqueado"]
-            if(daño < 0):
-                daño = 0
+            dano -= self.condicion["Bloqueado"]
+            if(dano < 0):
+                dano = 0
         self.condicion.update({"Atacando normal": 1})
-        return [[objetivo], daño]
+        return [[objetivo], dano]
     
     def dropear(self):
         #DEBUG
@@ -268,7 +267,7 @@ class Enemigo(Individuo):
             print("Dropeo Owo")
             return kk
         elif(self.dropeo[0] == "%"):
-            s = revisar_string(self.dropeo)
+            s = gm.revisar_string(self.dropeo)
             if(s[0].isdigit()):
                 for i in range(0, int(s[0])):
                     kk.append(s)
@@ -291,10 +290,10 @@ class Enemigo(Individuo):
     def is_ded(self, atacante: Individuo):
         #DEBUG
 #        print("-----------------------------------------------------Metodo is_ded")
-        for l in range(0, len(lugares_o)):
-            lug = lugares_o[l].zonas()
+        for l in range(0, len(gm.lugares_o)):
+            lug = gm.lugares_o[l].zonas()
             if(atacante.zona in lug):
-                lugar = lugares_o[l]
+                lugar = gm.lugares_o[l]
                 break
         zonas = lugar.zonas()
         i = zonas.index(atacante.zona)

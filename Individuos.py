@@ -1,4 +1,6 @@
 # -*- coding: ISO-8859-1 -*-
+import Game_Manager as gm
+
 class Individuo:
     
     def __init__(self, salud: int, fuerza:int, resistencia:int, carisma:int, inteligencia:int, sabiduria:int, nombre:str, condicion:dict):
@@ -90,4 +92,4 @@ class Individuo:
         print("Has recuperado el 30% de energia")
         if(self.energia > self.energia_max):
             self.energia = self.energia_max
-        return self.resistencia + Juego.dados(1, 10)[0]
+        return self.resistencia + gm.dados(1, 10)[0]

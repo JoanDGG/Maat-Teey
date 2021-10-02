@@ -1,5 +1,5 @@
 import Game_Manager as gm
-from Juegos import Juego
+#from Juegos import Juego
 
 gm.generar_carneables()
 

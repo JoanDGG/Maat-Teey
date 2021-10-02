@@ -649,4 +649,3 @@ personajes = [mirek, bugatti, ruben, sebas, norman]
 personajes_muertos = []
 
 personaje_malo = malo()
-
