@@ -43,8 +43,8 @@ class Enemigo(Individuo):
         zonas = gm.mapa_master[zona]
         tirada = gm.dados(1, len(zonas))[0]
         destino = gm.buscaLugar(zonas[tirada])
-        origen.enemigos_activos()[origen.zonas().index(zona)].remove(self)
-        destino.enemigos_activos()[destino.zonas().index(zonas[tirada])].append(self)
+        origen.enemigos_activos[origen.zonas.index(zona)].remove(self)
+        destino.enemigos_activos[destino.zonas.index(zonas[tirada])].append(self)
         return True
     
     def huir(self, turnos):
@@ -291,26 +291,31 @@ class Enemigo(Individuo):
         #DEBUG
 #        print("-----------------------------------------------------Metodo is_ded")
         for l in range(0, len(gm.lugares_o)):
-            lug = gm.lugares_o[l].zonas()
+            lug = gm.lugares_o[l].zonas
             if(atacante.zona in lug):
                 lugar = gm.lugares_o[l]
                 break
-        zonas = lugar.zonas()
+        zonas = lugar.zonas
         i = zonas.index(atacante.zona)
-        indio = lugar.enemigos_activos()[i].index(self)
-        lugar.enemigos_activos()[i].remove(self)
-        lugar.cantidades_enemigos()[i][indio] -= 1
+        indio = lugar.enemigos_activos[i].index(self)
+        lugar.enemigos_activos[i].remove(self)
+        lugar.cantidades_enemigos[i][indio] -= 1
         
         from Juegos import Juego
         kk = self.dropear()
         
         for k in kk:
-            indio = lugar.zonas().index(self.zona)
+            indio = lugar.zonas.index(self.zona)
             o = Juego.tranformar_objeto(k)
-            lugar.objetos_activos()[indio].append(o)
-            lugar.cantidades()[indio].append(1)
-            lugar.objetos()[indio].append(o.nombre)
+            lugar.objetos_activos[indio].append(o)
+            lugar.cantidades[indio].append(1)
+            lugar.objetos[indio].append(o.nombre)
         return True
 
-    def stats(self):
-        print(super().stats() + f'| Categoria: {self.categoria} \n Rango: {int(self.rango):<20} | Peso: {int(self.peso)} \n Agresividad: {int(self.agresividad):<15} \n Dropeos: \n {self.dropeo}')
+    def __str__ (self):
+        return (super().stats() + f'| Categoria: {self.categoria} \n Rango: {int(self.rango):<20} | Peso: {int(self.peso)} \n Agresividad: {int(self.agresividad):<15} \n Dropeos: \n {self.dropeo}')
+
+# =============================================================================
+# enemigo = Enemigo(120, 17, 17, 17, 13, 17, "Sub Bismark", "Saludable", "Fragmento de libro de secretos", "SCP", 9, 1, "zona")
+# print(enemigo)
+# =============================================================================
