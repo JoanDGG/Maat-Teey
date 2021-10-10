@@ -38,7 +38,7 @@ class Enemigo(Individuo):
 #    print("------------------------------------------------Metodo cambiar hp")
         self.salud += round(hp)
         if(self.salud <= 0):
-            print("\n"+self.nombre + " murió, F")
+            print("\n"+self.nombre + " muriï¿½, F")
             return self.is_ded(atacante)
         return False
     
@@ -48,8 +48,8 @@ class Enemigo(Individuo):
         zonas = gm.mapa_master[zona]
         tirada = gm.dados(1, len(zonas))[0]
         destino = gm.buscaLugar(zonas[tirada])
-        origen.enemigos_activos()[origen.zonas().index(zona)].remove(self)
-        destino.enemigos_activos()[destino.zonas().index(zonas[
+        origen.enemigos_activos[origen.zonas.index(zona)].remove(self)
+        destino.enemigos_activos[destino.zonas.index(zonas[
             tirada])].append(self)
         return True
     
@@ -340,27 +340,27 @@ class Enemigo(Individuo):
         #DEBUG
 #        print("------------------------------------------------Metodo is_ded")
         for l in range(0, len(gm.lugares_o)):
-            lug = gm.lugares_o[l].zonas()
+            lug = gm.lugares_o[l].zonas
             if(atacante.zona in lug):
                 lugar = gm.lugares_o[l]
                 break
-        zonas = lugar.zonas()
+        zonas = lugar.zonas
         i = zonas.index(atacante.zona)
-        indio = lugar.enemigos_activos()[i].index(self)
-        lugar.enemigos_activos()[i].remove(self)
-        lugar.cantidades_enemigos()[i][indio] -= 1
+        indio = lugar.enemigos_activos[i].index(self)
+        lugar.enemigos_activos[i].remove(self)
+        lugar.cantidades_enemigos[i][indio] -= 1
         
         from Juegos import Juego
         kk = self.dropear()
         
         for k in kk:
-            indio = lugar.zonas().index(self.zona)
+            indio = lugar.zonas.index(self.zona)
             o = Juego.tranformar_objeto(k)
-            lugar.objetos_activos()[indio].append(o)
-            lugar.cantidades()[indio].append(1)
-            lugar.objetos()[indio].append(o.nombre)
+            lugar.objetos_activos[indio].append(o)
+            lugar.cantidades[indio].append(1)
+            lugar.objetos[indio].append(o.nombre)
         return True
 
-    def stats(self):
-        print(super().stats() + f"| Categoria: {self.categoria} \n Rango: "
+    def __str__(self):
+        return(super().stats() + f"| Categoria: {self.categoria} \n Rango: "
               + f"{int(self.rango):<20} | Peso: {int(self.peso)} \n Agresividad: {int(self.agresividad):<15} \n Dropeos: \n {self.dropeo}")

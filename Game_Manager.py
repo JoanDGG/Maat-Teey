@@ -4,28 +4,28 @@ import numpy as np
 from Lugares import Lugar
 
 
-Data_e=pd.read_csv('D-D_Enemigos_3.csv')
-Data_o2=pd.read_csv('D-D_Objetos_3.csv', index_col = "Nombre")
+Data_e=pd.read_csv("D-D_Enemigos_3.csv")
+Data_o2=pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
 
-Data_o=pd.read_csv('D-D_Objetos_3.csv')
-Dfnombres_o = Data_o.loc[:,['Nombre']]
-Dfstats_o = Data_o.loc[:,['Estadistica']]
-Dfboosts_o = Data_o.loc[:,['Boosteo']]
-Dfmejoras_o = Data_o.loc[:,['Mejora']]
+Data_o=pd.read_csv("D-D_Objetos_3.csv")
+Dfnombres_o = Data_o.loc[:,["Nombre"]]
+Dfstats_o = Data_o.loc[:,["Estadistica"]]
+Dfboosts_o = Data_o.loc[:,["Boosteo"]]
+Dfmejoras_o = Data_o.loc[:,["Mejora"]]
 #------
-Dfestropeos_o = Data_o.loc[:,['Estropeo']]
-Dfespacios_o = Data_o.loc[:,['Espacio']]
-Dfusos_o = Data_o.loc[:,['Usos']]
-Dfcant_o = Data_o.loc[:,['Cantidad']]
-Dfprecio_t = Data_o.loc[:,['Precio']]
+Dfestropeos_o = Data_o.loc[:,["Estropeo"]]
+Dfespacios_o = Data_o.loc[:,["Espacio"]]
+Dfusos_o = Data_o.loc[:,["Usos"]]
+Dfcant_o = Data_o.loc[:,["Cantidad"]]
+Dfprecio_t = Data_o.loc[:,["Precio"]]
 
-Dfnombres_e = Data_e.loc[:,['Nombre']]
-Dfcant_e = Data_e.loc[:,['Cantidad']]
-Dfdifi_e = Data_e.loc[:,['Dificultad']]
-Dfcategorias_e = Data_e.loc[:,['Categoria']]
-Dfintimidar_e = Data_e.loc[:, ['Intimidar']]
-Dftranquilizar_e = Data_e.loc[:, ['Tranquilizar']]
-Dfpersuadir_e = Data_e.loc[:, ['Persuadir']]
+Dfnombres_e = Data_e.loc[:,["Nombre"]]
+Dfcant_e = Data_e.loc[:,["Cantidad"]]
+Dfdifi_e = Data_e.loc[:,["Dificultad"]]
+Dfcategorias_e = Data_e.loc[:,["Categoria"]]
+Dfintimidar_e = Data_e.loc[:, ["Intimidar"]]
+Dftranquilizar_e = Data_e.loc[:, ["Tranquilizar"]]
+Dfpersuadir_e = Data_e.loc[:, ["Persuadir"]]
 
 jefes = {"Zombie policia": "Puesto de seguridad", 
          "Siren Head": "Aire libre", 
@@ -49,32 +49,53 @@ jefes = {"Zombie policia": "Puesto de seguridad",
          "SCP-076": "Cuarto de contencion SCP-076",
          "SCP-439": "Cuarto de contencion SCP-439",
          "Chaman poseido": "Puerta",
-         "Senuelo": ["comedor", "almacen", "cabanas vecinas", "puesto de seguridad", "entrada"]
+         "Senuelo": ["comedor", "almacen", "cabanas vecinas", 
+                     "puesto de seguridad", "entrada"]
          }
 
-jefes_no_jefes = list(jefes.keys())+["Policia", "Guardabosques", "Lobo feroz", "Big foot", "Maykuyak Teey", "Magnate boosted", "Cocinendigo", "Cocinero", "Rata de dos patas", "Goat Z", "King of the mountain", "Ae", "Sr. Smith"] #--------------------------PENDIENTE
+jefes_no_jefes = list(jefes.keys()) + ["Policia", "Guardabosques", "Lobo feroz", 
+                     "Big foot", "Maykuyak Teey", "Burgues", "Magnate boosted", 
+                     "Cocinendigo", "Cocinero", "Rata de dos patas", "Goat Z", 
+                     "King of the mountain", "Ae", "Sr. Smith"]
 
-enemigos_op = list(jefes.keys())+["Alumno Revo", "Mentor Revo", "Lobo", "Zombie chasqueador", "Murcielagos", "Wendigos", "Cocinendigo", "King of the mountain", "Vampiro", "SCP 953", "SCP 1048", "SCP 4715", "SCP 076", "SCP 439", "Norman", "Mirek", "Ruben", "Turati", "Sebas"]
+enemigos_op = list(jefes.keys()) + ["Alumno Revo", "Mentor Revo", "Lobo", 
+                  "Zombie chasqueador", "Murcielagos", "Wendigos", "Cocinendigo", 
+                  "King of the mountain", "Vampiro", "SCP 953", "SCP 1048", 
+                  "SCP 4715", "SCP 076", "SCP 439", "Norman", "Mirek", "Ruben", 
+                  "Turati", "Sebas"]
 
-atrapables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica", "Rata", "Rata de dos patas", "Aguila", "Cocodrilo", "Trol", "Oso marino", "Wendigo"]
-atrapables_medianos = ["Lobo", "Murcielago", "Serpiente", "Anguila electrica", "Rata", "Rata de dos patas", "Aguila"]
-atrapables_t_osos = ["Lobo", "Oso", "Rata de dos patas", "Cocodrilo", "Trol", "Oso marino"]
+atrapables = ["Lobo", "Oso", "Murcielago", "Serpiente", 
+              "Anguila electrica", "Rata", "Rata de dos patas", "Aguila", 
+              "Cocodrilo", "Trol", "Oso marino", "Wendigo"]
 
-domables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica", "Rata", "Aguila", "Cocodrilo", "Trol", "Oso marino"]
+atrapables_medianos = ["Lobo", "Murcielago", "Serpiente", 
+                       "Anguila electrica", "Rata", "Rata de dos patas", "Aguila"]
 
-# Añadir zombies, humanos, monstruos, que no son jefes ni cocineros en atrapables por trampa de osos
+atrapables_t_osos = ["Lobo", "Oso", "Rata de dos patas", 
+                     "Cocodrilo", "Trol", "Oso marino"]
+
+domables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica", 
+            "Rata", "Aguila", "Cocodrilo", "Trol", "Oso marino"]
+
+# Añadir zombies, humanos, monstruos, que no son jefes 
+# ni cocineros en atrapables por trampa de osos
 for e in range(0, len(Dfcategorias_e)):
-    if(Dfcategorias_e.iloc[e,0] == "Zombie" or Dfcategorias_e.iloc[e,0] == "Humano" or Dfcategorias_e.iloc[e,0] == "Monstruo"):
-        if(Dfnombres_e.iloc[e,0] not in jefes and Dfnombres_e.iloc[e,0] not in jefes_no_jefes and Dfnombres_e.iloc[e,0] not in atrapables_t_osos):
+    if(Dfcategorias_e.iloc[e,0] == "Zombie" or Dfcategorias_e.iloc[e,0] == "Humano" 
+    or Dfcategorias_e.iloc[e,0] == "Monstruo"):
+        if(Dfnombres_e.iloc[e,0] not in jefes and Dfnombres_e.iloc[e,0] 
+        not in jefes_no_jefes and Dfnombres_e.iloc[e,0] not in atrapables_t_osos):
             atrapables_t_osos.append(Dfnombres_e.iloc[e,0])
 
-lugares = ["Campamento", "Bosque", "Pueblo", "Mina", "Edificio Abandonado", "Puerto", "Normancueva", "Deshuesadero", "Montana", "Mercado", "Puerta", "Fondo del mar", "Pantano", "Mejoras"]
+lugares = ["Campamento", "Bosque", "Pueblo", "Mina", "Edificio Abandonado", 
+           "Puerto", "Normancueva", "Deshuesadero", "Montana", "Mercado", "Puerta", 
+           "Fondo del mar", "Pantano", "Mejoras"]
 fin = False
 dificultad = 1
 
 consejos = [
             #--------------------------------------------------------Consejos utiles
-            "******************Sabias que*******************\nPara la gente de la montaña, comer carne no es de Dios",
+            "**************Sabias que**************\nPara la gente de la montaña, "
+            + "comer carne no es de Dios",
             "OFERTA TENEDORES AL 2X1 :D",
             "Tratar de mejorar lo inmejorable no siempre es bueno...",
             "La lagrima de una niña mata mas rapido que un ataque al corazon",
@@ -107,7 +128,8 @@ sabiduria_del_mas_alla = [
 mapa_master  = {#---------------------------------------------------------Campamento
                 "Cabana":  ["Comedor", "Cabanas vecinas", "Almacen"],
                 "Comedor": ["Cabana", "Cabanas vecinas", "Almacen"], 
-                "Almacen": ["Cabana", "Comedor", "Cabanas vecinas", "Puesto de seguridad"], 
+                "Almacen": ["Cabana", "Comedor", "Cabanas vecinas", 
+                            "Puesto de seguridad"], 
                 "Cabanas vecinas": ["Cabana", "Comedor", "Almacen"], 
                 "Puesto de seguridad": ["Almacen", "Pradera"],
                 #-------------------------------------------------------------Bosque
@@ -124,19 +146,29 @@ mapa_master  = {#---------------------------------------------------------Campam
                 "Corazon del bosque": ["Subida", "Aire libre", "Templo"],
                 "Carretera": ["Comunidad", "Entrada", "Aire libre"],
                 #-------------------------------------------------------------Pueblo
-                "Comunidad": ["Aire libre", "Ayuntamiento", "Mercado", "Casa de chaman", "Entrada mina pueblo", "Carretera"],
+                "Comunidad": ["Aire libre", "Ayuntamiento", "Mercado", 
+                              "Casa de chaman", "Entrada mina pueblo", "Carretera"],
                 "Casa de chaman": ["Comunidad"],
                 "Ayuntamiento": ["Comunidad"],
                 "Entrada mina pueblo": ["Comunidad", "Tunel salida pueblo"],
                 #---------------------------------------------------------------Mina
-                "Zona de exploracion I": ["Zona de exploracion II", "Tunel de exploracion I"],
-                "Zona de exploracion II": ["Zona de exploracion I", "Tunel de exploracion II", "Tunel salida deshuesadero"],
-                "Tunel de exploracion I": ["Zona de exploracion I", "Puestos de trabajo"],
-                "Tunel de exploracion II": ["Zona de exploracion II", "Puestos de trabajo"],
-                "Tunel salida bosque": ["Entrada mina bosque", "Puestos de trabajo"],
-                "Tunel salida pueblo": ["Entrada mina pueblo", "Puestos de trabajo"],
-                "Tunel salida pantano": ["Entrada mina pantano", "Puestos de trabajo"],
-                "Tunel salida deshuesadero": ["Entrada mina deshuesadero", "Zona de exploracion II"],
+                "Zona de exploracion I": ["Zona de exploracion II", 
+                                          "Tunel de exploracion I"],
+                "Zona de exploracion II": ["Zona de exploracion I", 
+                                           "Tunel de exploracion II", 
+                                           "Tunel salida deshuesadero"],
+                "Tunel de exploracion I": ["Zona de exploracion I", 
+                                           "Puestos de trabajo"],
+                "Tunel de exploracion II": ["Zona de exploracion II", 
+                                            "Puestos de trabajo"],
+                "Tunel salida bosque": ["Entrada mina bosque", 
+                                        "Puestos de trabajo"],
+                "Tunel salida pueblo": ["Entrada mina pueblo", 
+                                        "Puestos de trabajo"],
+                "Tunel salida pantano": ["Entrada mina pantano", 
+                                         "Puestos de trabajo"],
+                "Tunel salida deshuesadero": ["Entrada mina deshuesadero", 
+                                              "Zona de exploracion II"],
                 "Tunel ???": ["Templo", "Zona clausurada"],
                 "Tunel derrumbado": ["Zona clausurada", "Puestos de trabajo"],
                 "Puestos de trabajo": ["Tunel de exploracion I", 
@@ -147,11 +179,13 @@ mapa_master  = {#---------------------------------------------------------Campam
                                        "Tunel derrumbado"],
                 "Zona clausurada": ["Tunel derrumbado", "Tunel ???"],
                 #-----------------------------------------------------------Edificio
-                "Entrada": ["Exterior", "Carretera", "Escalera", "Laboratorio", "Sala de investigacion", "Submarino"],
+                "Entrada": ["Exterior", "Carretera", "Escalera", "Laboratorio", 
+                            "Sala de investigacion", "Submarino"],
                 "Maquina": ["Escalera"],
                 "Escalera": ["Entrada", "Laboratorio", "Sala de investigacion"],
                 "Laboratorio": ["Entrada", "Escalera", "Sala de investigacion"],
-                "Sala de investigacion": ["Entrada", "Laboratorio", "Escalera", "Bahia"],
+                "Sala de investigacion": ["Entrada", "Laboratorio", 
+                                          "Escalera", "Bahia"],
                 #-------------------------------------------------------------Puerto
                 "Bahia": ["Sala de investigacion", "Carguero", "Aire libre", "Mar"],
                 "Carguero": ["Bahia", "Mar"],
@@ -164,7 +198,8 @@ mapa_master  = {#---------------------------------------------------------Campam
                 "Carniceria": ["Sotano", "Alacena"],
                 "Basurero": ["Sotano", "Entrada mina deshuesadero"],
                 "Alacena": ["Sotano", "Carniceria"],
-                "Entrada mina deshuesadero": ["Basurero", "Tunel salida deshuesadero"],
+                "Entrada mina deshuesadero": ["Basurero", 
+                                              "Tunel salida deshuesadero"],
                 #------------------------------------------------------------Montana
                 "Cabana doctor": ["Cima"],
                 "Cima": ["Cabana doctor", "Subida"],
@@ -183,7 +218,8 @@ mapa_master  = {#---------------------------------------------------------Campam
                 "Banco": ["Mercado"],
                 #-------------------------------------------------------------Puerta
                 "Templo": ["Cueva", "Corazon del bosque", "Tunel ???"],
-                "Cueva": ["Templo", "Tunel misterioso", "Tunel rocoso", "Tunel terrible", "Tunel negro", "Tunel Siniestro"],
+                "Cueva": ["Templo", "Tunel misterioso", "Tunel rocoso", 
+                          "Tunel terrible", "Tunel negro", "Tunel Siniestro"],
                 "Tunel misterioso": ["Cueva", "Cuarto de contencion scp 953"],
                 "Tunel rocoso": ["Cueva", "Cuarto de contencion scp 076"],
                 "Tunel terrible": ["Cueva", "Cuarto de contencion scp 1048"],
@@ -204,7 +240,8 @@ mapa_master  = {#---------------------------------------------------------Campam
                 "camion": ["cabana", "cabanas vecinas"],
                 "cabana":  ["comedor", "cabanas vecinas", "almacen", "camion"],
                 "comedor": ["cabana", "cabanas vecinas", "almacen"], 
-                "almacen": ["cabana", "comedor", "cabanas vecinas", "puesto de seguridad"], 
+                "almacen": ["cabana", "comedor", "cabanas vecinas", 
+                            "puesto de seguridad"], 
                 "cabanas vecinas": ["cabana", "comedor", "almacen", "camion"], 
                 "puesto de seguridad": ["almacen", "pradera"],
                 "aire libre": ["pradera", "carretera"],
@@ -280,48 +317,86 @@ crafteos = {("Tela", "Hilo"): "Sombrero",
             ("Esencia inteligencia I", "Planta verde"): "Pocion inteligencia I",
             ("Esencia sabiduria I", "Planta morada"): "Pocion sabiduria I",
             ("Esencia energia I", "Planta naranja"): "Pocion energia I",
-            ("Esencia velocidad I", "Planta azul", "Planta blanca", "Planta roja"): "Pocion velocidad I",
-            ("Esencia invisibilidad I", "Planta azul", "Planta verde", "Planta morada"): "Pocion invisibilidad I",
+            ("Esencia velocidad I", "Planta azul", "Planta blanca", 
+             "Planta roja"): "Pocion velocidad I",
+            ("Esencia invisibilidad I", "Planta azul", "Planta verde", 
+             "Planta morada"): "Pocion invisibilidad I",
             ("Veneno II", "Hongo", "Hongo"): "Antidoto II",
-            ("Esencia salud II", "Planta blanca", "Planta blanca"): "Pocion salud II",
-            ("Esencia fuerza II", "Planta roja", "Planta roja"): "Pocion fuerza II",
-            ("Esencia resistencia II", "Planta azul", "Planta azul"): "Pocion resistencia II",
-            ("Esencia carisma II", "Planta amarilla", "Planta amarilla"): "Pocion carisma II",
-            ("Esencia inteligencia II", "Planta verde", "Planta verde"): "Pocion inteligencia II",
-            ("Esencia sabiduria II", "Planta morada", "Planta morada"): "Pocion sabiduria II",
-            ("Esencia energia II", "Planta naranja", "Planta naranja"): "Pocion energia II",
-            ("Esencia velocidad II", "Planta azul", "Planta blanca", "Planta roja"): "Pocion velocidad II",
-            ("Esencia invisibilidad II", "Planta azul", "Planta verde", "Planta morada"): "Pocion invisibilidad II",
+            ("Esencia salud II", "Planta blanca", 
+             "Planta blanca"): "Pocion salud II",
+            ("Esencia fuerza II", "Planta roja", 
+             "Planta roja"): "Pocion fuerza II",
+            ("Esencia resistencia II", "Planta azul", 
+             "Planta azul"): "Pocion resistencia II",
+            ("Esencia carisma II", "Planta amarilla", 
+             "Planta amarilla"): "Pocion carisma II",
+            ("Esencia inteligencia II", "Planta verde", 
+             "Planta verde"): "Pocion inteligencia II",
+            ("Esencia sabiduria II", "Planta morada", 
+             "Planta morada"): "Pocion sabiduria II",
+            ("Esencia energia II", "Planta naranja", 
+             "Planta naranja"): "Pocion energia II",
+            ("Esencia velocidad II", "Planta azul", "Planta blanca", 
+             "Planta roja"): "Pocion velocidad II",
+            ("Esencia invisibilidad II", "Planta azul", "Planta verde", 
+             "Planta morada"): "Pocion invisibilidad II",
             ("Veneno III", "Hongo", "Hongo", "Hongo"): "Antidoto III",
-            ("Esencia salud III", "Planta blanca", "Planta blanca", "Planta blanca"): "Pocion salud III",
-            ("Esencia fuerza III", "Planta roja", "Planta roja", "Planta roja"): "Pocion fuerza III",
-            ("Esencia resistencia III", "Planta azul", "Planta azul", "Planta azul"): "Pocion resistencia III",
-            ("Esencia carisma III", "Planta amarilla", "Planta amarilla", "Planta amarilla"): "Pocion carisma III",
-            ("Esencia inteligencia III", "Planta verde", "Planta verde", "Planta verde"): "Pocion inteligencia III",
-            ("Esencia sabiduria III", "Planta morada", "Planta morada", "Planta morada"): "Pocion sabiduria III",
-            ("Esencia energia III", "Planta naranja", "Planta naranja", "Planta naranja"): "Pocion energia III",
-            ("Esencia velocidad III", "Planta azul", "Planta blanca", "Planta roja"): "Pocion velocidad III",
-            ("Esencia invisibilidad III", "Planta azul", "Planta verde", "Planta morada"): "Pocion invisibilidad III"}
+            ("Esencia salud III", "Planta blanca", "Planta blanca", 
+             "Planta blanca"): "Pocion salud III",
+            ("Esencia fuerza III", "Planta roja", "Planta roja", 
+             "Planta roja"): "Pocion fuerza III",
+            ("Esencia resistencia III", "Planta azul", "Planta azul", 
+             "Planta azul"): "Pocion resistencia III",
+            ("Esencia carisma III", "Planta amarilla", "Planta amarilla", 
+             "Planta amarilla"): "Pocion carisma III",
+            ("Esencia inteligencia III", "Planta verde", "Planta verde", 
+             "Planta verde"): "Pocion inteligencia III",
+            ("Esencia sabiduria III", "Planta morada", "Planta morada", 
+             "Planta morada"): "Pocion sabiduria III",
+            ("Esencia energia III", "Planta naranja", "Planta naranja", 
+             "Planta naranja"): "Pocion energia III",
+            ("Esencia velocidad III", "Planta azul", "Planta blanca", 
+             "Planta roja"): "Pocion velocidad III",
+            ("Esencia invisibilidad III", "Planta azul", "Planta verde", 
+             "Planta morada"): "Pocion invisibilidad III"}
 
-habilidades = {"Jugar": {"Sabiduria del mas alla": 34, "Pociones": 22, "Boosteo": 34}, 
-               "Turno personaje": {"Disfraz": 10, "Carisma absoluta": 22, "Grito de guerra": 34, "Habilidad animal": 22, "Invocar animal": 34, "Special Curry": 10, "Kaio Ken": 10, "Ultra instinto": 34, "Analitico": 22, "Momazo": 10, "Meme de enemigos": 22, "Lord meme": 34, "Robots": 22, "Boosteo": 34, "Llamar al viento": 22, "Mente dormida": 34},
+habilidades = {"Jugar": {"Sabiduria del mas alla": 34, "Pociones": 22, 
+                         "Boosteo": 34}, 
+               "Turno personaje": {"Disfraz": 10, "Carisma absoluta": 22, 
+                                   "Grito de guerra": 34, "Habilidad animal": 22, 
+                                   "Invocar animal": 34, "Special Curry": 10, 
+                                   "Kaio Ken": 10, "Ultra instinto": 34, 
+                                   "Analitico": 22, "Momazo": 10, 
+                                   "Meme de enemigos": 22, "Lord meme": 34, 
+                                   "Robots": 22, "Boosteo": 34, 
+                                   "Llamar al viento": 22, "Mente dormida": 34},
                "Turno enemigo": {"Anticipacion": 10},
                "Buscar": {"Explorador": 0, "Vision nocturna": 0},
                "Iniciar pelea": {"Explorador": 34},
                "Actualizar stats": {"Super sayain": 0, "Bolsa magica": 0},
                "Usar obj": {"Nutrirse": 0},
-               "Atacar personaje": {"Critical": 0, "Kaio Ken": 0, "Smash ball": 34, "Cazador": 0},
-               "Atacar enemigo": {"Simpatizar con animales": 0, "Ultra instinto": 0, "Kaio Ken": 0},
+               "Atacar personaje": {"Critical": 0, "Kaio Ken": 0, 
+                                    "Smash ball": 34, "Cazador": 0},
+               "Atacar enemigo": {"Simpatizar con animales": 0, 
+                                  "Ultra instinto": 0, "Kaio Ken": 0},
                "Maquina": {"Artesano": 22, "Alquimista": 34}}
 
 dia = True
 count_turnos = 0
-iluminados = ["Puesto de seguridad", "Cabana de guardabosques", "Comunidad", "Ayuntamiento", "Puestos de trabajo", "Laboratorio", "Sala de investigacion", "Sala principal", "Casa", "Sotano", "Carniceria", "Alacena", "Cabana doctor", "Zona de control", "Mercado", "Banco", "puesto de seguridad"]
+iluminados = ["Puesto de seguridad", "Cabana de guardabosques", "Comunidad", 
+              "Ayuntamiento", "Puestos de trabajo", "Laboratorio", 
+              "Sala de investigacion", "Sala principal", "Casa", "Sotano", 
+              "Carniceria", "Alacena", "Cabana doctor", "Zona de control", 
+              "Mercado", "Banco", "puesto de seguridad"]
 
 carneables = []
 
-notaxeables = ["Zombie Base", "Zombie corredor", "Acechadores", "Zombie chasqueador", "Zombie gordinflon", "Wendigos", "Zombie Obrero", "Zombie pescador", "Anguilas electricas", "Cocinendigo", "Shombie", "Sr. Smith"]
-multiples = ["Gasolina", "Gasolina de pecao", "Aceite", "Aceite de pecao", "Dinamita", "Lodo", "Fosforo", "Antorcha", "Encendedor"]
+notaxeables = ["Zombie Base", "Zombie corredor", "Acechadores", 
+               "Zombie chasqueador", "Zombie gordinflon", "Wendigos", 
+               "Zombie Obrero", "Zombie pescador", "Anguilas electricas", 
+               "Cocinendigo", "Shombie", "Sr. Smith"]
+multiples = ["Gasolina", "Gasolina de pecao", "Aceite", "Aceite de pecao", 
+             "Dinamita", "Lodo", "Fosforo", "Antorcha", "Encendedor"]
 armash_shidas = ["Cushillo", "Mashete", "Eshpada", "Eshpada mejorada"]
 
 
@@ -331,9 +406,12 @@ cuello = ["Pin", "Pin de bob esponja", "Simbolo comunidad"]
 torso = ["Chaqueta de cuero", "Pechera", "Abrigo"]
 piernas = ["Pantalones", "Shorts"]
 pies = ["Botas", "Crocks"]
-espalda = ["Maleta", "Capa", "Mochila", "Mochila campista", "Cubeta", "Shaed", "Shaed mejorado"]
-cuerpo_completo = ["Disfraz", "Traje de obrero", "Traje de buzo", "Traje de buzo mejorado"]
-equipables = cabeza + cara + cuello + torso + piernas + pies + espalda + cuerpo_completo
+espalda = ["Maleta", "Capa", "Mochila", "Mochila campista", "Cubeta", 
+           "Shaed", "Shaed mejorado"]
+cuerpo_completo = ["Disfraz", "Traje de obrero", "Traje de buzo", 
+                   "Traje de buzo mejorado"]
+equipables = (cabeza + cara + cuello + torso + piernas + pies + espalda 
+              + cuerpo_completo)
 mochilas = ["Mochila", "Mochila campista", "Mochila mejorada", "Maleta", "Cubeta"]
          
 agua = ["Profundidades", "Mar"]
@@ -346,7 +424,7 @@ def eliminar(lista):
 
 def buscaLugar(zona: str):
     for l in range(0, len(lugares_o)):   # Sacar lugar a partir de zona
-            lug = lugares_o[l].zonas()
+            lug = lugares_o[l].zonas
             if(zona in lug):
                 lugar = lugares_o[l]
                 break
@@ -374,7 +452,7 @@ def revisar_string(nombre):
 def anadir_obj_manual(nombre, personaje, cant = None):
     from Juegos import Juego
 
-    indio = personaje.ubicacion.zonas().index(personaje.zona)    
+    indio = personaje.ubicacion.zonas.index(personaje.zona)    
     if("sabia" in nombre):
         boosteo = sabiduria_del_mas_alla[dados(1, len(sabiduria_del_mas_alla))[0]-1]
         nombre = "Nota de consejo"
@@ -386,9 +464,9 @@ def anadir_obj_manual(nombre, personaje, cant = None):
     if(o.nombre == "Nota de consejo" and "sabia" not in o.nombre):
         o.boosteo = consejos[dados(1, len(consejos))[0]-1]
     
-    personaje.ubicacion.objetos_activos()[indio].append(o)
-    personaje.ubicacion.cantidades()[indio].append(1)
-    personaje.ubicacion.objetos()[indio].append(o.nombre)
+    personaje.ubicacion.objetos_activos[indio].append(o)
+    personaje.ubicacion.cantidades[indio].append(1)
+    personaje.ubicacion.objetos[indio].append(o.nombre)
     personaje.anadir_obj(o)
 
 def separar(df, lugar, zonas, tipo):
@@ -418,7 +496,9 @@ def separar(df, lugar, zonas, tipo):
                 j+=1
             else:
                 if(enemigos):
-                    if(a.iloc[i,0]=="Rat King G" or a.iloc[i,0]=="Rat King C" or a.iloc[i,0]=="Cocinero" or Dfdifi_e.iloc[i,0] != dificultad):
+                    if(a.iloc[i,0]=="Rat King G" or a.iloc[i,0]=="Rat King C" 
+                       or a.iloc[i,0]=="Cocinero" 
+                       or Dfdifi_e.iloc[i,0] != dificultad):
                         continue
                 elementos[j].append(a.iloc[i,0])
                 cantidad[j].append(b.iloc[i,0])
@@ -452,17 +532,18 @@ def generar_carneables():
     nombres = Dfnombres_e
     categorias = Dfcategorias_e
     for n in range(0, len(nombres)):
-        if(categorias.iloc[n,0] in categorias_si) and (nombres.iloc[n,0] not in carneables) and (nombres.iloc[n,0] not in jefes.keys()):
+        if(categorias.iloc[n,0] in categorias_si) and (nombres.iloc[n,0] 
+        not in carneables) and (nombres.iloc[n,0] not in jefes.keys()):
             carneables.append(nombres.iloc[n,0])
 
 def malo():
     return personajes[dados(1, len(personajes))[0]-1]
 
 def queso():
-    print('Queso')
+    print("Queso")
     
 def jamon():
-    print('JAMON')
+    print("JAMON")
 
 def shufflepro(lista1, lista2):
     #DEBUG
@@ -558,44 +639,135 @@ def dados(n: int, l: int):
     return a
 
 def repetido(self, lugar, zona:int, jefe:str):
-    for e in lugar.enemigos_activos()[zona]:
+    for e in lugar.enemigos_activos[zona]:
         if(e.nombre == jefe):
             return True
     return False
 
-campamento    = generar_lugar_arg("Campamento", ["Cabana", "Comedor", "Almacen", "Cabanas vecinas", "Puesto de seguridad"])
-bosque        = generar_lugar_arg("Bosque", ["Aire libre", "Cabana de guardabosques", "Entrada mina bosque", "Pradera", "Carretera", "Corazon del bosque"])
-pueblo        = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman","Ayuntamiento", "Entrada mina pueblo"])
-mina          = generar_lugar_arg("Mina", ["Zona de exploracion I", "Zona de exploracion II", "Tunel salida bosque", "Tunel salida pueblo", "Tunel salida pantano", "Tunel salida deshuesadero", "Tunel ???", "Tunel derrumbado", "Tunel de exploracion I", "Tunel de exploracion II", "Puestos de trabajo", "Zona clausurada"])
-edificio      = generar_lugar_arg("Edificio Abandonado", ["Entrada", "Maquina", "Escalera", "Laboratorio", "Sala de investigacion"])
+campamento    = generar_lugar_arg("Campamento", ["Cabana", "Comedor", 
+                                                 "Almacen", "Cabanas vecinas", 
+                                                 "Puesto de seguridad"])
+bosque        = generar_lugar_arg("Bosque", ["Aire libre", 
+                                             "Cabana de guardabosques", 
+                                             "Entrada mina bosque", "Pradera", 
+                                             "Carretera", "Corazon del bosque"])
+pueblo        = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman",
+                                             "Ayuntamiento", "Entrada mina pueblo"])
+mina          = generar_lugar_arg("Mina", ["Zona de exploracion I", 
+                                           "Zona de exploracion II", 
+                                           "Tunel salida bosque", 
+                                           "Tunel salida pueblo", 
+                                           "Tunel salida pantano", 
+                                           "Tunel salida deshuesadero", 
+                                           "Tunel ???", "Tunel derrumbado", 
+                                           "Tunel de exploracion I", 
+                                           "Tunel de exploracion II", 
+                                           "Puestos de trabajo", "Zona clausurada"])
+edificio      = generar_lugar_arg("Edificio Abandonado", ["Entrada", 
+                                                          "Maquina", "Escalera", 
+                                                          "Laboratorio", 
+                                                          "Sala de investigacion"])
 puerto        = generar_lugar_arg("Puerto", ["Bahia", "Carguero"])
-normancueva   = generar_lugar_arg("Normancueva", ["Sala principal", "Entrada mistica"])
-deshuesadero  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", "Carniceria", "Basurero", "Alacena", "Entrada mina deshuesadero"])
+normancueva   = generar_lugar_arg("Normancueva", ["Sala principal", 
+                                                  "Entrada mistica"])
+deshuesadero  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", "Carniceria", 
+                                                   "Basurero", "Alacena", 
+                                                   "Entrada mina deshuesadero"])
 montana       = generar_lugar_arg("Montana", ["Cabana doctor", "Cima", "Subida"])
 mercado       = generar_lugar_arg("Mercado", ["Mercado", "Banco"])
-puerta        = generar_lugar_arg("Puerta", ["Templo", "Cueva", "Tunel misterioso", "Tunel rocoso", "Tunel terrible", "Tunel negro", "Tunel siniestro", "Cuarto de contencion scp 953", "Cuarto de contencion scp 1048", "Cuarto de contencion scp 4715", "Cuarto de contencion scp 076", "Cuarto de contencion scp 439", "Puerta"])
-fondo_del_mar = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", "Profundidades"])
-pantano       = generar_lugar_arg("Pantano", ["Zona de control", "Exterior", "Casa ogro", "Entrada mina pantano"])
-viaje_astral  = generar_lugar_arg("campamento", ["camion", "cabana", "comedor", "almacen", "cabanas vecinas", "puesto de seguridad", "aire libre", "pradera", "carretera", "entrada"])
+puerta        = generar_lugar_arg("Puerta", ["Templo", "Cueva", "Tunel misterioso", 
+                                             "Tunel rocoso", "Tunel terrible", 
+                                             "Tunel negro", "Tunel siniestro", 
+                                             "Cuarto de contencion scp 953", 
+                                             "Cuarto de contencion scp 1048", 
+                                             "Cuarto de contencion scp 4715", 
+                                             "Cuarto de contencion scp 076", 
+                                             "Cuarto de contencion scp 439", 
+                                             "Puerta"])
+fondo_del_mar = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", 
+                                                    "Profundidades"])
+pantano       = generar_lugar_arg("Pantano", ["Zona de control", "Exterior", 
+                                              "Casa ogro", "Entrada mina pantano"])
+viaje_astral  = generar_lugar_arg("campamento", ["camion", "cabana", "comedor", 
+                                                 "almacen", "cabanas vecinas", 
+                                                 "puesto de seguridad", 
+                                                 "aire libre", "pradera", 
+                                                 "carretera", "entrada"])
 
-lugares_o = [campamento, bosque, pueblo, mina, edificio, puerto, normancueva, deshuesadero, montana, mercado, puerta, fondo_del_mar, pantano, viaje_astral]
+lugares_o = [campamento, bosque, pueblo, mina, edificio, 
+             puerto, normancueva, deshuesadero, montana, mercado, 
+             puerta, fondo_del_mar, pantano, viaje_astral]
 
-campamento_original    = generar_lugar_arg("Campamento", ["Cabana", "Comedor", "Almacen", "Cabanas vecinas", "Puesto de seguridad"])
-bosque_original        = generar_lugar_arg("Bosque", ["Aire libre", "Cabana de guardabosques", "Entrada mina bosque", "Pradera", "Carretera", "Corazon del bosque"])
-pueblo_original        = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman","Ayuntamiento", "Entrada mina pueblo"])
-mina_original          = generar_lugar_arg("Mina", ["Zona de exploracion I", "Zona de exploracion II", "Tunel salida bosque", "Tunel salida pueblo", "Tunel salida pantano", "Tunel salida deshuesadero", "Tunel ???", "Tunel derrumbado", "Tunel de exploracion I", "Tunel de exploracion II", "Puestos de trabajo", "Zona clausurada"])
-edificio_original      = generar_lugar_arg("Edificio Abandonado", ["Entrada", "Maquina", "Escalera", "Laboratorio", "Sala de investigacion"])
+campamento_original = generar_lugar_arg("Campamento", ["Cabana", "Comedor", 
+                                                       "Almacen", "Cabanas vecinas", 
+                                                       "Puesto de seguridad"])
+bosque_original = generar_lugar_arg("Bosque", ["Aire libre", 
+                                               "Cabana de guardabosques", 
+                                               "Entrada mina bosque", "Pradera", 
+                                               "Carretera", "Corazon del bosque"])
+pueblo_original = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman", 
+                                               "Ayuntamiento", 
+                                               "Entrada mina pueblo"])
+mina_original = generar_lugar_arg("Mina", ["Zona de exploracion I", 
+                                           "Zona de exploracion II", 
+                                           "Tunel salida bosque", 
+                                           "Tunel salida pueblo", 
+                                           "Tunel salida pantano", 
+                                           "Tunel salida deshuesadero", 
+                                           "Tunel ???", "Tunel derrumbado", 
+                                           "Tunel de exploracion I", 
+                                           "Tunel de exploracion II", 
+                                           "Puestos de trabajo", "Zona clausurada"])
+edificio_original = generar_lugar_arg("Edificio Abandonado", ["Entrada", "Maquina", 
+                                                              "Escalera", 
+                                                              "Laboratorio", 
+                                                              "Sala de "
+                                                              + "investigacion"])
 puerto_original        = generar_lugar_arg("Puerto", ["Bahia", "Carguero"])
-normancueva_original   = generar_lugar_arg("Normancueva", ["Sala principal", "Entrada mistica"])
-deshuesadero_original  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", "Carniceria", "Basurero", "Alacena", "Entrada mina deshuesadero"])
-montana_original       = generar_lugar_arg("Montana", ["Cabana doctor", "Cima", "Subida"])
+normancueva_original   = generar_lugar_arg("Normancueva", ["Sala principal", 
+                                                           "Entrada mistica"])
+deshuesadero_original  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", 
+                                                            "Carniceria", 
+                                                            "Basurero", "Alacena", 
+                                                            "Entrada mina "
+                                                            + "deshuesadero"])
+montana_original       = generar_lugar_arg("Montana", ["Cabana doctor", "Cima", 
+                                                       "Subida"])
 mercado_original       = generar_lugar_arg("Mercado", ["Mercado", "Banco"])
-puerta_original        = generar_lugar_arg("Puerta", ["Templo", "Cueva", "Tunel misterioso", "Tunel rocoso", "Tunel terrible", "Tunel negro", "Tunel siniestro", "Cuarto de contencion scp 953", "Cuarto de contencion scp 1048", "Cuarto de contencion scp 4715", "Cuarto de contencion scp 076", "Cuarto de contencion scp 439", "Puerta"])
-fondo_del_mar_original = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", "Profundidades"])
-pantano_original       = generar_lugar_arg("Pantano", ["Zona de control", "Exterior", "Casa ogro", "Entrada mina pantano"])
-viaje_astral_original  = generar_lugar_arg("campamento", ["camion", "cabana", "comedor", "almacen", "cabanas vecinas", "puesto de seguridad", "aire libre", "pradera", "carretera", "entrada"])
+puerta_original        = generar_lugar_arg("Puerta", ["Templo", "Cueva", 
+                                                      "Tunel misterioso", 
+                                                      "Tunel rocoso", 
+                                                      "Tunel terrible", 
+                                                      "Tunel negro", 
+                                                      "Tunel siniestro", 
+                                                      "Cuarto de contencion "
+                                                      + "scp 953", 
+                                                      "Cuarto de contencion "
+                                                      + "scp 1048", 
+                                                      "Cuarto de contencion "
+                                                      + "scp 4715", 
+                                                      "Cuarto de contencion "
+                                                      + "scp 076", 
+                                                      "Cuarto de contencion "
+                                                      + "scp 439", "Puerta"])
+fondo_del_mar_original = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", 
+                                                             "Profundidades"])
+pantano_original       = generar_lugar_arg("Pantano", ["Zona de control", 
+                                                       "Exterior", "Casa ogro", 
+                                                       "Entrada mina pantano"])
+viaje_astral_original  = generar_lugar_arg("campamento", ["camion", "cabana", 
+                                                          "comedor", "almacen", 
+                                                          "cabanas vecinas", 
+                                                          "puesto de seguridad", 
+                                                          "aire libre", "pradera", 
+                                                          "carretera", "entrada"])
 
-lugares_o_originales = [campamento_original, bosque_original, pueblo_original, mina_original, edificio_original, puerto_original, normancueva_original, deshuesadero_original, montana_original, mercado_original, puerta_original, fondo_del_mar_original, pantano_original, viaje_astral_original]
+lugares_o_originales = [campamento_original, bosque_original, pueblo_original, 
+                        mina_original, edificio_original, puerto_original, 
+                        normancueva_original, deshuesadero_original, 
+                        montana_original, mercado_original, puerta_original, 
+                        fondo_del_mar_original, pantano_original, 
+                        viaje_astral_original]
 
 arbol_mirek   = {"A1": [0, 1, "Disfraz"],
                  "A2": [0, 2, "Carisma absoluta"],

@@ -13,7 +13,6 @@ class Asistente(Enemigo):
         self.dueno = dueno
         self.apodo = apodo
 
-
     def is_ded(self):
         self.dueno.asistentes.remove(self)
         mensaje = input("Escribe un mensaje de despedida "
