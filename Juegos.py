@@ -91,7 +91,7 @@ class Juego:
                 if(gm.mercado == "Buscar"):
                     objeto = input("¿Que quieres " + is_mercado.lower() 
                                    + "? (0 para nada en especifico)\n")
-                    if(objeto == '0'):
+                    if(objeto == "0"):
                         turnos[t].buscar()
                     else:
                         turnos[t].buscar(objeto)
@@ -765,13 +765,13 @@ class Juego:
 #                        print(e_presentes)
                 indio_e_aux=turnos_aux.index(res[0])
                 eleccion = input(f"¿Deseas atacar a {res[0].nombre}? (S/N)\n")
-                if(eleccion == 'S'):
+                if(eleccion == "S"):
                     if("Confundido" in personaje.condicion):
                         res[0] = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
                     print(f"{personaje.nombre} ataca a {res[0].nombre} con "
                           +f"{res[2].nombre} con una increible fuerza de {res[1]}")
                     salida = False
-                elif(eleccion == 'N'):
+                elif(eleccion == "N"):
                     continue
                 else:
                     print("Tas tonto shavo")
@@ -1201,9 +1201,9 @@ class Juego:
             niv_nina = gm.dados(1, 20)[0]
             niv_monstruo = gm.dados(1, 25)[0]
         sel = input(f"{p.nombre}, ¿quieres bajar? (S/N)\n")
-        if(sel == 'S'):
+        if(sel == "S"):
             nivel += 1
-        elif(sel == 'N'):
+        elif(sel == "N"):
             print("Has vuelto al inicio de las escaleras")
             nivel = 0
         else:
@@ -1221,7 +1221,7 @@ class Juego:
         if(nivel == niv_nina):
             s = input("Has encontrado una sala misteriosa... "
                       + "¿Quieres entrar? (S/N)\n")
-            if(s == 'S'):
+            if(s == "S"):
                 print("Dialogo intenso...")
                 obj = Objeto("Pelo", "--", "--", 0, 1, 10000, 0)
                 zonas = p.ubicacion.zonas
@@ -1233,7 +1233,7 @@ class Juego:
         if(nivel == niv_maquina):
             s = input("Has encontrado la sala de la maquina!! "
                       + "¿Quieres entrar? (S/N)\n")
-            if(s == 'S'):
+            if(s == "S"):
                 p.moverse(gm.edificio, "Maquina")
                 p.usar_maquina()
         return [p, nivel, niv_maquina, niv_nina, niv_monstruo]
@@ -1400,7 +1400,7 @@ class Juego:
         #DEBUG
 #        print("--------------------------------------------Metodo generar objetos")
         fragmento = Objeto("Fragmento de libro de secretos", 
-                           0, 'Habilidad', 0, 1, 1, 300)
+                           0, "Habilidad", 0, 1, 1, 300)
         if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
             lugar.objetos_activos[1].append(fragmento)
         elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
@@ -1441,7 +1441,7 @@ class Juego:
                     break
                 if((gm.Dfnombres_o.iloc[h,0] == objetos[j]) 
                 and (cantidades[j] > 0.0) 
-                and (gm.Dfnombres_o.iloc[h,0] != 'Fragmento de Libro de Secretos')):
+                and (gm.Dfnombres_o.iloc[h,0] != "Fragmento de Libro de Secretos")):
                     nombre = objetos[j]
                     o = self.tranformar_objeto(nombre, cantidades[j])
                     lugar.objetos_activos[indio].append(o)
@@ -1455,7 +1455,7 @@ class Juego:
         #DEBUG
         print("---------------------------------------------Metodo generar objetos")
         fragmento = Objeto("Fragmento de libro de secretos", 0, 
-                           'Habilidad', 0, 1, 1, 300)
+                           "Habilidad", 0, 1, 1, 300)
         if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
             lugar.objetos_activos[1].append(fragmento)
         elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
@@ -1487,7 +1487,7 @@ class Juego:
                         if ((gm.Dfnombres_o.iloc[h,0] == lugar.objetos[i][j]) 
                         and (lugar.cantidades()[i][j] > 0.0) 
                         and (lugar.objetos[
-                                i][j] != 'Fragmento de Libro de Secretos')):
+                                i][j] != "Fragmento de Libro de Secretos")):
                                 nombre = lugar.objetos[i][j]
                                 o = self.tranformar_objeto(nombre, 
                                                            lugar.cantidades()[i][j])

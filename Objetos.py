@@ -16,10 +16,10 @@ class Objeto:
         self.precio = precio
         
     def __str__(self):
-        return (f'\n\t{self.nombre} \n '
-                + f'Boosteo: {self.boosteo} \t| Estadistica: {self.estadistica} \n '
-                + f'Peso: {self.peso} \t| Usos: {self.usos} \n '
-                + f'Cantidad: {self.cantidad}\t| Precio: {self.precio}')
+        return (f"\n\t{self.nombre} \n "
+                + f"Boosteo: {self.boosteo} \t| Estadistica: {self.estadistica} \n "
+                + f"Peso: {self.peso} \t| Usos: {self.usos} \n "
+                + f"Cantidad: {self.cantidad}\t| Precio: {self.precio}")
 
 # =============================================================================
 #obj = Objeto("nombre", 0, "tu caca", 3.0, 8, 1, -3)

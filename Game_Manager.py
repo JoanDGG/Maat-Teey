@@ -4,28 +4,28 @@ import numpy as np
 from Lugares import Lugar
 
 
-Data_e=pd.read_csv('D-D_Enemigos_3.csv')
-Data_o2=pd.read_csv('D-D_Objetos_3.csv', index_col = "Nombre")
+Data_e=pd.read_csv("D-D_Enemigos_3.csv")
+Data_o2=pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
 
-Data_o=pd.read_csv('D-D_Objetos_3.csv')
-Dfnombres_o = Data_o.loc[:,['Nombre']]
-Dfstats_o = Data_o.loc[:,['Estadistica']]
-Dfboosts_o = Data_o.loc[:,['Boosteo']]
-Dfmejoras_o = Data_o.loc[:,['Mejora']]
+Data_o=pd.read_csv("D-D_Objetos_3.csv")
+Dfnombres_o = Data_o.loc[:,["Nombre"]]
+Dfstats_o = Data_o.loc[:,["Estadistica"]]
+Dfboosts_o = Data_o.loc[:,["Boosteo"]]
+Dfmejoras_o = Data_o.loc[:,["Mejora"]]
 #------
-Dfestropeos_o = Data_o.loc[:,['Estropeo']]
-Dfespacios_o = Data_o.loc[:,['Espacio']]
-Dfusos_o = Data_o.loc[:,['Usos']]
-Dfcant_o = Data_o.loc[:,['Cantidad']]
-Dfprecio_t = Data_o.loc[:,['Precio']]
+Dfestropeos_o = Data_o.loc[:,["Estropeo"]]
+Dfespacios_o = Data_o.loc[:,["Espacio"]]
+Dfusos_o = Data_o.loc[:,["Usos"]]
+Dfcant_o = Data_o.loc[:,["Cantidad"]]
+Dfprecio_t = Data_o.loc[:,["Precio"]]
 
-Dfnombres_e = Data_e.loc[:,['Nombre']]
-Dfcant_e = Data_e.loc[:,['Cantidad']]
-Dfdifi_e = Data_e.loc[:,['Dificultad']]
-Dfcategorias_e = Data_e.loc[:,['Categoria']]
-Dfintimidar_e = Data_e.loc[:, ['Intimidar']]
-Dftranquilizar_e = Data_e.loc[:, ['Tranquilizar']]
-Dfpersuadir_e = Data_e.loc[:, ['Persuadir']]
+Dfnombres_e = Data_e.loc[:,["Nombre"]]
+Dfcant_e = Data_e.loc[:,["Cantidad"]]
+Dfdifi_e = Data_e.loc[:,["Dificultad"]]
+Dfcategorias_e = Data_e.loc[:,["Categoria"]]
+Dfintimidar_e = Data_e.loc[:, ["Intimidar"]]
+Dftranquilizar_e = Data_e.loc[:, ["Tranquilizar"]]
+Dfpersuadir_e = Data_e.loc[:, ["Persuadir"]]
 
 jefes = {"Zombie policia": "Puesto de seguridad", 
          "Siren Head": "Aire libre", 
@@ -540,10 +540,10 @@ def malo():
     return personajes[dados(1, len(personajes))[0]-1]
 
 def queso():
-    print('Queso')
+    print("Queso")
     
 def jamon():
-    print('JAMON')
+    print("JAMON")
 
 def shufflepro(lista1, lista2):
     #DEBUG
