@@ -7,8 +7,13 @@ import numpy as np
 
 class Personaje(Individuo):
     
-    def __init__(self, salud: int, fuerza:int, resistencia:int, carisma:int, inteligencia:int, sabiduria:int, nombre:str, condicion:dict, peso:int, inventario:list, ubicacion: Lugar, zona:str, nivel:int, mapa: dict, cartera: int, energia: int, arbol: dict):
-        super().__init__(salud, fuerza, resistencia, carisma, inteligencia, sabiduria, nombre, condicion)
+    def __init__(self, salud: int, fuerza:int, resistencia:int, carisma:int,
+                 inteligencia:int, sabiduria:int, nombre:str, condicion:dict,
+                 peso:int, inventario:list, ubicacion: Lugar, zona:str,
+                 nivel:int, mapa: dict, cartera: int, energia: int,
+                 arbol: dict):
+        super().__init__(salud, fuerza, resistencia, carisma, inteligencia,
+                         sabiduria, nombre, condicion)
         self.inventario = inventario
         self.inventario_nombres = []
         self.peso_normal = self.resistencia*(self.salud_max/self.salud)
@@ -22,7 +27,8 @@ class Personaje(Individuo):
         self.nivel = nivel
         self.zona = zona
         self.velocidad = round((self.fuerza/self.peso)*self.nivel)
-        self.carga = round(self.resistencia*(self.salud/self.salud_max) + (self.inteligencia+self.fuerza)/2)
+        self.carga = round(self.resistencia*(self.salud/self.salud_max)
+                           + (self.inteligencia+self.fuerza)/2)
         self.mapa = mapa
         self.cartera = cartera
         self.puntos_habilidad = 0
@@ -57,7 +63,8 @@ class Personaje(Individuo):
             if(self.fuerza != self.condicion["Super Sayain"] * 1.5):
                 self.fuerza *= 1.5
         self.velocidad = round((self.fuerza/self.peso)*self.nivel)
-        self.carga = round(self.resistencia*(self.salud/self.salud_max) + (self.inteligencia+self.fuerza)/2)
+        self.carga = round(self.resistencia*(self.salud/self.salud_max)
+                           + (self.inteligencia+self.fuerza)/2)
         if(self.arbol["B1"][0] == 1):
             self.carga += self.energia_max
         for m in range(0, len(gm.mochilas)):
@@ -109,7 +116,7 @@ class Personaje(Individuo):
     
     def cambiar_hp(self, hp:int, atacante:Individuo):
         #DEBUG
-#    print("-----------------------------------------------------Metodo cambiar hp")
+#    print("------------------------------------------------Metodo cambiar hp")
         self.salud += round(hp)
         if(self.salud <= 0):
             print("\n"+self.nombre + " murió, F")
@@ -120,16 +127,21 @@ class Personaje(Individuo):
     
     def reclutar(self, asistente):
         while(self.espacio_asistentes < asistente.rango):
-            print(f"No tienes espacio suficiente! (espacio faltante: {asistente.rango - self.espacio_asistentes}) \n¿Deseas liberar a algun asistente?")
+            print("No tienes espacio suficiente! (espacio faltante: "
+                  + f"{asistente.rango - self.espacio_asistentes}) \n¿Deseas "
+                  + "liberar a algun asistente?")
             for a in range(0, len(self.asistentes)):
-                print(f"{a+1}: {self.asistentes[a].apodo} \t espacio ocupado: {self.asistentes[a].rango}")
+                print(f"{a+1}: {self.asistentes[a].apodo} \t espacio ocupado: "
+                      + f"{self.asistentes[a].rango}")
             print(f"{len(self.asistentes)+1}: Ninguno")
             decision = int(input()) - 1
             if(decision == len(self.asistentes)):
                 return False
             else:
                 if(Juego.ubicar.count(self.zona) > 1): # Si no estas solo en la zona
-                    decision = int(input("¿Deseas dejar libre al asistente o darselo a alguien?\n 1: Dejarlo libre \n 2: Cambiar de dueno\n"))
+                    decision = int(input("¿Deseas dejar libre al asistente o "
+                                         + "darselo a alguien?\n 1: Dejarlo "
+                                         + "libre \n 2: Cambiar de dueno\n"))
                     if(decision == 1):
                         self.asistentes[decision].is_ded()
                     elif(decision == 2):
@@ -146,9 +158,14 @@ class Personaje(Individuo):
         elif(issubclass(asistente, Enemigo)): # Si ya tiene apodo
             nombre = asistente.apodo
         print(f"Felicidades! {nombre} se ha unido a tu aventura!!")
-        agresividad_max = ((Juego.oso_marino.carisma + Juego.oso_marino.fuerza)-(Juego.oso_marino.inteligencia + Juego.oso_marino.resistencia))+4
-        suma = asistente.salud_max + asistente.fuerza + asistente.resistencia + asistente.carisma_max + asistente.inteligencia + asistente.sabiduria
-        boosteo = (asistente.salud/asistente.salud_maxima - asistente.agresividad/agresividad_max) * suma / 4
+        agresividad_max = (((Juego.oso_marino.carisma 
+                             + Juego.oso_marino.fuerza)
+                           -(Juego.oso_marino.inteligencia 
+                             + Juego.oso_marino.resistencia))+4)
+        suma = (asistente.salud_max + asistente.fuerza + asistente.resistencia
+        + asistente.carisma_max + asistente.inteligencia + asistente.sabiduria)
+        boosteo = ((asistente.salud/asistente.salud_maxima 
+                   - asistente.agresividad/agresividad_max) * suma / 4)
         for punto in range(0, boosteo):
             tirada = Juego.dados(1, 6)[0]
             if(tirada == 1):
@@ -164,8 +181,15 @@ class Personaje(Individuo):
             elif(tirada == 6):
                 asistente.sabiduria += 1
         
-        self.ubicacion.enemigos_activos()[self.ubicacion.zonas().index(self.zona)].remove(asistente)
-        nuevo = Asistente(asistente.salud_max, asistente.fuerza, asistente.resistencia, asistente.carisma_max, asistente.inteligencia, asistente.sabiduria, asistente.nombre, asistente.condicion, asistente.dropeo, asistente.categoria, asistente.rango, asistente.cantidad, asistente.zona, self, nombre)
+        zona = self.ubicacion.zonas().index(self.zona)
+        self.ubicacion.enemigos_activos()[zona].remove(asistente)
+        nuevo = Asistente(asistente.salud_max, asistente.fuerza,
+                          asistente.resistencia, asistente.carisma_max,
+                          asistente.inteligencia, asistente.sabiduria,
+                          asistente.nombre, asistente.condicion,
+                          asistente.dropeo, asistente.categoria,
+                          asistente.rango, asistente.cantidad,
+                          asistente.zona, self, nombre)
         self.asistentes.append(nuevo)
         return True
                 
@@ -180,14 +204,18 @@ class Personaje(Individuo):
         if(personajes_temp != []):
             print("¿Con quien vas a intercambiar asistentes?")
             for p in range(0, len(personajes_temp)):
-                print(f"{p+1}: {personajes_temp[p].nombre} \t espacio libre: {personajes_temp[p].espacio_asistentes}")
+                print(f"{p+1}: {personajes_temp[p].nombre} \t espacio libre: "
+                      + f"{personajes_temp[p].espacio_asistentes}")
             print(f"{len(personajes_temp) + 1}: No pues ya no")
             decision = int(input()) - 1
             if(decision == len(personajes_temp)):
                 return False
             else:
                 for a in range(0, len(personajes_temp[decision].asistentes)):
-                    print(f"{a+1}: {personajes_temp[decision].asistentes[a].apodo} \t espacio ocupado: {personajes_temp[decision].asistentes[a].rango}")
+                    print(f"{a+1}: "
+                          + f"{personajes_temp[decision].asistentes[a].apodo}"
+                          + " \t espacio ocupado: "
+                          + f"{personajes_temp[decision].asistentes[a].rango}")
                 print(f"{len(self.asistentes)+1}: Ninguno")
                 decision2 = int(input()) - 1
                 if(decision2 == len(personajes_temp)):
@@ -199,12 +227,17 @@ class Personaje(Individuo):
                         return False
                 else:
                     espacio1 = asistente.rango
-                    espacio2 = personajes_temp[decision].asistentes[decision2].rango
-                    if(self.espacio_asistentes + espacio1 - espacio2 >= 0 and personajes_temp[decision].espacio_asistentes + espacio2 - espacio1 >= 0):
+                    espacio2 = personajes_temp[decision].asistentes[decision2]
+                    espacio2 = espacio2.rango
+                    if(self.espacio_asistentes + espacio1 - espacio2 >= 0 
+                       and ((personajes_temp[decision].espacio_asistentes 
+                       + espacio2 - espacio1) >= 0)):
                         a1 = asistente
                         a2 = personajes_temp[decision].asistentes[decision2]
                         self.liberar(asistente)
-                        personajes_temp[decision].decision(personajes_temp[decision].asistentes[decision2])
+                        person = personajes_temp[decision]
+                        asistentes = person.asistentes[decision2]
+                        personajes_temp[decision].decision(asistentes)
                         personajes_temp[decision].reclutar(a1)
                         self.reclutar(a2)
                         return True
@@ -231,18 +264,25 @@ class Personaje(Individuo):
                 self.mapa[self.zona].append(z)
                 self.mapa.update({z: [self.zona]})
                 return self.mapa
-        print(f"{self.nombre}, parece que ya has descubierto todo de esta zona")
+        print(f"{self.nombre}, parece que "
+              + "ya has descubierto todo de esta zona")
         return False
     
     def activar_habilidad(self, llave, cancel = []):
-        estadisticas = ["Salud", "Fuerza", "Resistencia", "Carisma", "Inteligencia", "Sabiduria", "Energia"]
+        estadisticas = ["Salud", "Fuerza", "Resistencia", "Carisma",
+                        "Inteligencia", "Sabiduria", "Energia"]
         if(llave != "anticipacion"):
             print("¿Que habilidad quieres activar? (0 para salir)")
             print("HABILIDAD\tCOSTO")
             for a in self.arbol:
                 for n in range(0, len(gm.habilidades[llave])):
-                    if(list(gm.habilidades[llave].keys())[n] in self.arbol[a][2] and self.arbol[a][0] == 1):
-                        print(f"{a}: {self.arbol[a][2]}:\t{gm.habilidades[llave][list(gm.habilidades[llave].keys())[n]]}")
+                    habilidad = list(gm.habilidades[llave].keys())[n]
+                    if(habilidad in self.arbol[a][2] 
+                       and self.arbol[a][0] == 1):
+                        gm_hab = gm.habilidades[llave]
+                        gm_hab = gm_hab[list(gm.habilidades[llave].keys())[n]]
+                        print(f"{a}: {self.arbol[a][2]}:\t"
+                              + f"{gm_hab}")
             hab = input()
             if(hab == "0"):
                 return [False, False]
@@ -253,8 +293,14 @@ class Personaje(Individuo):
             llave = "Turno enemigo"
             hab = "Anticipacion"
             
-        # Costo de habilidad en llave, en self.arbol[hab][2] (nombre de la habilidad)
-        costo = gm.habilidades[llave][list(gm.habilidades[llave].keys())[gm.habilidades[llave][list(gm.habilidades[llave].keys()).index(self.arbol[hab][2])]]]
+# =============================================================================
+#         Costo de habilidad en llave, en self.arbol[hab][2] 
+#         (nombre de la habilidad)
+# =============================================================================
+        costo = gm.habilidades[
+            llave][list(gm.habilidades[llave].keys())[gm.habilidades[
+                llave][list(gm.habilidades[
+                    llave].keys()).index(self.arbol[hab][2])]]]
         print(f"Habilidad: {self.arbol[hab][2]}\n Costo: {costo}")
         
         if(self.energia < costo):
@@ -312,28 +358,42 @@ class Personaje(Individuo):
  
             elif(self.arbol[a][2] == "Disfraz"):
                 print("¿De quien te vas a disfrazar?")
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    print(f"{enemigo + 1}: {self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
-                objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][int(input())-1]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    print(f"{enemigo + 1}: "
+                          + str(self.ubicacion.enemigos_activos[
+                              self.ubicacion.zonas.index(self.zona)][
+                                  enemigo].nombre))
+                objetivo = self.ubicacion.enemigos_activos[
+                    self.ubicacion.zonas.index(self.zona)][int(input())-1]
                 objetivo.enfermar("Confundido", 3)
                 
             elif(self.arbol[a][2] == "Carisma absoluta"):
                 print("¿A quien vas a pacificar?")
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    print(f"{enemigo + 1}: {self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
-                objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][int(input())-1]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    print(f"{enemigo + 1}: "
+                          + str(self.ubicacion.enemigos_activos[
+                              self.ubicacion.zonas.index(self.zona)][
+                                  enemigo].nombre))
+                objetivo = self.ubicacion.enemigos_activos[
+                    self.ubicacion.zonas.index(self.zona)][int(input())-1]
                 objetivo.mover_enemigo(self.zona)
                 
             elif(self.arbol[a][2] == "Grito de guerra"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    objetivo = self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)][enemigo]
                     objetivo.enfermar("Confundido", 3)
                     cancel.append(objetivo)
                     
             elif(self.arbol[a][2] == "Habilidad animal"):
                 animales = []
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    objetivo = self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)][enemigo]
                     if(objetivo.categoria == "Animal"):
                         animales.append(objetivo)
                 
@@ -352,108 +412,163 @@ class Personaje(Individuo):
                     self.cambiar_hp(victima.salud)
                 elif(decision == "Fuerza"):
                     if(victima.fuerza > self.fuerza):
-                        self.condicion.update({decision + str(victima.fuerza - self.fuerza): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.fuerza 
+                                                     - self.fuerza): 3})
                         self.fuerza = victima.fuerza
                     else:
-                        self.condicion.update({decision + str(victima.fuerza): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.fuerza): 3})
                         self.fuerza += victima.fuerza
                 elif(decision == "Resistencia"):
                     if(victima.resistencia > self.resistencia):
-                        self.condicion.update({decision + str(victima.resistencia - self.resistencia): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.resistencia 
+                                                     - self.resistencia): 3})
                         self.resistencia = victima.resistencia
                     else:
-                        self.condicion.update({decision + str(victima.resistencia): 3})
+                        self.condicion.update({decision
+                                               + str(victima.resistencia): 3})
                         self.resistencia += victima.resistencia
                 elif(decision == "Carisma"):
                     if(victima.carisma > self.carisma):
-                        self.condicion.update({decision + str(victima.carisma - self.carisma): 3})
+                        self.condicion.update({decision
+                                               + str(victima.carisma 
+                                                     - self.carisma): 3})
                         self.carisma = victima.carisma
                     else:
-                        self.condicion.update({decision + str(victima.carisma): 3})
+                        self.condicion.update({decision
+                                               + str(victima.carisma): 3})
                         self.carisma += victima.carisma
                 elif(decision == "Inteligencia"):
                     if(victima.inteligencia > self.inteligencia):
-                        self.condicion.update({decision + str(victima.inteligencia - self.inteligencia): 3})
+                        self.condicion.update({decision
+                                               + str(victima.inteligencia 
+                                                     - self.inteligencia): 3})
                         self.inteligencia = victima.inteligencia
                     else:
-                        self.condicion.update({decision + str(victima.inteligencia): 3})
+                        self.condicion.update({decision
+                                               + str(victima.inteligencia): 3})
                         self.inteligencia += victima.inteligencia
                 elif(decision == "Sabiduria"):
                     if(victima.sabiduria > self.sabiduria):
-                        self.condicion.update({decision + str(victima.sabiduria - self.sabiduria): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.sabiduria 
+                                                     - self.sabiduria): 3})
                         self.sabiduria = victima.sabiduria
                     else:
-                        self.condicion.update({decision + str(victima.sabiduria): 3})
+                        self.condicion.update({decision
+                                               + str(victima.sabiduria): 3})
                         self.sabiduria += victima.sabiduria
                 elif(decision == "Energia"):
                     if(victima.energia > self.energia):
-                        self.condicion.update({decision + str(victima.energia - self.energia): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.energia 
+                                                     - self.energia): 3})
                         self.energia = victima.energia
                     else:
-                        self.condicion.update({decision + str(victima.energia): 3})
+                        self.condicion.update({decision 
+                                               + str(victima.energia): 3})
                         self.energia += victima.energia
             elif(self.arbol[a][2] == "Invocar animal"):
-                oso = Asistente(65, 19, 19, 19, 5, 17, "Oso", "Saludable", "Pelaje", "Animal", 5, 1, self.zona, self, "Oso")
+                oso = Asistente(65, 19, 19, 19, 5, 17, "Oso", "Saludable",
+                                "Pelaje", "Animal", 5, 1, self.zona,
+                                self, "Oso")
                 oso.condicion.update({"Lealtad": 5})
                 self.asistentes.append(gm.nuevo)
             elif(self.arbol[a][2] == "Special curry"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
                     enemigo.enfermar("Quemado", 3)
-            elif(self.arbol[a][2] == "Kaio ken" and llave == "Turno personaje"):
+            elif(self.arbol[a][2] == "Kaio ken" 
+                 and llave == "Turno personaje"):
                 self.condicion.update({"Kaio Ken": 3})
-            elif(self.arbol[a][2] == "Ultra instinto" and llave == "Turno personaje"):
+            elif(self.arbol[a][2] == "Ultra instinto" 
+                 and llave == "Turno personaje"):
                 self.condicion.update({"Ultra instinto": 3})
             elif(self.arbol[a][2] == "Analitico"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
                     print(enemigo.stats())
             elif(self.arbol[a][2] == "Momazo"):
                 print("¿A quien vas a trollear?")
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    print(f"{enemigo + 1}: {self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
-                objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][int(input())-1]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    print(f"{enemigo + 1}: "
+                          + str(self.ubicacion.enemigos_activos[
+                              self.ubicacion.zonas.index(self.zona)][
+                                  enemigo].nombre))
+                objetivo = self.ubicacion.enemigos_activos[
+                    self.ubicacion.zonas.index(self.zona)][int(input())-1]
                 cancel.append(objetivo)
             elif(self.arbol[a][2] == "Meme de enemigos"):
                 print("¿A quien vas buliear?")
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                    print(f"{enemigo + 1}: {self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
-                objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][int(input())-1]
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                    print(f"{enemigo + 1}: "
+                          + str(self.ubicacion.enemigos_activos[
+                              self.ubicacion.zonas.index(self.zona)][
+                                  enemigo].nombre))
+                objetivo = self.ubicacion.enemigos_activos[
+                    self.ubicacion.zonas.index(self.zona)][int(input())-1]
                 objetivo.carisma -= Juego.dados(1, objetivo.carisma//2)
             elif(self.arbol[a][2] == "Lord meme"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
                     enemigo.carisma -= Juego.dados(1, objetivo.carisma//2)
                     cancel.append(enemigo)                
             elif(self.arbol[a][2] == "Robots"):
-                robot = Asistente(25, 11, 7, 9, 15, 15, "Robot", "Saludable", "Tornillo", "Robot", 2, 1, self.zona, self, "Robot")
+                robot = Asistente(25, 11, 7, 9, 15, 15, "Robot", "Saludable",
+                                  "Tornillo", "Robot", 2, 1, self.zona, self,
+                                  "Robot")
                 robot.condicion.update({"Lealtad": 5})
                 self.asistentes.append(gm.nuevo)
             elif(self.arbol[a][2] == "Llamar al viento"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
                     self.atacar(enemigo, 2)
                 for p in range(0, len(gm.personajes)):
                     if(p.zona == self.zona and p != self):
                         self.atacar(p, 2)
             elif(self.arbol[a][2] == "Mente dormida"):
-                eleccion = int(input("¿Deseas atacar a todos (0) o a uno (1)?\n"))
+                eleccion = int(input("¿Deseas atacar a todos (0) o a uno "
+                                     + "(1)?\n"))
                 if(eleccion == 0):
-                    for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
+                    for enemigo in range(0, len(
+                            self.ubicacion.enemigos_activos[
+                                self.ubicacion.zonas.index(self.zona)])):
                         self.atacar(enemigo, 1.5)
                 else:
                     print("¿A quien vas a atacar?")
-                    for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                        print(f"{enemigo + 1}: {self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
-                    objetivo = self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][int(input())-1]
+                    for enemigo in range(0, len(
+                            self.ubicacion.enemigos_activos[
+                                self.ubicacion.zonas.index(self.zona)])):
+                        print(f"{enemigo + 1}: "
+                              + str(self.ubicacion.enemigos_activos[
+                                  self.ubicacion.zonas.index(self.zona)][
+                                      enemigo].nombre))
+                    objetivo = self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)][int(input())-1]
                     self.atacar(objetivo, 3)
             elif(self.arbol[a][2] == "Anticipacion"):
                 return [True, False]
-            elif(self.arbol[a][2] == "Explorador" and llave == "Iniciar pelea"):
-                for enemigo in range(0, len(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])):
-                        print(f"{self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)][enemigo].nombre}")
+            elif(self.arbol[a][2] == "Explorador" 
+                 and llave == "Iniciar pelea"):
+                for enemigo in range(0, len(self.ubicacion.enemigos_activos[
+                        self.ubicacion.zonas.index(self.zona)])):
+                        print(str(self.ubicacion.enemigos_activos[
+                            self.ubicacion.zonas.index(self.zona)][
+                                enemigo].nombre))
             elif(self.arbol[a][2] == "Smash ball"):
                 tirada = Juego.dados(1, 2)
                 if(tirada == 1):
-                    objetivo, dano, arma = gm.atacar(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)], 5)
+                    objetivo, dano, arma = gm.atacar(
+                        self.ubicacion.enemigos_activos[
+                            self.ubicacion.zonas.index(self.zona)], 5)
                 else:
-                    objetivo, dano, arma = gm.atacar(self.ubicacion.enemigos_activos[self.ubicacion.zonas.index(self.zona)])
+                    objetivo, dano, arma = gm.atacar(
+                        self.ubicacion.enemigos_activos[
+                            self.ubicacion.zonas.index(self.zona)])
                     self.cambiar_hp(-dano * 3)
                     dano = 0
                 # aplicar el ataque en turno personaje
@@ -465,7 +580,8 @@ class Personaje(Individuo):
                 for obj in self.inventario_nombres:
                     for ing in resultado[1]:
                         if(ing.nombre == obj):
-                            self.inventario.pop(self.inventario_nombres.index(obj))
+                            self.inventario.pop(
+                                self.inventario_nombres.index(obj))
                             quitar = True
                 if(quitar):
                     Juego.maquina(resultado[2], self)
@@ -580,12 +696,13 @@ class Personaje(Individuo):
         self.anadir_equipo(o, indie)
         
         self.actualizar_stats()
-        print("-------------------------------------------------------------------")
+        print("--------------------------------------------------------------")
     
     def desequipar(self):
         print("¿Que objeto quieres desequiparte?")
         for e in range(0, len(self.equipo_nombres)):
-            print(f"{e+1}: {self.equipo_nombres[e]} | {self.equipo[e].estadistica}: {self.equipo[e].boosteo}")
+            print(f"{e+1}: {self.equipo_nombres[e]} | "
+                  + f"{self.equipo[e].estadistica}: {self.equipo[e].boosteo}")
         print(f"{len(self.equipo_nombres)+1}: Salir")    
         o = int(input())
         if(o == len(self.equipo_nombres)+1):
@@ -609,13 +726,14 @@ class Personaje(Individuo):
         self.equipo_nombres.pop(o-1)
         
         self.actualizar_stats()
-        print("----------------------------------------------------------------------")
+        print("--------------------------------------------------------------")
         return True
     
     def arbol_habilidades(self):
         print('{:-^70}'.format('Arbol de habilidades'))
         print(f"Puntos de habilidad disponibles: {self.puntos_habilidad}")
-        print(f"COSTO\t\t\t\t    __________ \t\t\t\t\n\t\t\t\t   | {self.nombre} |\n\t\t\t\t    __________ \t\t\t\t\n")
+        print("COSTO\t\t\t\t    __________ \t\t\t\t\n\t\t\t\t   | "
+              + f"{self.nombre} |\n\t\t\t\t    __________ \t\t\t\t\n")
         print("\t\t\t\t/\t\t  \\")
         repetir = False
         for i in range(1, 4):
@@ -624,13 +742,15 @@ class Personaje(Individuo):
             if(self.arbol[llave][0] == 0):
                 print(f"{self.arbol[llave][1]}\t\t\t      |{llave}|\t", end="")
             else:
-                print(f"{self.arbol[llave][1]}\t\t\t      |{self.arbol[llave][2]}|\t", end="")
+                print(f"{self.arbol[llave][1]}\t\t\t      |"
+                      + f"{self.arbol[llave][2]}|\t", end="")
             llave = "B"+str(i)
             if(self.arbol[llave][0] == 0):
                 print(f"\t|{llave}|")
             else:
                 print(f"\t|{self.arbol[llave][2]}|")
-        seleccion = input("¿Que habilidad deseas desbloquear? (0 para salir)\n")
+        seleccion = input("¿Que habilidad deseas desbloquear? "
+                          + "(0 para salir)\n")
         if(seleccion == "0"):
             return False
         elif(seleccion not in self.arbol.keys()):
@@ -657,7 +777,7 @@ class Personaje(Individuo):
             
     def subir_salud_max(self):
         #DEBUG
-#    print("---------------------------------------------Metodo subir salud maxima")
+#    print("----------------------------------------Metodo subir salud maxima")
         self.salud_max+=15
         self.energia_max+=4
         print("Tu salud y energía han aumentado!!")
@@ -666,7 +786,7 @@ class Personaje(Individuo):
     
     def is_ded(self):
         #DEBUG
-#        print("-----------------------------------------------------Metodo is_ded")
+#        print("------------------------------------------------Metodo is_ded")
         zonas = self.ubicacion.zonas()
         z = zonas.index(self.zona)
         self.condicion = {"Muerto": 1}
@@ -709,7 +829,13 @@ class Personaje(Individuo):
         print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
         i=0
         for llave in self.cartera_obj:
-            print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} | \t\t{self.inventario[self.inventario_nombres.index(llave)].estadistica} | \t{self.inventario[self.inventario_nombres.index(llave)].boosteo}")
+            print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} | "
+                  + "\t\t"
+                  + str(self.inventario[
+                      self.inventario_nombres.index(llave)].estadistica)
+                  + "| \t"
+                  + str(self.inventario[
+                      self.inventario_nombres.index(llave)].boosteo))
             i+=1
         
         obj = int(input())-1
@@ -724,7 +850,7 @@ class Personaje(Individuo):
     
     def anadir_obj(self, objeto):
         #DEBUG
-#        print("----------------------------------------------Metodo anadir objeto")
+#        print("-----------------------------------------Metodo anadir objeto")
         if(self.is_wendigo):
             if(type(objeto) == int):
                 print("Nel")
@@ -758,9 +884,12 @@ class Personaje(Individuo):
                 for b in range(0, 6):
                     gm.anadir_obj_manual("Bala de sniper", self)
                 return True
-    #        print(self.ubicacion.cantidades_objetos_activos()[z][j])
-    #        print(self.ubicacion.cantidades_objetos_activos()[z])
-    #        print(f'\nFelicidades!! Obtuviste {objeto.nombre}, quedan {self.ubicacion.cantidades()[z][h]} restantes')
+# =============================================================================
+#              print(self.ubicacion.cantidades_objetos_activos()[z][j])
+#              print(self.ubicacion.cantidades_objetos_activos()[z])
+#              print(f'\nFelicidades!! Obtuviste {objeto.nombre}, quedan
+#              {self.ubicacion.cantidades()[z][h]} restantes')
+# =============================================================================
             ind = objetos_nombres[z].index(objeto.nombre)
             objetos_nombres[z].remove(objeto.nombre)
             if(self.ubicacion.cantidades()[z][h] <= 0):
@@ -781,9 +910,10 @@ class Personaje(Individuo):
         
     def usar_obj(self, target = None, objeto = None):
         robots = ["Sub Bismark"]
-        borrachos = ["Alumno Pasio", "Mentor Pasio", "Policia", "Guardabosques", "Pueblerino", "Obrero", "Burgues"]
+        borrachos = ["Alumno Pasio", "Mentor Pasio", "Policia",
+                     "Guardabosques", "Pueblerino", "Obrero", "Burgues"]
         #DEBUG
-#    print("----------------------------------------------------Metodo usar objeto")
+#    print("-----------------------------------------------Metodo usar objeto")
         self.energia += self.energia_max * 0.2
         print("Has recuperado el 20% de energia")
         if(self.energia > self.energia_max):
@@ -796,7 +926,8 @@ class Personaje(Individuo):
         if(objeto == None):
             objetos_permitidos = []
             for i in range(0, len(self.inventario)):
-                if(self.inventario[i].estadistica != "F" or "Pocion" in self.inventario_nombres[i]):
+                if(self.inventario[i].estadistica != "F" 
+                   or "Pocion" in self.inventario_nombres[i]):
                     objetos_permitidos.append(self.inventario[i].nombre)
             
             print("¿Que quieres usar?")
@@ -804,7 +935,13 @@ class Personaje(Individuo):
             i=0
             for llave in self.cartera_obj:
                 if(llave in objetos_permitidos):
-                    print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} | \t\t{self.inventario[self.inventario_nombres.index(llave)].estadistica} | \t{self.inventario[self.inventario_nombres.index(llave)].boosteo}")
+                    print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} "
+                          + "| \t\t"
+                          + str(self.inventario[self.inventario_nombres.index(
+                                  llave)].estadistica)
+                          + "| \t"
+                          + str(self.inventario[self.inventario_nombres.index(
+                              llave)].boosteo))
                     i+=1
             
             obj = int(input())-1
@@ -862,7 +999,7 @@ class Personaje(Individuo):
             print("No se encontró el target")
             return False
             
-        # ----------------------------------------------------------Objetos perrones
+        # -----------------------------------------------------Objetos perrones
         Dfstat_o = gm.Dfstats_o.iloc[i,0]
         
         cantidad = int(gm.Dfboosts_o.iloc[i,0])
@@ -870,7 +1007,10 @@ class Personaje(Individuo):
         if("Sustancia" in objeto.nombre):
             ind = self.inventario_nombres.index(objeto.nombre)
             self.anadir_equipo(objeto, ind)
-            pociones = ["Pocion fuerza", "Pocion resistencia", "Pocion carisma", "Pocion inteligencia", "Pocion sabiduria", "Pocion invisibilidad", "Pocion velocidad", "Pocion energia", "Veneno"]
+            pociones = ["Pocion fuerza", "Pocion resistencia",
+                        "Pocion carisma", "Pocion inteligencia",
+                        "Pocion sabiduria", "Pocion invisibilidad",
+                        "Pocion velocidad", "Pocion energia", "Veneno"]
             pocion = pociones[Juego.dados(1, len(pociones))[0]-1]
             if("III" in objeto.nombre):
                 pocion += " III"
@@ -892,7 +1032,8 @@ class Personaje(Individuo):
         elif(objeto.nombre == "GPS"):
             conocidos = self.mapa[self.zona]
             posibles = gm.mapa_master[self.zona]
-            print(f"Utilizando GPS... existen {len(posibles) - len(conocidos)} lugares sin descubrir")
+            print(f"Utilizando GPS... existen {len(posibles) - len(conocidos)}"
+                  + " lugares sin descubrir")
         
         elif(objeto.nombre == "Brujula"):
             if(self.ubicacion.nombre == "campamento"):
@@ -901,10 +1042,12 @@ class Personaje(Individuo):
                 conocidos = self.mapa[self.zona]
                 for j in conocidos:
                     if(j in gm.jefes.values()):
-                        print(f"Dentro de {j} se siente una presencia muy maligna...")
+                        print(f"Dentro de {j} se siente una presencia"
+                              + " muy maligna...")
                         break
         
-        elif(objeto.nombre == "Carnada") and (target.nombre not in gm.jefes.keys()):
+        elif(objeto.nombre == "Carnada") and (target.nombre 
+                                              not in gm.jefes.keys()):
             print(type(target.condicion))
             target.condicion.update({"Oloroso": 2})
             conocidos = gm.mapa_master[self.zona]
@@ -915,15 +1058,18 @@ class Personaje(Individuo):
                     if(c in lug):
                         lugar = gm.lugares_o[l]
                         break
-                # ---------------------------------lugar = objeto lugar de la zona c
+                # ----------------------------lugar = objeto lugar de la zona c
                 for e in lugar.enemigos_activos()[lugar.zonas().index(c)]:
                     print(e.nombre)
                     if(e.nombre in gm.carneables):
-                        lugar.enemigos_activos()[lugar.zonas().index(c)].remove(e)
-                        self.ubicacion.enemigos_activos()[self.ubicacion.zonas().index(self.zona)].append(e)
+                        lugar.enemigos_activos()[
+                            lugar.zonas().index(c)].remove(e)
+                        self.ubicacion.enemigos_activos()[
+                            self.ubicacion.zonas().index(self.zona)].append(e)
                         e.condicion.update({"Atraido": 2})
                         e.zona = self.zona
-                        print(f"La carnada ha atraido a un {e.nombre} salvaje...")
+                        print(f"La carnada ha atraido a un {e.nombre} "
+                              + "salvaje...")
                         break
         
         elif(objeto.nombre == "Control universal"):
@@ -966,13 +1112,18 @@ class Personaje(Individuo):
                     break
             indio = ubicacion.zonas().index(zona)
             for e in ubicacion.enemigos_activos()[indio]:
-                print(f"Puedes ver un {e.nombre} salvaje acechando a lo lejos...")
-            if("Sniper" in objeto.nombre and "Bala de sniper" in self.inventario_nombres):
+                print(f"Puedes ver un {e.nombre} salvaje acechando"
+                      + " a lo lejos...")
+            if("Sniper" in objeto.nombre 
+               and "Bala de sniper" in self.inventario_nombres):
                 print("¿A quien quieres dispararle los sesos con el sniper?")
                 print("INDICE \t NOMBRE \t SALUD")
                 print("0: Nadie")
                 for i in range (0, len(ubicacion.enemigos_activos()[indio])):
-                    print(f"{i+1}: {ubicacion.enemigos_activos()[indio][i].nombre}\t{ubicacion.enemigos_activos()[indio][i].salud}")
+                    print(f"{i+1}: "
+                          + str(ubicacion.enemigos_activos()[indio][i].nombre)
+                          + "\t"
+                          + str(ubicacion.enemigos_activos()[indio][i].salud))
                 ind = int(input())-1
                 objetivo = ubicacion.enemigos_activos()[indio][ind]
                 if(ind <= -1):
@@ -1039,31 +1190,35 @@ class Personaje(Individuo):
                 self.actualizar_stats()
                 return True
         
-        elif("Gasolina" in objeto.nombre or "Aceite" in objeto.nombre or "Alcohol" in objeto.nombre):
+        elif("Gasolina" in objeto.nombre or "Aceite" in objeto.nombre 
+             or "Alcohol" in objeto.nombre):
             tirada = Juego.dados(1, 20)[0]
-            if(tirada <= 2):#-----------------------------------Todos los personajes
-                print("Le has hechado gasolina a todos tus companeros, maravillosa jugada! :D")
+            if(tirada <= 2):#------------------------------Todos los personajes
+                print("Le has hechado gasolina a todos tus companeros, "
+                      + "maravillosa jugada! :D")
                 for t in targets[0]:
                     if("Quemado" in t.condicion):
                         t.enfermar("Quemado", 3)
                     else:
                         t.condicion.update({"Engasolinado": 2})
-            elif(tirada <= 5):#----------------------------------------------Tu solo
-                print("Te has resbalado y echado gasolina tu solo, que egoista...")
+            elif(tirada <= 5):#-----------------------------------------Tu solo
+                print("Te has resbalado y echado gasolina tu solo, "
+                      + "que egoista...")
                 if("Quemado" in self.condicion):
                     self.enfermar("Quemado", 3)
                 else:
                     self.condicion.update({"Engasolinado": 2})
-            elif(tirada <= 10):#------------------------------------------Un enemigo
+            elif(tirada <= 10):#-------------------------------------Un enemigo
                 t = targets[1][Juego.dados(1, len(targets[1]))[0]-1]
-                print(f"Le has hechado gasolina a {t.nombre}, no se ve muy feliz...")
+                print(f"Le has hechado gasolina a {t.nombre}, no se ve"
+                      + " muy feliz...")
                 if("Quemado" in t.condicion):
                     t.enfermar("Quemado", 3)
                 else:
                     t.condicion.update({"Engasolinado": 2})
-            elif(tirada <= 15):#-----------------------------------------------Nadie
+            elif(tirada <= 15):#------------------------------------------Nadie
                 print("Has banado el suelo con gasolina!")
-            elif(tirada <= 18):#-----------------------------------------------Todos
+            elif(tirada <= 18):#------------------------------------------Todos
                 print("Haces un mortal triple y riegas gasolina a todos")
                 for f in targets:
                     for t in f:
@@ -1071,15 +1226,17 @@ class Personaje(Individuo):
                             t.enfermar("Quemado", 3)
                         else:
                             t.condicion.update({"Engasolinado": 2})
-            elif(tirada <= 20):#----------------------------------Todos los enemigos
-                print("No se como le hiciste, pero banaste a todos tus rivales")
+            elif(tirada <= 20):#-----------------------------Todos los enemigos
+                print("No se como le hiciste, pero banaste a todos tus "
+                      + "rivales")
                 for t in targets[1]:
                     if("Quemado" in t.condicion):
                         t.enfermar("Quemado", 3)
                     else:
                         t.condicion.update({"Engasolinado": 2})
         
-        elif("Fosforo" in objeto.nombre or "Antorcha" in objeto.nombre or "Encendedor" in objeto.nombre):
+        elif("Fosforo" in objeto.nombre or "Antorcha" in objeto.nombre 
+             or "Encendedor" in objeto.nombre):
             for f in targets:
                 for t in f:
                     if("Engasolinado" in t.condicion):
@@ -1087,54 +1244,62 @@ class Personaje(Individuo):
         
         elif("Lodo" in objeto.nombre):
             tirada = Juego.dados(1, 20)[0]
-            if(tirada <= 2):#-----------------------------------Todos los personajes
-                print("Le has hechado lodo a todos tus companeros, maravillosa jugada! :D")
+            if(tirada <= 2):#------------------------------Todos los personajes
+                print("Le has hechado lodo a todos tus companeros, "
+                      + "maravillosa jugada! :D")
                 for t in targets[0]:
                     t.condicion.update({"Cegado": 1})
-            elif(tirada <= 5):#----------------------------------------------Tu solo
+            elif(tirada <= 5):#-----------------------------------------Tu solo
                 print("Te has resbalado y echado lodo tu solo, que egoista...")
                 self.condicion.update({"Cegado": 1})
-            elif(tirada <= 10):#------------------------------------------Un enemigo
+            elif(tirada <= 10):#-------------------------------------Un enemigo
                 t = targets[1][Juego.dados(1, len(targets[1]))[0]-1]
-                print(f"Le has hechado lodo a {t.nombre}, no se ve muy feliz...")
+                print(f"Le has hechado lodo a {t.nombre}, no se ve "
+                      + "muy feliz...")
                 t.condicion.update({"Cegado": 1})
-            elif(tirada <= 15):#-----------------------------------------------Nadie
+            elif(tirada <= 15):#------------------------------------------Nadie
                 print("Has banado el suelo con lodo!")
-            elif(tirada <= 18):#-----------------------------------------------Todos
+            elif(tirada <= 18):#------------------------------------------Todos
                 print("Haces un mortal triple y riegas lodo a todos")
                 for f in targets:
                     for t in f:
                         t.condicion.update({"Cegado": 1})
-            elif(tirada <= 20):#----------------------------------Todos los enemigos
-                print("No se como le hiciste, pero banaste a todos tus rivales")
+            elif(tirada <= 20):#-----------------------------Todos los enemigos
+                print("No se como le hiciste, pero banaste a todos "
+                      + "tus rivales")
                 for t in targets[1]:
                     t.condicion.update({"Cegado": 1})
         
         elif("Dinamita" in objeto.nombre):
             tirada = Juego.dados(1, 20)[0]
-            if(tirada <= 2):#-----------------------------------Todos los personajes
-                print("Has activado la dinamita en donde se encuentran tu y tus companeros exitosamente")
+            if(tirada <= 2):#------------------------------Todos los personajes
+                print("Has activado la dinamita en donde se encuentran tu y "
+                      + "tus companeros exitosamente")
                 for t in targets[0]:
                     t.cambiar_hp(gm.Dfboosts_o.iloc[i,0])
                     t.actualizar_stats()
-            elif(tirada <= 5):#----------------------------------------------Tu solo
-                print("Has activado la dinamita... pero has olvidarlo lanzarla")
+            elif(tirada <= 5):#-----------------------------------------Tu solo
+                print("Has activado la dinamita... pero has olvidarlo "
+                      + "lanzarla")
                 self.cambiar_hp(gm.Dfboosts_o.iloc[i,0])
                 self.actualizar_stats()
-            elif(tirada <= 10):#------------------------------------------Un enemigo
+            elif(tirada <= 10):#-------------------------------------Un enemigo
                 t = targets[1][Juego.dados(1, len(targets[1]))[0]-1]
-                print(f"Le has lanzado la dinamita a {t.nombre} de una manera muy radical")
+                print(f"Le has lanzado la dinamita a {t.nombre} de una manera "
+                      + "muy radical")
                 t.cambiar_hp(gm.Dfboosts_o.iloc[i,0])
                 t.actualizar_stats()
-            elif(tirada <= 15):#-----------------------------------------------Nadie
-                print("Lanzaste la dinamita muy lejos y exploto la casa de tu abuela")
-            elif(tirada <= 18):#-----------------------------------------------Todos
-                print("La explosion fue mucho mas grande de lo que esperabas...")
+            elif(tirada <= 15):#------------------------------------------Nadie
+                print("Lanzaste la dinamita muy lejos y exploto la casa de "
+                      + "tu abuela")
+            elif(tirada <= 18):#------------------------------------------Todos
+                print("La explosion fue mucho mas grande de lo que "
+                      + "esperabas...")
                 for f in targets:
                     for t in f:
                         t.cambiar_hp(gm.Dfboosts_o.iloc[i,0])
                         t.actualizar_stats()
-            elif(tirada <= 20):#----------------------------------Todos los enemigos
+            elif(tirada <= 20):#-----------------------------Todos los enemigos
                 print("Lanzaste la dinamita justo donde querias!")
                 for t in targets[1]:
                     t.cambiar_hp(gm.Dfboosts_o.iloc[i,0])
@@ -1146,7 +1311,8 @@ class Personaje(Individuo):
             ind = self.inventario_nombres.index(objeto.nombre)
             self.anadir_equipo(objeto, ind)
             self.actualizar_stats()
-            print(f"\n{self.nombre} ha usado con éxito {objeto.nombre}, es super efectivo!")
+            print(f"\n{self.nombre} ha usado con éxito {objeto.nombre}, "
+                  + "es super efectivo!")
             return True
         
         elif("Nota de consejo" in objeto.nombre):
@@ -1156,7 +1322,8 @@ class Personaje(Individuo):
         elif("Cana" == objeto.nombre and self.ubicacion.nombre == "Puerto"):
             self.buscar(None, "Mar")
             
-        elif("Cana mejorada" == objeto.nombre and self.ubicacion.nombre == "Puerto"):
+        elif("Cana mejorada" == objeto.nombre 
+             and self.ubicacion.nombre == "Puerto"):
             self.buscar(None, "Profundidades")
         
         elif("Lector de poder" in objeto.nombre):
@@ -1183,7 +1350,11 @@ class Personaje(Individuo):
         elif("SCP 427" == objeto.nombre):
             gm.personajes.remove(self)
             gm.personajes_muertos.append(self)
-            nuevo = Asistente(self.salud_max, self.fuerza, self.resistencia, self.carisma_max, self.inteligencia, self.sabiduria, self.nombre, self.condicion, self.inventario, "SCP", self.nivel, 1, self.zona, self, self.nombre + " SCP")
+            nuevo = Asistente(self.salud_max, self.fuerza, self.resistencia,
+                              self.carisma_max, self.inteligencia,
+                              self.sabiduria, self.nombre, self.condicion,
+                              self.inventario, "SCP", self.nivel, 1,
+                              self.zona, self, self.nombre + " SCP")
             nuevo.condicion.update({"Temporal": 1})
             nuevo.salud_max *= 4
             nuevo.salud = self.salud_max
@@ -1243,7 +1414,8 @@ class Personaje(Individuo):
         else:
             if(Dfstat_o== 'H'):
                 if(self.nombre == "Turati" and self.arbol["B1"][0] == 1):
-                    gm.cantidad = int(gm.cantidad * np.random.randint(10, 21) / 10)
+                    gm.cantidad = (int(gm.cantidad 
+                                       * np.random.randint(10, 21) / 10))
                 target.salud += cantidad
                 if(target.salud > target.salud_max):
                     target.salud = target.salud_max
@@ -1260,7 +1432,8 @@ class Personaje(Individuo):
                     target.condicion.pop('Envenenado I')
                     target.curar()
             elif(Dfstat_o=='Envenenado I'):
-                if ('Envenenado III' not in target.condicion) and ('Envenenado II' not in target.condicion):
+                if (('Envenenado III' not in target.condicion) 
+                    and ('Envenenado II' not in target.condicion)):
                     target.enfermar('Envenenado I', cantidad)
             elif(Dfstat_o=='Envenenado II'):
                 if ('Envenenado III' not in target.condicion):
@@ -1291,11 +1464,14 @@ class Personaje(Individuo):
                 target.condicion = {"Saludable": 1}
                 target.salud = target.salud_max
             elif(Dfstat_o=='Revivir'):
-                if(target.salud <= 0 and target in gm.personajes_muertos and ("Cadaver de "+target.nombre) in self.inventario_nombres):
+                if(target.salud <= 0 and target in gm.personajes_muertos 
+                   and (("Cadaver de "+target.nombre) 
+                        in self.inventario_nombres)):
                     gm.personajes_muertos.remove(target)
                     gm.personajes.append(target)
                     target.salud = target.salud_max/2
-                    ind = self.inventario_nombres.index("Cadaver de "+target.nombre)
+                    ind = self.inventario_nombres.index(
+                        "Cadaver de "+target.nombre)
                     self.inventario_nombres.remove("Cadaver de "+target.nombre)
                     self.inventario.pop(ind)
                     target.condicion = {"Saludable": 1}
@@ -1313,7 +1489,8 @@ class Personaje(Individuo):
             ind = self.inventario_nombres.index(objeto.nombre)
             self.anadir_equipo(objeto, ind)
         self.actualizar_stats()
-        print(f"\n{self.nombre} ha usado con éxito {objeto.nombre}, es super efectivo!")
+        print(f"\n{self.nombre} ha usado con éxito {objeto.nombre}, "
+              + "es super efectivo!")
         return True
     
     def craftear(self):
@@ -1324,7 +1501,13 @@ class Personaje(Individuo):
             print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
             i=0
             for llave in self.cartera_obj:
-                print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} | \t\t{self.inventario[self.inventario_nombres.index(llave)].estadistica} | \t{self.inventario[self.inventario_nombres.index(llave)].boosteo}")
+                print(f"{i+1}, \t{llave:.<24s}: {self.cartera_obj[llave]} | "
+                      + "\t\t"
+                      + str(self.inventario[
+                          self.inventario_nombres.index(llave)].estadistica)
+                      + "| \t"
+                      + str(self.inventario[
+                          self.inventario_nombres.index(llave)].boosteo))
                 i+=1
             print(f"{i+1}: Terminar")
             obj = int(input())-1
@@ -1333,7 +1516,12 @@ class Personaje(Individuo):
                 for craft in gm.crafteos:
                     crafteo = list(craft)
                     if("Amuleto" in ingredientes):
-                        nuevo = Asistente(19, 15, 3, 15, 5, 9, "Golem de " + ingredientes[-1].nombre, {"Saludable": 1}, ["Amuleto"], "Monstruo", len(ingredientes), 1, self.zona, self, "Golem")
+                        nuevo = Asistente(19, 15, 3, 15, 5, 9,
+                                          ("Golem de " 
+                                           + ingredientes[-1].nombre),
+                                          {"Saludable": 1}, ["Amuleto"],
+                                          "Monstruo", len(ingredientes), 1,
+                                          self.zona, self, "Golem")
                         for ing in ingredientes:
                             estadistica = ing.estadistica
                             boosteo = ing.boosteo
@@ -1366,13 +1554,17 @@ class Personaje(Individuo):
         return [True, ingredientes, gm.crafteos[craft]]
     
     def stats(self):
-        print(super().stats() + f"| Peso: {self.peso} \n Nivel: {self.nivel:<20} | Ubicacion: {self.ubicacion.nombre} \n Zona: {self.zona:<21} | Carga: {self.carga} \n Saldo: {self.cartera:<20} \n Equipo: \n {self.equipo_nombres}\n Inventario: \n {self.cartera_obj}")
+        print(super().stats() + f"| Peso: {self.peso} \n Nivel: "
+              + f"{self.nivel:<20} | Ubicacion: {self.ubicacion.nombre} \n "
+              + f"Zona: {self.zona:<21} | Carga: {self.carga} \n Saldo: "
+              + f"{self.cartera:<20} \n Equipo: \n {self.equipo_nombres}\n "
+              + f"Inventario: \n {self.cartera_obj}")
         if(self.is_wendigo):
             print("ESTATUS: WENDIGO")
     
     def moverse(self, zona = None):
         #DEBUG
-#    print("--------------------------------------------------------Metodo moverse")
+#    print("---------------------------------------------------Metodo moverse")
         self.hogar = self.zona
 
         ubicaciones = []
@@ -1422,14 +1614,18 @@ class Personaje(Individuo):
                 Juego.generar_objetos_zona(ubicacion_zone, zone)
         
         if(lugar.nombre == "Edificio Abandonado"):
-            if('Submarino' not in [x for v in values for x in v if type(v)==list] or 'Submarino' not in values):
+            if('Submarino' not in [
+                    x for v in values for x in v if type(v)==list] 
+                    or 'Submarino' not in values):
                 lugar = gm.fondo_del_mar
                 zona = "Submarino"
             if(self.evolucion != True and self == gm.personaje_malo):
                 lugar = gm.viaje_astral
-                zona = "camion" #---------------------------------------------------
-        if(zona == "Profundidades" and "Pin de bob esponja" in self.equipo_nombres):
-            print("Escuchas a lo lejos una voz que dice: ""EsToY LiStO"" seguido de una risa infantil...")
+                zona = "camion" #----------------------------------------------
+        if(zona == "Profundidades" 
+           and "Pin de bob esponja" in self.equipo_nombres):
+            print("Escuchas a lo lejos una voz que dice: ""EsToY LiStO"" "
+                  + "seguido de una risa infantil...")
         if(zona == "Sala principal"):
             Juego.dificultad = 2
         
@@ -1451,10 +1647,16 @@ class Personaje(Individuo):
                 ubicacion_zapo.objetos_activos()[z] = []
                 print(f"enemigos y objetos eliminados de: {zapo}")
         
-        if(self.zona in gm.agua and "Traje de buzo mejorado" in self.equipo_nombres and zona not in gm.agua):
-            self.velocidad -= self.equipo[self.equipo_nombres.index("Traje de buzo mejorado")].boosteo
-        elif(self.zona not in gm.agua and "Traje de buzo mejorado" in self.equipo_nombres and zona in gm.agua):
-            self.velocidad += self.equipo[self.equipo_nombres.index("Traje de buzo mejorado")].boosteo
+        if(self.zona in gm.agua 
+           and "Traje de buzo mejorado" in self.equipo_nombres 
+           and zona not in gm.agua):
+            self.velocidad -= self.equipo[
+                self.equipo_nombres.index("Traje de buzo mejorado")].boosteo
+        elif(self.zona not in gm.agua 
+             and "Traje de buzo mejorado" in self.equipo_nombres 
+             and zona in gm.agua):
+            self.velocidad += self.equipo[self.equipo_nombres.index(
+                "Traje de buzo mejorado")].boosteo
         
         print(lugar.jaulas)
         
@@ -1473,11 +1675,16 @@ class Personaje(Individuo):
     
     def buscar(self, objeto = None, zona = None):
         #DEBUG
-#    print("---------------------------------------------------------Metodo buscar")
+#    print("----------------------------------------------------Metodo buscar")
         scp = ["SCP 079", "SCP 053", "SCP 682"]
-        ultra_raros = ["Diamante", "Nota amenazante", "Tridente", "Esencia de bida"]
-        raros = ["Planta azul", "Planta blanca", "Planta roja", "Planta verde", "Planta morada", "Planta amarilla", "Sniper", "Dinamita", "Oro", "SCP 079", "SCP 500"]
-        iluminacion = ["Fosforo","Encendedor", "Antorcha", "Lupa", "Telefono", "Telefono con senal infinita", "Linterna", "Casco con linterna"]
+        ultra_raros = ["Diamante", "Nota amenazante", "Tridente",
+                       "Esencia de bida"]
+        raros = ["Planta azul", "Planta blanca", "Planta roja",
+                 "Planta verde", "Planta morada", "Planta amarilla",
+                 "Sniper", "Dinamita", "Oro", "SCP 079", "SCP 500"]
+        iluminacion = ["Fosforo","Encendedor", "Antorcha", "Lupa", "Telefono",
+                       "Telefono con senal infinita", "Linterna",
+                       "Casco con linterna"]
         
         
         if(zona == None):
@@ -1526,7 +1733,7 @@ class Personaje(Individuo):
         obj = ""
         print("Buscando...")
         if(objeto == None):
-            #--------------------------------------------------------------aleatorio
+            #---------------------------------------------------------aleatorio
             tirada = Juego.dados(1, len(lugar.objetos_activos()[z]))[0]
             objeto = lugar.objetos_activos()[z][tirada-1]
         else:
@@ -1544,7 +1751,7 @@ class Personaje(Individuo):
         if(objeto.nombre == "SCP 053"):
             print("No nel no puedes jaja salu3")
         if(objeto.nombre in scp):
-            #-----------------------------------dialogo scp, crear objeto pertinente
+            #------------------------------dialogo scp, crear objeto pertinente
             print("\nDi lo tuyo...\n")
             if(objeto.nombre == "SCP 079"):
                 obj = Objeto("Tecla", "--", "--", 0, 1, 1, 0)
@@ -1557,15 +1764,15 @@ class Personaje(Individuo):
                 gm.anadir_obj_manual(obj, self)
                 return True
         elif(objeto.nombre in ultra_raros):
-            #-------------------------------------busca objeto con probabilidad baja
+            #--------------------------------busca objeto con probabilidad baja
             if(n >= 80):
                 obj = objeto
         elif(objeto.nombre in raros):
-            #------------------------------------busca objeto con probabilidad media
+            #-------------------------------busca objeto con probabilidad media
             if(n >= 45):
                 obj = objeto
         else:
-            #-------------------------------------busca objeto con probabilidad alta
+            #--------------------------------busca objeto con probabilidad alta
             if(n >= 15):
                 obj = objeto
 #        print()
@@ -1618,13 +1825,14 @@ class Personaje(Individuo):
     
     def atacar(self, e_presentes, mult = 1):
         #DEBUG
-#    print("-----------------------------------------------Metodo atacar personaje")
+#    print("------------------------------------------Metodo atacar personaje")
         nada = Objeto("Puno", 0, "F", 0, 1, 2, 0)
         if(len(e_presentes) > 1):
             print("\n¿Quién será tu victima?")
             print("INDICE \t NOMBRE \t SALUD")
             for i in range (0, len(e_presentes)):
-                print(f"{i+1}: {e_presentes[i].nombre}\t{e_presentes[i].salud}")
+                print(f"{i+1}: "
+                      + f"{e_presentes[i].nombre}\t{e_presentes[i].salud}")
             objetivo = e_presentes[int(input())-1]
         else:
             objetivo = e_presentes[0]
@@ -1654,7 +1862,8 @@ class Personaje(Individuo):
                 mult *= 2
         elif(self.nombre == "Sebas" and "Kaio Ken" in self.condicion):
             mult *= 2
-        elif(self.nombre == "Ruben" and self.arbol["A1"][0] == 1 and objetivo.categoria == "Animal"):
+        elif(self.nombre == "Ruben" and self.arbol["A1"][0] == 1 
+             and objetivo.categoria == "Animal"):
             mult *= 2
         dano = self.fuerza*mult + int(arma.boosteo) + da2
         
@@ -1684,7 +1893,9 @@ class Personaje(Individuo):
                 self.anadir_equipo(self.inventario[indio], indio)
                 
         elif(arma.nombre == "Arco") or (arma.nombre == "Arco mejorado"):
-            if("Flecha" not in self.inventario_nombres) and ("Flecha emplumada" not in self.inventario_nombres) and ("Flecha primitiva" not in self.inventario_nombres):
+            if(("Flecha" not in self.inventario_nombres) 
+               and ("Flecha emplumada" not in self.inventario_nombres) 
+               and ("Flecha primitiva" not in self.inventario_nombres)):
                 print("No pues estas mongolo")
                 dano = 0
             else:
@@ -1713,7 +1924,8 @@ class Personaje(Individuo):
         return [objetivo, dano, arma]
     
     def atacar_carisma(self, enemigo):
-        ataque = int(input("¿Cómo quieres atacar?\n1: Intimidar\n2: Tranquilizar\n3: Persuadir"))-1
+        ataque = int(input("¿Cómo quieres atacar?\n1: Intimidar\n2: "
+                           + "Tranquilizar\n3: Persuadir"))-1
         dano = self.carisma + Juego.dados(1, self.carisma_max/10)[0]
         for h in range (0, len(gm.Dfnombres_e)):
             if(gm.Dfnombres_e.iloc[h,0] == enemigo.nombre):
@@ -1726,7 +1938,7 @@ class Personaje(Individuo):
         return[enemigo, dano]
         
     
-    def huir(self, e_presentes): #------------------------------e_presentes = turnos
+    def huir(self, e_presentes): #-------------------------e_presentes = turnos
         for e in range(0, len(e_presentes)):
             if(type(e_presentes[e]) == gm.Enemigo):
                 break
@@ -1747,22 +1959,29 @@ class Personaje(Individuo):
         else:
             print("¿Que quieres comprar?\nNOMBRE \t PRECIO")
             for i in range (0, len(self.ubicacion.objetos_activos()[0])):
-                print(f"{i+1}: {self.ubicacion.objetos_activos()[0][i].nombre}: \t{self.ubicacion.objetos_activos()[0][i].precio}")
+                print(f"{i+1}: "
+                      + f"{self.ubicacion.objetos_activos()[0][i].nombre}: "
+                      + f"\t{self.ubicacion.objetos_activos()[0][i].precio}")
             objeto = int(input())
-            if(self.inventario_nombres.count("Dinero") >= self.ubicacion.objetos_activos()[0][objeto-1].precio):
+            if(self.inventario_nombres.count("Dinero") 
+               >= self.ubicacion.objetos_activos()[0][objeto-1].precio):
                 print("Compra realizada!")
                 pago = self.ubicacion.objetos_activos()[0][objeto-1].precio
                 self.anadir_obj(-pago)
                 self.anadir_obj(self.ubicacion.objetos_activos()[0][objeto-1])
             else:
-                decision = input("Oh no! No alcanzan los dineros :( ¿Quieres vender algo? (S/N) \n")
+                decision = input("Oh no! No alcanzan los dineros :( "
+                                 + "¿Quieres vender algo? (S/N) \n")
                 if(decision == "S"):
-                    vend = self.vender(self.ubicacion.objetos_activos()[0][objeto-1].precio)
+                    vend = self.vender(self.ubicacion.objetos_activos()[0][
+                        objeto-1].precio)
                     if(vend):
                         print("Compra realizada!")
-                        pago = self.ubicacion.objetos_activos()[0][objeto-1].precio
+                        pago = self.ubicacion.objetos_activos()[0][
+                            objeto-1].precio
                         self.anadir_obj(-pago)
-                        self.anadir_obj(self.ubicacion.objetos_activos()[0][objeto-1])
+                        self.anadir_obj(self.ubicacion.objetos_activos()[0][
+                            objeto-1])
                 else:
                     print("Weno pues estas pobre")
                     return False
@@ -1775,7 +1994,8 @@ class Personaje(Individuo):
         else:
             print("¿Que quieres vender?\nNOMBRE \t PRECIO")
             for i in range(0, len(self.inventario)):
-                print(f"{i+1}: {self.inventario_nombres[i]} {round(self.inventario[i].precio*.6)}")
+                print(f"{i+1}: {self.inventario_nombres[i]} "
+                      + f"{round(self.inventario[i].precio*.6)}")
             indio = int(input())-1
             objeto = self.inventario[indio]
             if(objeto.nombre == "Nota de consejo" or objeto.precio == 0):
@@ -1793,7 +2013,7 @@ class Personaje(Individuo):
     
     def exceso_peso(self):
         #DEBUG
-#    print("----------------------------------------------------Metodo exceso peso")
+#    print("-----------------------------------------------Metodo exceso peso")
         if(self.peso > self.carga):
             if(self.inventario != []):
                 print(f"{self.nombre} estas muy gordo :(")
@@ -1803,7 +2023,7 @@ class Personaje(Individuo):
     
     def tirar_objeto(self):
         #DEBUG
-#    print("----------------------------------------------------------Tirar objeto")
+#    print("-----------------------------------------------------Tirar objeto")
         self.energia += self.energia_max * 0.2
         print("Has recuperado el 20% de energia")
         if(self.energia > self.energia_max):
@@ -1816,7 +2036,9 @@ class Personaje(Individuo):
         print("INDICE \t NOMBRE \t CANTIDAD \t PESO")
         i=0
         for llave in self.cartera_obj:
-            print(f"{i+1},\t {llave:.<24s}: {self.cartera_obj[llave]} | {self.inventario[self.inventario_nombres.index(llave)].peso}")
+            print(f"{i+1},\t {llave:.<24s}: {self.cartera_obj[llave]} | "
+                  + str(self.inventario[
+                      self.inventario_nombres.index(llave)].peso))
             i+=1
         objeto = int(input())-1
         if("Confundido" in self.condicion):
@@ -1827,7 +2049,8 @@ class Personaje(Individuo):
                 break
             objeto -= 1
         
-        print(f"{self.nombre} se ha desecho de {llave}, descanse en paz {llave}, F")
+        print(f"{self.nombre} se ha desecho de {llave}, descanse en paz "
+              + f"{llave}, F")
         zonas = self.ubicacion.zonas()
         i = zonas.index(self.zona)
         indio = self.inventario_nombres.index(llave)
@@ -1848,7 +2071,7 @@ class Personaje(Individuo):
     
     def subir_nivel(self):
         #DEBUG
-#    print("----------------------------------------------------Metodo subir nivel")
+#    print("-----------------------------------------------Metodo subir nivel")
         self.nivel += 1
         self.puntos_habilidad += 1
         self.subir_salud_max()
@@ -1856,8 +2079,10 @@ class Personaje(Individuo):
             print(f"\n{self.nombre}: " + "SUBISTE DE NIVEL!!\n")
             contador=5
             for i in range(0, 5):
-                print("¿Que estadistica deseas mejorar? Tienes: "+ str(contador-i) +" puntos disponibles")
-                sel = int(input("\nFuerza(1)\nResistencia(2)\nCarisma(3)\nInteligencia(4)\nSabiduria(5)\n"))
+                print("¿Que estadistica deseas mejorar? Tienes: "
+                      + str(contador-i) +" puntos disponibles")
+                sel = int(input("\nFuerza(1)\nResistencia(2)\nCarisma(3)\n"
+                                + "Inteligencia(4)\nSabiduria(5)\n"))
                 if(sel == 1):        
                     self.fuerza+=1
                     if("Super Sayain" in self.condicion):
@@ -1881,11 +2106,25 @@ class Personaje(Individuo):
 from Juegos import Juego
 import Game_Manager as gm
 
-gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek",  {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1, gm.mapa_mirek, 0, 10, gm.arbol_mirek)
-gm.bugatti = Personaje(39, 8, 7, 18, 16, 9,    "Turati", {"Saludable": 1}, 25, [], gm.campamento, "Cabana", 1, gm.mapa_bugatti, 0, 10, gm.arbol_bugatti)
-gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 0, 10, gm.arbol_ruben)
-gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 25, [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 0, 10, gm.arbol_sebas)
-gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 15, [], gm.campamento, "Cabana", 1, gm.mapa_norman, 0, 10, gm.arbol_norman)
+gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek",
+                       {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1,
+                       gm.mapa_mirek, 0, 10, gm.arbol_mirek)
+gm.bugatti = Personaje(39, 8, 7, 18, 16, 9,    "Turati", {"Saludable": 1}, 25,
+                       [], gm.campamento, "Cabana", 1, gm.mapa_bugatti, 0, 10,
+                       gm.arbol_bugatti)
+gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 20,
+                       [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 0, 10,
+                       gm.arbol_ruben)
+gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 25,
+                       [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 0, 10,
+                       gm.arbol_sebas)
+gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 15,
+                       [], gm.campamento, "Cabana", 1, gm.mapa_norman, 0, 10,
+                       gm.arbol_norman)
 
-gm.master  = Personaje(420, 5, 69, 69, 69, 69,  "Tu dios", {"Saludable": 1}, 69, [], gm.bosque, "Aire libre", 69, gm.mapa_master, 666, 420, gm.arbol_norman)
-gm.ninja   = Personaje(420, 69, 69, 69, 69, 69,  "Tu segundo dios", {"Saludable": 1}, 69, [], gm.bosque, "Aire libre", 69, gm.mapa_master, 666, 420, gm.arbol_norman)
+gm.master  = Personaje(420, 5, 69, 69, 69, 69,  "Tu dios", {"Saludable": 1},
+                       69, [], gm.bosque, "Aire libre", 69, gm.mapa_master,
+                       666, 420, gm.arbol_norman)
+gm.ninja   = Personaje(420, 69, 69, 69, 69, 69,  "Tu segundo dios",
+                       {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
+                       69, gm.mapa_master, 666, 420, gm.arbol_norman)

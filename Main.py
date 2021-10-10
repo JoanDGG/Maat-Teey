@@ -201,7 +201,7 @@ def main():
 # Recuperan 20% y 30% energia COMPLETADO
 
 
-    # Separar codigo por documentos
+    # Separar codigo por documentos COMPLETADO
     # Anadir funciones
     # Reducir funciones
     # Comentar TODO

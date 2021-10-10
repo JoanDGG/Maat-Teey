@@ -3,7 +3,8 @@ import Game_Manager as gm
 
 class Individuo:
     
-    def __init__(self, salud: int, fuerza:int, resistencia:int, carisma:int, inteligencia:int, sabiduria:int, nombre:str, condicion:dict):
+    def __init__(self, salud: int, fuerza:int, resistencia:int, carisma:int,
+                 inteligencia:int, sabiduria:int, nombre:str, condicion:dict):
         self.salud = salud
         self.fuerza = fuerza
         self.resistencia = resistencia
@@ -19,7 +20,7 @@ class Individuo:
             
     def cambiar_hp(self, hp:int):
         #DEBUG
-#    print("-----------------------------------------------------Metodo cambiar hp")
+#    print("------------------------------------------------Metodo cambiar hp")
         self.salud += round(hp)
         if(self.salud <= 0):
             print("\n"+self.nombre + " murió, F")
@@ -28,7 +29,7 @@ class Individuo:
     
     def efecto(self):
         #DEBUG
-#    print("---------------------------------------------------------Metodo efecto")
+#    print("----------------------------------------------------Metodo efecto")
         if("Envenenado III" in self.condicion):
             self.cambiar_hp(-self.salud_max*.15)
         elif("Envenenado II" in self.condicion):
@@ -40,7 +41,8 @@ class Individuo:
         if("Acelerado" in self.condicion):
             self.velocidad *= 1.2
         for c in self.condicion:
-            if(c != "Saludable" and c != "Muerto" and c != "Bloqueado" and c != "Temporal" and c != "Super Sayain"):
+            if(c != "Saludable" and c != "Muerto" and c != "Bloqueado" 
+               and c != "Temporal" and c != "Super Sayain"):
                 self.condicion[c] -= 1
             if(self.condicion[c] == 0 or c == "Bloqueado"):
                 if(c == "Indefenso"):
@@ -64,16 +66,25 @@ class Individuo:
     def stats(self):
         espacio = 18-(len(str(int(self.energia_max))))
         espacio2 = 19-(len(str(int(self.salud_max))))
-        a = f'\n{self.nombre:.^50} \n Salud: {int(self.salud)}/{int(self.salud_max):<{espacio2}} | Fuerza: {int(self.fuerza)} \n Resistencia: {int(self.resistencia):<14} | Carisma/Hostilidad: {int(self.carisma)} \n Inteligencia: {int(self.inteligencia):<13} | Sabiduria: {int(self.sabiduria)} \n Velocidad: {int(self.velocidad):<16} | Condicion: {self.condicion}\n Energia: {int(self.energia)}/{int(self.energia_max):<{espacio}}'
+        a = f"\n{self.nombre:.^50} \n Salud: {int(self.salud)}/"
+        + f"{int(self.salud_max):<{espacio2}} | Fuerza: {int(self.fuerza)}"
+        + f" \n Resistencia: {int(self.resistencia):<14} | "
+        + f"Carisma/Hostilidad: {int(self.carisma)} \n Inteligencia: "
+        + f"{int(self.inteligencia):<13} | Sabiduria: {int(self.sabiduria)} "
+        + f"\n Velocidad: {int(self.velocidad):<16} | Condicion: "
+        + f"{self.condicion}\n Energia: {int(self.energia)}/"
+        + f"{int(self.energia_max):<{espacio}}"
         return a
     
     def is_ded(self):
         #DEBUG
-#    print("-----------------------------------------------Metodo is_ded individuo")
+#    print("------------------------------------------Metodo is_ded individuo")
         return True
     
     def curar(self):
-        if("Envenenado III" not in self.condicion and "Envenenado II" not in self.condicion and "Envenenado I" not in self.condicion and "Quemado" not in self.condicion):
+        if("Envenenado III" not in self.condicion and "Envenenado II" 
+           not in self.condicion and "Envenenado I" not in self.condicion 
+           and "Quemado" not in self.condicion):
             self.condicion.update({"Saludable": 1})
             return True
         return False
@@ -86,7 +97,7 @@ class Individuo:
     
     def defender(self):
         #DEBUG
-#    print("-------------------------------------------------------Metodo defender")
+#    print("--------------------------------------------------Metodo defender")
         self.condicion.update({"Defendiendose": 1})
         self.energia += self.energia_max * .3
         print("Has recuperado el 30% de energia")
