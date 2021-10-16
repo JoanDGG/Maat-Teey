@@ -206,6 +206,10 @@ def main():
     # Reducir funciones
     # Comentar TODO
 
+    # Renombrar Shufflepros
+    # Cambiar nombre variables Juegos
+
+
     # Arreglar docs
     
     # Metodo guardar y cargar

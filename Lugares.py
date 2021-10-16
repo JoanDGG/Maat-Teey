@@ -2,7 +2,7 @@ class Lugar:
     
     def __init__(self, nombre:str, zonas:list, enemigos:list, 
                  cantidades_enemigos:list, objetos:list, cantidades:list, 
-                 objetos_activos: list, enemigos_activos: list):
+                 enemigos_activos: list, objetos_activos: list):
         self.nombre = nombre
         self.zonas = zonas
         self.jaulas = []
@@ -13,20 +13,19 @@ class Lugar:
         self.objetos = objetos
         self.objetos_activos = objetos_activos
     
-    def enemigos_zona_s(self, enemigos, zona):
-        indice_zona = self.zonas.index(zona)
-        self.enemigos[indice_zona] = enemigos
+    def enemigos_zona_setter(self, enemigos, zona):
+        self.enemigos[self.indice_zona(zona)] = enemigos
     
-    def objetos_zona_s(self, objetos, zona):
-        indice_zona = self.zonas.index(zona)
-        self.objetos[indice_zona] = objetos
+    def objetos_zona_setter(self, objetos, zona):
+        self.objetos[self.indice_zona(zona)] = objetos
 
-    def cantidades_enemigos_zona_s(self, cantidades, zona):
-        indice_zona = self.zonas.index(zona)
-        self.cantidades_enemigos[indice_zona] = cantidades
+    def cantidades_enemigos_zona_setter(self, cantidades, zona):
+        self.cantidades_enemigos[self.indice_zona(zona)] = cantidades
     
-    def cantidades_objetos_zona_s(self, cantidades, zona):
-        indice_zona = self.zonas.index(zona)
-        self.cantidades[indice_zona] = cantidades
+    def cantidades_objetos_zona_setter(self, cantidades, zona):
+        self.cantidades[self.indice_zona(zona)] = cantidades
+        
+    def indice_zona(self, zona):
+        return self.zonas.index(zona)
 
 #lug = Lugar("A", [], [], [], [], [], [], [])

@@ -4,28 +4,28 @@ import numpy as np
 from Lugares import Lugar
 
 
-Data_e=pd.read_csv("D-D_Enemigos_3.csv")
-Data_o2=pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
+Data_enemigos = pd.read_csv("D-D_Enemigos_3.csv")
+Data_objetos2 = pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
 
-Data_o=pd.read_csv("D-D_Objetos_3.csv")
-Dfnombres_o = Data_o.loc[:,["Nombre"]]
-Dfstats_o = Data_o.loc[:,["Estadistica"]]
-Dfboosts_o = Data_o.loc[:,["Boosteo"]]
-Dfmejoras_o = Data_o.loc[:,["Mejora"]]
+Data_objetos  = pd.read_csv("D-D_Objetos_3.csv")
+Dfnombres_o   = Data_objetos.loc[:,["Nombre"]]
+Dfstats_o     = Data_objetos.loc[:,["Estadistica"]]
+Dfboosts_o    = Data_objetos.loc[:,["Boosteo"]]
+Dfmejoras_o   = Data_objetos.loc[:,["Mejora"]]
 #------
-Dfestropeos_o = Data_o.loc[:,["Estropeo"]]
-Dfespacios_o = Data_o.loc[:,["Espacio"]]
-Dfusos_o = Data_o.loc[:,["Usos"]]
-Dfcant_o = Data_o.loc[:,["Cantidad"]]
-Dfprecio_t = Data_o.loc[:,["Precio"]]
+Dfestropeos_o = Data_objetos.loc[:,["Estropeo"]]
+Dfespacios_o  = Data_objetos.loc[:,["Espacio"]]
+Dfusos_o      = Data_objetos.loc[:,["Usos"]]
+Dfcant_o      = Data_objetos.loc[:,["Cantidad"]]
+Dfprecio_t    = Data_objetos.loc[:,["Precio"]]
 
-Dfnombres_e = Data_e.loc[:,["Nombre"]]
-Dfcant_e = Data_e.loc[:,["Cantidad"]]
-Dfdifi_e = Data_e.loc[:,["Dificultad"]]
-Dfcategorias_e = Data_e.loc[:,["Categoria"]]
-Dfintimidar_e = Data_e.loc[:, ["Intimidar"]]
-Dftranquilizar_e = Data_e.loc[:, ["Tranquilizar"]]
-Dfpersuadir_e = Data_e.loc[:, ["Persuadir"]]
+Dfnombres_e   = Data_enemigos.loc[:,["Nombre"]]
+Dfcant_e      = Data_enemigos.loc[:,["Cantidad"]]
+Dfdifi_e      = Data_enemigos.loc[:,["Dificultad"]]
+Dfcategorias_e = Data_enemigos.loc[:,["Categoria"]]
+Dfintimidar_e = Data_enemigos.loc[:, ["Intimidar"]]
+Dftranquilizar_e = Data_enemigos.loc[:, ["Tranquilizar"]]
+Dfpersuadir_e = Data_enemigos.loc[:, ["Persuadir"]]
 
 jefes = {"Zombie policia": "Puesto de seguridad", 
          "Siren Head": "Aire libre", 
@@ -71,7 +71,7 @@ atrapables = ["Lobo", "Oso", "Murcielago", "Serpiente",
 atrapables_medianos = ["Lobo", "Murcielago", "Serpiente", 
                        "Anguila electrica", "Rata", "Rata de dos patas", "Aguila"]
 
-atrapables_t_osos = ["Lobo", "Oso", "Rata de dos patas", 
+atrapables_trampa_osos = ["Lobo", "Oso", "Rata de dos patas", 
                      "Cocodrilo", "Trol", "Oso marino"]
 
 domables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica", 
@@ -79,12 +79,14 @@ domables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica",
 
 # Añadir zombies, humanos, monstruos, que no son jefes 
 # ni cocineros en atrapables por trampa de osos
-for e in range(0, len(Dfcategorias_e)):
-    if(Dfcategorias_e.iloc[e,0] == "Zombie" or Dfcategorias_e.iloc[e,0] == "Humano" 
-    or Dfcategorias_e.iloc[e,0] == "Monstruo"):
-        if(Dfnombres_e.iloc[e,0] not in jefes and Dfnombres_e.iloc[e,0] 
-        not in jefes_no_jefes and Dfnombres_e.iloc[e,0] not in atrapables_t_osos):
-            atrapables_t_osos.append(Dfnombres_e.iloc[e,0])
+for enemigo in range(0, len(Dfcategorias_e)):
+    if(Dfcategorias_e.iloc[enemigo,0] == "Zombie" 
+       or Dfcategorias_e.iloc[enemigo,0] == "Humano" 
+       or Dfcategorias_e.iloc[enemigo,0] == "Monstruo"):
+        if(Dfnombres_e.iloc[enemigo,0] not in jefes 
+           and Dfnombres_e.iloc[enemigo,0] not in jefes_no_jefes 
+           and Dfnombres_e.iloc[enemigo,0] not in atrapables_trampa_osos):
+            atrapables_trampa_osos.append(Dfnombres_e.iloc[enemigo,0])
 
 lugares = ["Campamento", "Bosque", "Pueblo", "Mina", "Edificio Abandonado", 
            "Puerto", "Normancueva", "Deshuesadero", "Montana", "Mercado", "Puerta", 
@@ -121,6 +123,7 @@ consejos = [
             "Si no sabes a donde ir, no importa que camino sigas"
             ]
 
+# 
 sabiduria_del_mas_alla = [
                             ""
                             ]
@@ -389,6 +392,7 @@ iluminados = ["Puesto de seguridad", "Cabana de guardabosques", "Comunidad",
               "Carniceria", "Alacena", "Cabana doctor", "Zona de control", 
               "Mercado", "Banco", "puesto de seguridad"]
 
+# Enemigos que dropean carne
 carneables = []
 
 notaxeables = ["Zombie Base", "Zombie corredor", "Acechadores", 
@@ -416,134 +420,155 @@ mochilas = ["Mochila", "Mochila campista", "Mochila mejorada", "Maleta", "Cubeta
          
 agua = ["Profundidades", "Mar"]
 
-
-def eliminar(lista):
-    for l in lista:
-        del(l)
-    return True
-
-def buscaLugar(zona: str):
-    for l in range(0, len(lugares_o)):   # Sacar lugar a partir de zona
-            lug = lugares_o[l].zonas
-            if(zona in lug):
-                lugar = lugares_o[l]
-                break
-    return lugar
-
-def revisar_string(nombre):
-    s=""
-    cantidad = nombre.count("/")
-    tirada = dados(1,cantidad+1)[0]
-    i=0
-    for l in range(0, len(nombre)):
-        if(nombre[l] == "/"):
-            i+=1
-        if(i == tirada-1):
-            l+=1
-            break
-    if(tirada != cantidad+1): #-------Revisar en donde esta la n diagonal
-        while(nombre[l] != "/"):
-            s+=nombre[l]
-            l+=1
-    else:
-        s = nombre[l:]
-    return s
-
-def anadir_obj_manual(nombre, personaje, cant = None):
+def anadir_obj_manual(nombre, personaje, cantidad = None):
     from Juegos import Juego
 
-    indio = personaje.ubicacion.zonas.index(personaje.zona)    
+    indice = personaje.ubicacion.zonas.index(personaje.zona)    
     if("sabia" in nombre):
         boosteo = sabiduria_del_mas_alla[dados(1, len(sabiduria_del_mas_alla))[0]-1]
         nombre = "Nota de consejo"
-        o= Juego.tranformar_objeto(nombre, cant)
-        o.boosteo = boosteo
+        objeto = Juego.tranformar_objeto(nombre, cantidad)
+        objeto.boosteo = boosteo
     else:
-        o= Juego.tranformar_objeto(nombre, cant)
+        objeto = Juego.tranformar_objeto(nombre, cantidad)
     
-    if(o.nombre == "Nota de consejo" and "sabia" not in o.nombre):
-        o.boosteo = consejos[dados(1, len(consejos))[0]-1]
+    if(objeto.nombre == "Nota de consejo" and "sabia" not in objeto.nombre):
+        objeto.boosteo = consejos[dados(1, len(consejos))[0]-1]
     
-    personaje.ubicacion.objetos_activos[indio].append(o)
-    personaje.ubicacion.cantidades[indio].append(1)
-    personaje.ubicacion.objetos[indio].append(o.nombre)
-    personaje.anadir_obj(o)
+    personaje.ubicacion.objetos_activos[indice].append(objeto)
+    personaje.ubicacion.cantidades[indice].append(1)
+    personaje.ubicacion.objetos[indice].append(objeto.nombre)
+    personaje.anadir_obj(objeto)
+    return True
 
-def separar(df, lugar, zonas, tipo):
-    #DEBUG
-#    print("------------------------------------------------Metodo separar objetos")
-    enemigos = False
-    if(df == "o"):
-        a = Dfnombres_o
-        b = Dfcant_o
-        enemigos = False
-    else:
-        a = Dfnombres_e
-        b = Dfcant_e
-        enemigos = True
-    elementos = []
-    cantidad = []
-    for i in range (0, len(zonas)):
-        elementos.append([])
-        cantidad.append([])
-    como_quieras = False
-    j=-1
-    for i in range (0, len(a)):
-        if (a.iloc[i,0] in lugares and a.iloc[i,0] != lugar) or (a.iloc[i,0] == ""):
-            como_quieras = False
-        if(como_quieras): #-----------------------------------------Dentro del lugar
-            if (a.iloc[i,0] in zonas):
-                j+=1
-            else:
-                if(enemigos):
-                    if(a.iloc[i,0]=="Rat King G" or a.iloc[i,0]=="Rat King C" 
-                       or a.iloc[i,0]=="Cocinero" 
-                       or Dfdifi_e.iloc[i,0] != dificultad):
-                        continue
-                elementos[j].append(a.iloc[i,0])
-                cantidad[j].append(b.iloc[i,0])
-        if(a.iloc[i,0] == lugar):
-            como_quieras = True
-#    print(elementos)
-#    print(cantidad)
-    if(tipo == 1):
-        return elementos
-    elif(tipo == 2):
-        return cantidad
-
-def generar_lugar_arg(nombre, zonas):
-    activos = []
-    activos1 = []
-    for i in range(0, len(zonas)):
-        activos.append([])
-        activos1.append([])
-    lugar = Lugar(nombre, zonas,
-                  separar("e", nombre, zonas, 1), 
-                  separar("e", nombre, zonas, 2), 
-                  separar("o", nombre, zonas, 1), 
-                  separar("o", nombre, zonas, 2), 
-                  activos, activos1)
-    for i in range (0, len(zonas)):
-        lugar.jaulas.append({})
+def busca_lugar(zona: str):
+    # Sacar lugar a partir de zona
+    for lugar_original in range(0, len(objetos_lugares)):
+            if(zona in objetos_lugares[lugar_original].zonas):
+                lugar = objetos_lugares[lugar_original]
+                break
     return lugar
+
+def dados(cantidad_dados: int, cantidad_caras: int):
+    #DEBUG
+#    print("----------------------------------------------------------Metodo dados")
+    if(cantidad_dados == 0):
+        return 0
+    tiradas = []
+    for indice in range (0, cantidad_dados):
+        tiradas.append(np.random.randint(1, cantidad_caras + 1))
+    return tiradas
+
+def eliminar(lista):
+    for elemento in lista:
+        del(elemento)
+    return True
 
 def generar_carneables():
     categorias_si = ["Animal", "Monstruo", "Zombie"]
     nombres = Dfnombres_e
     categorias = Dfcategorias_e
-    for n in range(0, len(nombres)):
-        if(categorias.iloc[n,0] in categorias_si) and (nombres.iloc[n,0] 
-        not in carneables) and (nombres.iloc[n,0] not in jefes.keys()):
-            carneables.append(nombres.iloc[n,0])
+    for indice in range(0, len(nombres)):
+        if(categorias.iloc[indice,0] in categorias_si) and (nombres.iloc[indice,0] 
+        not in carneables) and (nombres.iloc[indice,0] not in jefes.keys()):
+            carneables.append(nombres.iloc[indice,0])
+
+def generar_lugar(nombre, zonas):
+    enemigos_activos = []
+    objetos_activos = []
+    for i in range(0, len(zonas)):
+        enemigos_activos.append([])
+        objetos_activos.append([])
+    lugar = Lugar(nombre, zonas,
+                  separar("enemigos", nombre, zonas, "elementos"), 
+                  separar("enemigos", nombre, zonas, "cantidades"), 
+                  separar("objetos", nombre, zonas, "elementos"), 
+                  separar("objetos", nombre, zonas, "cantidades"), 
+                  enemigos_activos, objetos_activos)
+    for i in range (0, len(zonas)):
+        lugar.jaulas.append({})
+    return lugar
+
+def jamon():
+    print("JAMON")
+
+def queso():
+    print("Queso")
 
 def malo():
     return personajes[dados(1, len(personajes))[0]-1]
 
-def queso():
-    print("Queso")
-    
-def jamon():
-    print("JAMON")
+def repetido(self, lugar, zona:int, jefe:str):
+    for enemigo in lugar.enemigos_activos[zona]:
+        if(enemigo.nombre == jefe):
+            return True
+    return False
+
+def revisar_string(nombre):
+    # Revisa el texto dividido por diagonales
+    salida = ""
+    cantidad_diagonales = nombre.count("/")
+    tirada = dados(1, cantidad_diagonales + 1)[0]
+    contador = 0
+    for indice in range(0, len(nombre)):
+        if(nombre[indice] == "/"):
+            contador += 1
+        if(contador == tirada-1):
+            indice += 1
+            break
+    if(tirada != cantidad_diagonales + 1): #-----Revisar en donde esta la n diagonal
+        while(nombre[indice] != "/"):
+            salida += nombre[indice]
+            indice += 1
+    else:
+        salida = nombre[indice:]
+    return salida
+
+def separar(entidades, lugar, zonas, tipo):
+    #DEBUG
+#    print("------------------------------------------------Metodo separar objetos")
+    is_enemigos = False
+    if(entidades == "objetos"):
+        nombres = Dfnombres_o
+        cantidades = Dfcant_o
+        is_enemigos = False
+    else:
+        nombres = Dfnombres_e
+        cantidades = Dfcant_e
+        is_enemigos = True
+
+    elementos = []
+    cantidad = []
+    for indice in range (0, len(zonas)):
+        elementos.append([])
+        cantidad.append([])
+        
+    dentro_de_lugar = False
+    indice_elemento = -1
+    for indice in range (0, len(nombres)):
+        if ((nombres.iloc[indice,0] in lugares and nombres.iloc[indice,0] != lugar) 
+            or (nombres.iloc[indice,0] == "")):
+            dentro_de_lugar = False
+        if(dentro_de_lugar):
+            if (nombres.iloc[indice,0] in zonas):
+                indice_elemento += 1
+            else:
+                if(is_enemigos):
+                    if(nombres.iloc[indice,0]=="Rat King G" 
+                       or nombres.iloc[indice,0]=="Rat King C" 
+                       or nombres.iloc[indice,0]=="Cocinero" 
+                       or Dfdifi_e.iloc[indice,0] != dificultad):
+                        continue
+                elementos[indice_elemento].append(nombres.iloc[indice,0])
+                cantidad[indice_elemento].append(cantidades.iloc[indice,0])
+        if(nombres.iloc[indice,0] == lugar):
+            dentro_de_lugar = True
+#    print(elementos)
+#    print(cantidad)
+    if(tipo == "elementos"):
+        return elementos
+    elif(tipo == "cantidades"):
+        return cantidad
 
 def shufflepro(lista1, lista2):
     #DEBUG
@@ -620,40 +645,26 @@ def shuffleproplusultra(lista1, lista2):
 def ubicar(self):
     #DEBUG
 #    print("---------------------------------------------------------Metodo ubicar")
-    for i in personajes:
-        print(i.nombre + " esta en: " + i.ubicacion.nombre + ", " + i.zona)
+    for personaje in personajes:
+        print(personaje.nombre + " esta en: " + personaje.ubicacion.nombre 
+              + ", en la zona " + personaje.zona)
     print("------------------------------------------------------------------")
     ubicaciones = []
-    for i in range (0, len(personajes)):
-        ubicaciones.append(personajes[i].zona)
+    for indice in range (0, len(personajes)):
+        ubicaciones.append(personajes[indice].zona)
     return ubicaciones
 
-def dados(n: int, l: int):
-    #DEBUG
-#    print("----------------------------------------------------------Metodo dados")
-    if(l == 0):
-        return 0
-    a=[]
-    for i in range (0, n):
-        a.append(np.random.randint(1, l+1))
-    return a
 
-def repetido(self, lugar, zona:int, jefe:str):
-    for e in lugar.enemigos_activos[zona]:
-        if(e.nombre == jefe):
-            return True
-    return False
-
-campamento    = generar_lugar_arg("Campamento", ["Cabana", "Comedor", 
+campamento    = generar_lugar("Campamento", ["Cabana", "Comedor", 
                                                  "Almacen", "Cabanas vecinas", 
                                                  "Puesto de seguridad"])
-bosque        = generar_lugar_arg("Bosque", ["Aire libre", 
+bosque        = generar_lugar("Bosque", ["Aire libre", 
                                              "Cabana de guardabosques", 
                                              "Entrada mina bosque", "Pradera", 
                                              "Carretera", "Corazon del bosque"])
-pueblo        = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman",
+pueblo        = generar_lugar("Pueblo", ["Comunidad", "Casa de chaman",
                                              "Ayuntamiento", "Entrada mina pueblo"])
-mina          = generar_lugar_arg("Mina", ["Zona de exploracion I", 
+mina          = generar_lugar("Mina", ["Zona de exploracion I", 
                                            "Zona de exploracion II", 
                                            "Tunel salida bosque", 
                                            "Tunel salida pueblo", 
@@ -663,19 +674,19 @@ mina          = generar_lugar_arg("Mina", ["Zona de exploracion I",
                                            "Tunel de exploracion I", 
                                            "Tunel de exploracion II", 
                                            "Puestos de trabajo", "Zona clausurada"])
-edificio      = generar_lugar_arg("Edificio Abandonado", ["Entrada", 
+edificio      = generar_lugar("Edificio Abandonado", ["Entrada", 
                                                           "Maquina", "Escalera", 
                                                           "Laboratorio", 
                                                           "Sala de investigacion"])
-puerto        = generar_lugar_arg("Puerto", ["Bahia", "Carguero"])
-normancueva   = generar_lugar_arg("Normancueva", ["Sala principal", 
+puerto        = generar_lugar("Puerto", ["Bahia", "Carguero"])
+normancueva   = generar_lugar("Normancueva", ["Sala principal", 
                                                   "Entrada mistica"])
-deshuesadero  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", "Carniceria", 
+deshuesadero  = generar_lugar("Deshuesadero", ["Casa", "Almacen", "Carniceria", 
                                                    "Basurero", "Alacena", 
                                                    "Entrada mina deshuesadero"])
-montana       = generar_lugar_arg("Montana", ["Cabana doctor", "Cima", "Subida"])
-mercado       = generar_lugar_arg("Mercado", ["Mercado", "Banco"])
-puerta        = generar_lugar_arg("Puerta", ["Templo", "Cueva", "Tunel misterioso", 
+montana       = generar_lugar("Montana", ["Cabana doctor", "Cima", "Subida"])
+mercado       = generar_lugar("Mercado", ["Mercado", "Banco"])
+puerta        = generar_lugar("Puerta", ["Templo", "Cueva", "Tunel misterioso", 
                                              "Tunel rocoso", "Tunel terrible", 
                                              "Tunel negro", "Tunel siniestro", 
                                              "Cuarto de contencion scp 953", 
@@ -684,31 +695,31 @@ puerta        = generar_lugar_arg("Puerta", ["Templo", "Cueva", "Tunel misterios
                                              "Cuarto de contencion scp 076", 
                                              "Cuarto de contencion scp 439", 
                                              "Puerta"])
-fondo_del_mar = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", 
+fondo_del_mar = generar_lugar("Fondo del mar", ["Submarino", "Mar", 
                                                     "Profundidades"])
-pantano       = generar_lugar_arg("Pantano", ["Zona de control", "Exterior", 
+pantano       = generar_lugar("Pantano", ["Zona de control", "Exterior", 
                                               "Casa ogro", "Entrada mina pantano"])
-viaje_astral  = generar_lugar_arg("campamento", ["camion", "cabana", "comedor", 
+viaje_astral  = generar_lugar("campamento", ["camion", "cabana", "comedor", 
                                                  "almacen", "cabanas vecinas", 
                                                  "puesto de seguridad", 
                                                  "aire libre", "pradera", 
                                                  "carretera", "entrada"])
 
-lugares_o = [campamento, bosque, pueblo, mina, edificio, 
+objetos_lugares = [campamento, bosque, pueblo, mina, edificio, 
              puerto, normancueva, deshuesadero, montana, mercado, 
              puerta, fondo_del_mar, pantano, viaje_astral]
 
-campamento_original = generar_lugar_arg("Campamento", ["Cabana", "Comedor", 
+campamento_original = generar_lugar("Campamento", ["Cabana", "Comedor", 
                                                        "Almacen", "Cabanas vecinas", 
                                                        "Puesto de seguridad"])
-bosque_original = generar_lugar_arg("Bosque", ["Aire libre", 
+bosque_original = generar_lugar("Bosque", ["Aire libre", 
                                                "Cabana de guardabosques", 
                                                "Entrada mina bosque", "Pradera", 
                                                "Carretera", "Corazon del bosque"])
-pueblo_original = generar_lugar_arg("Pueblo", ["Comunidad", "Casa de chaman", 
+pueblo_original = generar_lugar("Pueblo", ["Comunidad", "Casa de chaman", 
                                                "Ayuntamiento", 
                                                "Entrada mina pueblo"])
-mina_original = generar_lugar_arg("Mina", ["Zona de exploracion I", 
+mina_original = generar_lugar("Mina", ["Zona de exploracion I", 
                                            "Zona de exploracion II", 
                                            "Tunel salida bosque", 
                                            "Tunel salida pueblo", 
@@ -718,23 +729,23 @@ mina_original = generar_lugar_arg("Mina", ["Zona de exploracion I",
                                            "Tunel de exploracion I", 
                                            "Tunel de exploracion II", 
                                            "Puestos de trabajo", "Zona clausurada"])
-edificio_original = generar_lugar_arg("Edificio Abandonado", ["Entrada", "Maquina", 
+edificio_original = generar_lugar("Edificio Abandonado", ["Entrada", "Maquina", 
                                                               "Escalera", 
                                                               "Laboratorio", 
                                                               "Sala de "
                                                               + "investigacion"])
-puerto_original        = generar_lugar_arg("Puerto", ["Bahia", "Carguero"])
-normancueva_original   = generar_lugar_arg("Normancueva", ["Sala principal", 
+puerto_original        = generar_lugar("Puerto", ["Bahia", "Carguero"])
+normancueva_original   = generar_lugar("Normancueva", ["Sala principal", 
                                                            "Entrada mistica"])
-deshuesadero_original  = generar_lugar_arg("Deshuesadero", ["Casa", "Almacen", 
+deshuesadero_original  = generar_lugar("Deshuesadero", ["Casa", "Almacen", 
                                                             "Carniceria", 
                                                             "Basurero", "Alacena", 
                                                             "Entrada mina "
                                                             + "deshuesadero"])
-montana_original       = generar_lugar_arg("Montana", ["Cabana doctor", "Cima", 
+montana_original       = generar_lugar("Montana", ["Cabana doctor", "Cima", 
                                                        "Subida"])
-mercado_original       = generar_lugar_arg("Mercado", ["Mercado", "Banco"])
-puerta_original        = generar_lugar_arg("Puerta", ["Templo", "Cueva", 
+mercado_original       = generar_lugar("Mercado", ["Mercado", "Banco"])
+puerta_original        = generar_lugar("Puerta", ["Templo", "Cueva", 
                                                       "Tunel misterioso", 
                                                       "Tunel rocoso", 
                                                       "Tunel terrible", 
@@ -750,12 +761,12 @@ puerta_original        = generar_lugar_arg("Puerta", ["Templo", "Cueva",
                                                       + "scp 076", 
                                                       "Cuarto de contencion "
                                                       + "scp 439", "Puerta"])
-fondo_del_mar_original = generar_lugar_arg("Fondo del mar", ["Submarino", "Mar", 
+fondo_del_mar_original = generar_lugar("Fondo del mar", ["Submarino", "Mar", 
                                                              "Profundidades"])
-pantano_original       = generar_lugar_arg("Pantano", ["Zona de control", 
+pantano_original       = generar_lugar("Pantano", ["Zona de control", 
                                                        "Exterior", "Casa ogro", 
                                                        "Entrada mina pantano"])
-viaje_astral_original  = generar_lugar_arg("campamento", ["camion", "cabana", 
+viaje_astral_original  = generar_lugar("campamento", ["camion", "cabana", 
                                                           "comedor", "almacen", 
                                                           "cabanas vecinas", 
                                                           "puesto de seguridad", 

@@ -161,7 +161,7 @@ class Juego:
                 jaula_select = jaulas[int(input())]
         # t = objeto personaje, 
         # t.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
-        # objeto enemigo, jaula_selecct = objeto jaula, defensas, cancel, hist
+        # objeto enemigo, jaula_select = objeto jaula, defensas, cancel, hist
                 self.domas.append(self.domar(t, 
                 t.ubicacion.jaulas[jaula_select.nombre][jaula_select], jaula_select, 
                 [0, 0], [], []))
@@ -1237,7 +1237,6 @@ class Juego:
                 p.moverse(gm.edificio, "Maquina")
                 p.usar_maquina()
         return [p, nivel, niv_maquina, niv_nina, niv_monstruo]
-    
     
     def generar_jefes(self, lugar, zona:str):
         print("-------------------------------------------------------Metodo jefes")
