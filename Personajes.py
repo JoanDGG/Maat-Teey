@@ -16,13 +16,13 @@ class Personaje(Individuo):
                          sabiduria, nombre, condicion)
         self.inventario = inventario
         self.inventario_nombres = []
-        self.peso_normal = self.resistencia*(self.salud_max/self.salud)
+        self.masa_corporal = self.resistencia*(self.salud_max/self.salud)
         for i in (self.inventario):
             self.inventario_nombres.append(i.nombre)
         self.peso = 0
         for i in self.inventario:
             self.peso += i.peso
-        self.peso = round(self.peso) + self.peso_normal
+        self.peso = round(self.peso) + self.masa_corporal
         self.ubicacion = ubicacion
         self.nivel = nivel
         self.zona = zona
@@ -35,30 +35,31 @@ class Personaje(Individuo):
         self.energia = energia
         self.energia_max = energia
         self.arbol = arbol
-        self.evolucion = False
+        self.viaje_astral = False
         self.equipo = []
         self.equipo_nombres= []
-        for i in (self.equipo):
-            self.equipo_nombres.append(i.nombre)
+        for equipo in (self.equipo):
+            self.equipo_nombres.append(equipo.nombre)
         self.cartera_obj = {}
         self.is_wendigo = False
-        self.hogar = "Cabana"
+        self.lugar_previo = "Cabana"
         self.asistentes = []
         self.espacio_asistentes = 7
     
     def efecto(self):
         super().efecto()
-        for a in self.asistentes:
-            if("Lealtad" in a.condicion and a.condicion["Lealtad"] == 0):
-                self.asistentes.remove(a)
+        for asistente in self.asistentes:
+            if("Lealtad" in asistente.condicion 
+               and asistente.condicion["Lealtad"] == 0):
+                self.asistentes.remove(asistente)
         self.actualizar_stats()
     
     def actualizar_stats(self):
-        self.peso_normal = self.resistencia*(self.salud_max/self.salud)
+        self.masa_corporal = self.resistencia*(self.salud_max/self.salud)
         self.peso = 0
-        for i in self.inventario:
-            self.peso += i.peso
-        self.peso = round(self.peso) + self.peso_normal
+        for objeto in self.inventario:
+            self.peso += objeto.peso
+        self.peso = round(self.peso) + self.masa_corporal
         if("Super Sayain" in self.condicion):
             if(self.fuerza != self.condicion["Super Sayain"] * 1.5):
                 self.fuerza *= 1.5
@@ -67,9 +68,9 @@ class Personaje(Individuo):
                            + (self.inteligencia+self.fuerza)/2)
         if(self.arbol["B1"][0] == 1):
             self.carga += self.energia_max
-        for m in range(0, len(gm.mochilas)):
-            if(gm.mochilas[m] in self.equipo_nombres):
-                indio = self.equipo_nombres.index(gm.mochilas[m])
+        for mochila in range(0, len(gm.mochilas)):
+            if(gm.mochilas[mochila] in self.equipo_nombres):
+                indio = self.equipo_nombres.index(gm.mochilas[mochila])
                 self.carga += self.equipo[indio].boosteo
                 break
         if("Shaed" in self.equipo_nombres and not gm.dia):
@@ -1566,7 +1567,7 @@ class Personaje(Individuo):
     def moverse(self, zona = None):
         #DEBUG
 #    print("---------------------------------------------------Metodo moverse")
-        self.hogar = self.zona
+        self.lugar_previo = self.zona
 
         ubicaciones = []
         zonas = self.ubicacion.zonas
@@ -1620,7 +1621,8 @@ class Personaje(Individuo):
                     or 'Submarino' not in values):
                 lugar = gm.fondo_del_mar
                 zona = "Submarino"
-            if(self.evolucion != True and self == gm.personaje_malo):
+            if(self.viaje_astral != True and self == gm.personaje_malo):
+                self.viaje_astral = True
                 lugar = gm.viaje_astral
                 zona = "camion" #----------------------------------------------
         if(zona == "Profundidades" 
