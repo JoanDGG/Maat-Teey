@@ -10,24 +10,24 @@ class Juego:
     
     def __init__(self):
         self.funcional = True
-        self.domas = []
+        self.peleas_doma = []
         self.oso_marino = None
     
-    def jugar(self, reses = []):
+    def jugar(self, resultados = []):
         #DEBUG
 #        print("------------------------------------------------------Metodo jugar")
         # Quitar los que ya no estan domando
         domar_nuevo = []
-        for domar in self.domas:
+        for domar in self.peleas_doma:
             if(domar[0]):
                domar_nuevo.append(domar)
-        self.domas = domar_nuevo
+        self.peleas_doma = domar_nuevo
 #        print("-----------------"+ str(self.oso_marino.carisma))
         fin = False
         per = []
 #        print("Per")
-#        print(reses)
-        for r in reses:
+#        print(resultados)
+        for r in resultados:
             for r1 in r[1]:
                 print(r1.nombre)
 #                print("-.-.-.-.-.-.-.-.-.")
@@ -51,14 +51,14 @@ class Juego:
         for t in range(0, len(turnos)):
             if("Domando" in turnos[t].condicion):
                 print(turnos[t].nombre + "esta domando...")
-                for doma in range (0, len(self.domas)):
-                    if(turnos[t] in self.domas[doma]):
+                for doma in range (0, len(self.peleas_doma)):
+                    if(turnos[t] in self.peleas_doma[doma]):
                         #doma[2] = enemigo, doma[3] = jaula, doma[4] = defensas, 
                         #doma[5] = cancel, doma[6] = hist
-                        self.domas[doma] = self.domar(turnos[t], 
-                                  self.domas[doma][2], self.domas[doma][3], 
-                                  self.domas[doma][4], self.domas[doma][5], 
-                                  self.domas[doma][6])
+                        self.peleas_doma[doma] = self.domar(turnos[t], 
+                                  self.peleas_doma[doma][2], self.peleas_doma[doma][3], 
+                                  self.peleas_doma[doma][4], self.peleas_doma[doma][5], 
+                                  self.peleas_doma[doma][6])
                         break
                 continue
             
@@ -162,7 +162,7 @@ class Juego:
         # t = objeto personaje, 
         # t.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
         # objeto enemigo, jaula_select = objeto jaula, defensas, cancel, hist
-                self.domas.append(self.domar(t, 
+                self.peleas_doma.append(self.domar(t, 
                 t.ubicacion.jaulas[jaula_select.nombre][jaula_select], jaula_select, 
                 [0, 0], [], []))
             else:
@@ -272,31 +272,31 @@ class Juego:
                     print(i.nombre, end = ", ")
                 print()
 #            print(peleas)
-#            print(reses)
+#            print(resultados)
             for pelea in peleas:
                 omitir = True
                 cancel = []
                 defensas = []
                 turnos_pelea = []
                 empezar = False
-                for r in range(0,len(reses)):
-                    for r1 in reses[r][1]:
+                for r in range(0,len(resultados)):
+                    for r1 in resultados[r][1]:
                         if(r1 in pelea):
                             
-                            cancel = reses[r][5].copy()
-                            defensas = reses[r][3].copy()
-                            turnos_pelea = reses[r][4].copy()
+                            cancel = resultados[r][5].copy()
+                            defensas = resultados[r][3].copy()
+                            turnos_pelea = resultados[r][4].copy()
                             omitir = False
                             break
                     if(not omitir):
                         break
                 if(omitir):
-                    #Esta en pelea y no en reses (la pelea esta comenzando)
+                    #Esta en pelea y no en resultados (la pelea esta comenzando)
                     empezar = True
-#                if(reses != []):
-                if(reses != [] and not reses[r][0]):
-                    reses.remove(r)
-                elif(reses != [] and reses[r] == []):
+#                if(resultados != []):
+                if(resultados != [] and not resultados[r][0]):
+                    resultados.remove(r)
+                elif(resultados != [] and resultados[r] == []):
                     cancel = []
                     defensas = []
                     turnos_pelea = []
@@ -317,23 +317,23 @@ class Juego:
                 
                 if(empezar):
                     print("La pelea ha comenzado")
-                    reses.append(self.iniciar_pelea(self, pelea, 
+                    resultados.append(self.iniciar_pelea(self, pelea, 
                                                     e_presentes, cancel))
                 else:
                     print("Que siga la pelea")
-                    # La r se sobreescribe de las reses, 
+                    # La r se sobreescribe de las resultados, 
                     # r5 esta antes por el orden en que recibe iniciar pelea
                     # r1 = p_presentes, r2 = e_presentes, r5 = cancel, 
                     # r3 = defensas, r4 = turnos, per = personajes peleando
-#                    print("reses")
-#                    print(reses)
-                    reses[r] = self.iniciar_pelea(self, pelea, e_presentes, cancel, 
+#                    print("resultados")
+#                    print(resultados)
+                    resultados[r] = self.iniciar_pelea(self, pelea, e_presentes, cancel, 
                                                   defensas, turnos_pelea, per)
 #                    print("\nr")
-#                    print(reses[r])
+#                    print(resultados[r])
         
         if(not fin):
-            return reses
+            return resultados
             
     def iniciar_pelea(self, p_presentes, e_presentes, cancel = [], defensas = [], 
                       turnos = [], per = [], victima = None, mult = 1):
@@ -1297,9 +1297,8 @@ class Juego:
         
         self.generar_jefes(lugar, zona)
         indio = lugar.zonas.index(zona)
-        enemigos,cantidades = gm.shuffleproplusultra(lugar.enemigos[indio],
-                                                     lugar.cantidades_enemigos[
-                                                                             indio])
+        enemigos,cantidades = gm.mezclar_listas(lugar.enemigos[indio],
+                                                lugar.cantidades_enemigos[indio], 1)
         lugar.enemigos_zona_s(enemigos, zona)
         lugar.cantidades_enemigos_zona_s(cantidades, zona)
         from Enemigos import Enemigo
@@ -1412,8 +1411,8 @@ class Juego:
             lugar.objetos_activos[0].append(fragmento)
             
         indio = lugar.zonas.index(zona)
-        objetos,cantidades = gm.shuffleproplusultra(lugar.objetos[indio],
-                                                    lugar.cantidades()[indio])
+        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indio],
+                                               lugar.cantidades()[indio], 1)
         lugar.objetos_zona_s(objetos, zona)
         lugar.cantidades_objetos_zona_s(cantidades, zona)
         
@@ -1465,7 +1464,7 @@ class Juego:
         elif((lugar == gm.fondo_del_mar) 
             and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
             lugar.objetos_activos[0].append(fragmento)
-        objetos,cantidades = gm.shufflepro(lugar.objetos,lugar.cantidades())
+        objetos,cantidades = gm.mezclar_listas(lugar.objetos, lugar.cantidades(), 2)
         lugar.objetos = objetos
         lugar.cantidades = cantidades
 #        print(lugar.objetos)
