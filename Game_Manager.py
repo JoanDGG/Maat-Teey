@@ -498,6 +498,43 @@ def queso():
 def malo():
     return personajes[dados(1, len(personajes))[0]-1]
 
+def mezclar_listas(lista1, lista2, tipo):
+    # Tipo 1 = Lista simple, tipo 2 = Lista de listas
+    lista3 = []
+    lista4 = []
+    
+    for i in range (0, len(lista1)):
+        if(tipo == 1):
+            lista3.append([])
+            lista4.append([])
+            for j in range(0, len(lista1[i])):
+                lista3[i].append("")
+                lista4[i].append("")
+        elif(tipo == 2):
+            lista3.append("")
+            lista4.append("")
+    
+    
+    if(tipo == 1):
+        c=0
+        while "" in lista3:
+            valor = np.random.randint(0, len(lista1))
+            if(lista3[valor] == ""):
+                lista3[valor] = lista1[c]
+                lista4[valor] = lista2[c]
+                c+=1
+    elif(tipo == 2):
+        for h in range (0, len(lista1)):
+            c=0
+            while "" in lista3[h]:
+                valor = np.random.randint(0, len(lista1[h]))
+                if(lista3[h][valor] == ""):
+                    lista3[h][valor] = lista1[h][c]
+                    lista4[h][valor] = lista2[h][c]
+                    c+=1
+
+    return (lista3,lista4)
+
 def repetido(self, lugar, zona:int, jefe:str):
     for enemigo in lugar.enemigos_activos[zona]:
         if(enemigo.nombre == jefe):
@@ -569,78 +606,6 @@ def separar(entidades, lugar, zonas, tipo):
         return elementos
     elif(tipo == "cantidades"):
         return cantidad
-
-def shufflepro(lista1, lista2):
-    #DEBUG
-#    print("-----------------------------------------------------Metodo shufflepro")
-    lista3 = []
-    lista4 = []
-    
-    for i in range (0, len(lista1)):
-        lista3.append([])
-        lista4.append([])
-        for j in range(0, len(lista1[i])):
-            lista3[i].append("")
-            lista4[i].append("")
-    
-    for h in range (0, len(lista1)):
-        c=0
-        while "" in lista3[h]:
-            valor = np.random.randint(0, len(lista1[h]))
-            if(lista3[h][valor] == ""):
-                lista3[h][valor] = lista1[h][c]
-                lista4[h][valor] = lista2[h][c]
-                c+=1
-
-    return (lista3,lista4)
-
-def shuffleproplus(lista_personajes):
-    #DEBUG
-#    print("-------------------------------------------------Metodo shuffleproplus")
-    lista1 = []
-    lista2 = []
-    for p in lista_personajes:
-        if("Cadaver de " + malo.nombre in p.inventario_nombres):
-            indio = p.inventario_nombres.index("Cadaver de " + malo.nombre)
-            p.inventario_nombres.remove("Cadaver de Norman" + malo.nombre)
-            p.inventario.pop(indio)
-        for i in range(0, len(p.inventario)):
-            lista1.append(p.inventario[i])
-            lista2.append(p.inventario_nombres[i])
-        p.inventario = []
-        p.inventario_nombres = []
-    
-    lista1, lista2 = shufflepro([lista1], [lista2])
-    lista1 = lista1[0]
-    lista2 = lista2[0]
-    c = 0
-    for per in lista_personajes:
-        total = 0
-        while (total < per.carga) and (c < len(lista1)):
-            per.inventario.append(lista1[c])
-            per.inventario_nombres.append(lista2[c])
-            total += lista1[c].peso
-            c+=1
-
-def shuffleproplusultra(lista1, lista2):
-    #DEBUG
-#    print("-----------------------------------------------------Metodo shufflepro")
-    lista3 = []
-    lista4 = []
-    
-    for i in range (0, len(lista1)):
-        lista3.append("")
-        lista4.append("")
-    
-    c=0
-    while "" in lista3:
-        valor = np.random.randint(0, len(lista1))
-        if(lista3[valor] == ""):
-            lista3[valor] = lista1[c]
-            lista4[valor] = lista2[c]
-            c+=1
-
-    return (lista3,lista4)
 
 def ubicar(self):
     #DEBUG

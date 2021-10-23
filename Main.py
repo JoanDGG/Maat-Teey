@@ -206,9 +206,8 @@ def main():
     # Reducir funciones
     # Comentar TODO
 
-    # Renombrar Shufflepros
     # Cambiar nombre variables Juegos
-
+    # gm.dias ?
 
     # Arreglar docs
     
