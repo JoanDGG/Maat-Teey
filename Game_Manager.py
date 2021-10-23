@@ -386,7 +386,7 @@ habilidades = {"Jugar": {"Sabiduria del mas alla": 34, "Pociones": 22,
 
 dia = True
 count_turnos = 0
-iluminados = ["Puesto de seguridad", "Cabana de guardabosques", "Comunidad", 
+lugares_iluminados = ["Puesto de seguridad", "Cabana de guardabosques", "Comunidad", 
               "Ayuntamiento", "Puestos de trabajo", "Laboratorio", 
               "Sala de investigacion", "Sala principal", "Casa", "Sotano", 
               "Carniceria", "Alacena", "Cabana doctor", "Zona de control", 
