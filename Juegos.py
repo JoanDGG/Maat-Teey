@@ -24,127 +24,131 @@ class Juego:
         self.peleas_doma = domar_nuevo
 #        print("-----------------"+ str(self.oso_marino.carisma))
         fin = False
-        per = []
+        personajes_peleando = []
 #        print("Per")
 #        print(resultados)
-        for r in resultados:
-            for r1 in r[1]:
-                print(r1.nombre)
+        for resultado in resultados:
+            for personaje in resultado[1]:
+                print(personaje.nombre)
 #                print("-.-.-.-.-.-.-.-.-.")
-                per.append(r1)
+                personajes_peleando.append(personaje)
 #        print(per)
         turnos = gm.personajes
-        for p in range(len(gm.personajes)-1,0,-1):
-            for i in range(p):
-                if gm.personajes[i].velocidad>gm.personajes[i+1].velocidad:
-                    temp = turnos[i]
-                    turnos[i] = turnos[i+1]
-                    turnos[i+1] = temp
+        for personaje in range(len(gm.personajes)-1,0,-1):
+            for indice in range(personaje):
+                if (gm.personajes[indice].velocidad > 
+                    gm.personajes[indice + 1].velocidad):
+                    temp = turnos[indice]
+                    turnos[indice] = turnos[indice + 1]
+                    turnos[indice + 1] = temp
         
         turnos_aux = []
-        for t in range(len(turnos)-1, 0, -1):
-            turnos_aux.append(turnos[t])
+        for turno in range(len(turnos)-1, 0, -1):
+            turnos_aux.append(turnos[turno])
         turnos_aux.append(turnos[0])
         
         turnos = turnos_aux
         
-        for t in range(0, len(turnos)):
-            if("Domando" in turnos[t].condicion):
-                print(turnos[t].nombre + "esta domando...")
+        for turno in range(0, len(turnos)):
+            personaje = turnos[turno]
+            if("Domando" in personaje.condicion):
+                print(personaje.nombre + "esta domando...")
                 for doma in range (0, len(self.peleas_doma)):
-                    if(turnos[t] in self.peleas_doma[doma]):
+                    if(personaje in self.peleas_doma[doma]):
                         #doma[2] = enemigo, doma[3] = jaula, doma[4] = defensas, 
-                        #doma[5] = cancel, doma[6] = hist
-                        self.peleas_doma[doma] = self.domar(turnos[t], 
-                                  self.peleas_doma[doma][2], self.peleas_doma[doma][3], 
-                                  self.peleas_doma[doma][4], self.peleas_doma[doma][5], 
+                        #doma[5] = omitidos, doma[6] = historial
+                        self.peleas_doma[doma] = self.domar(personaje, 
+                                  self.peleas_doma[doma][2], 
+                                  self.peleas_doma[doma][3], 
+                                  self.peleas_doma[doma][4], 
+                                  self.peleas_doma[doma][5], 
                                   self.peleas_doma[doma][6])
                         break
                 continue
             
             domar_posible = ""
-            zona_personaje = turnos[t].ubicacion.zonas.index(turnos[t].zona)
-            for enemigo in turnos[t].ubicacion.enemigos_activos[zona_personaje]:
+            zona_personaje = personaje.ubicacion.zonas.index(personaje.zona)
+            for enemigo in personaje.ubicacion.enemigos_activos[zona_personaje]:
                 if("Atrapado" in enemigo.condicion):
                     domar_posible = "9: Domar"
                 elif("Atrapado" not in enemigo.condicion):
                     domar_posible = ""
                     break
             
-            is_mercado = "Buscar"
-            if(turnos[t] in per):
+            es_mercado = "Buscar"
+            if(personaje in personajes_peleando):
                 continue
-            if(turnos[t].zona == "Mercado"):
-                is_mercado = "Robar"
-            turnos[t].stats()
+            if(personaje.zona == "Mercado"):
+                es_mercado = "Robar"
+            personaje.stats()
             
-            turnos[t].efecto() # efecto a personajes que no esten peleando
-            print(f"{turnos[t].nombre}, ¿Que deseas hacer?")
-            seleccion = int(input("1: Moverte\n2: " + is_mercado 
+            personaje.efecto() # efecto a personajes que no esten peleando
+            print(f"{personaje.nombre}, ¿Que deseas hacer?")
+            seleccion = int(input("1: Moverte\n2: " + es_mercado 
                                   + "\n3: Usar objeto\n4: Tirar objeto\n5: Esperar"
                                   + "\n6: Curarse\n7: Usar habilidad "
                                   + "\n8: Guardar(Salir por ahora)\n" 
                                   + domar_posible))
             if(seleccion == 1):
-                turnos[t].moverse()
+                personaje.moverse()
             elif(seleccion == 2):
                 if(gm.mercado == "Buscar"):
-                    objeto = input("¿Que quieres " + is_mercado.lower() 
+                    objeto = input("¿Que quieres " + es_mercado.lower() 
                                    + "? (0 para nada en especifico)\n")
                     if(objeto == "0"):
-                        turnos[t].buscar()
+                        personaje.buscar()
                     else:
-                        turnos[t].buscar(objeto)
+                        personaje.buscar(objeto)
                 else:
-                    print("¿Que quieres "+is_mercado.lower()+"?\n")
-                    for o in gm.mercado.objetos_activos[0]:
-                        print(f"{o.nombre}")
-                    objeto = input()
-                    turnos[t].buscar(objeto)
+                    print("¿Que quieres "+es_mercado.lower()+"?\n")
+                    for objeto in gm.mercado.objetos_activos[0]:
+                        print(f"{objeto.nombre}")
+                    objeto_seleccionado = input()
+                    personaje.buscar(objeto_seleccionado)
                     
             elif(seleccion == 3):
                 objetos_permitidos = []
-                for i in range(0, len(turnos[t].inventario)):
-                    if(turnos[t].inventario[i].nombre != "F" or "Pocion" 
-                       in turnos[t].inventario_nombres[i] 
-                       and turnos[t].inventario_nombres[i] != "SCP 427"):
-                        objetos_permitidos.append(turnos[t].inventario[i].nombre)
+                for indice in range(0, len(personaje.inventario)):
+                    if(personaje.inventario[indice].nombre != "F" or "Pocion" 
+                       in personaje.inventario_nombres[indice] 
+                       and personaje.inventario_nombres[indice] != "SCP 427"):
+                        objetos_permitidos.append(personaje.
+                                                  inventario[indice].nombre)
                 
                 print("¿Que quieres usar?")
                 print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
-                i=0
-                for llave in turnos[t].cartera_obj:
+                contador = 0
+                for llave in personaje.cartera_obj:
                     if(llave in objetos_permitidos):
-                        print(str(i + 1) + f", \t{llave:.<24s}: " 
-                              + str(turnos[t].cartera_obj[llave]) + " | \t\t" 
-                              + turnos[
-                                t].inventario[
+                        print(str(contador + 1) + f", \t{llave:.<24s}: " 
+                              + str(personaje.cartera_obj[llave]) + " | \t\t" 
+                              + personaje.inventario[
                                 self.inventario_nombres.index(
                                 llave)].estadistica + " | \t" 
-                              + turnos[t].inventario[
-                                turnos[t].inventario_nombres.index(llave)].boosteo)
-                        i+=1
+                              + personaje.inventario[
+                                personaje.inventario_nombres.index(llave)].boosteo)
+                        contador += 1
                 
-                obj = int(input())-1
-                for llave in turnos[t].cartera_obj:
+                indice_objeto = int(input())-1
+                for llave in personaje.cartera_obj:
                     if(llave in objetos_permitidos):
-                        if(obj == 0):
+                        if(indice_objeto == 0):
                             break
-                        obj -= 1
-                objeto = turnos[t].inventario[
-                        turnos[t].inventario_nombres.index(llave)]
+                        indice_objeto -= 1
+                objeto = personaje.inventario[
+                        personaje.inventario_nombres.index(llave)]
                 
-                turnos[t].usar_obj(objeto)
+                personaje.usar_obj(objeto)
             elif(seleccion == 4):
-                turnos[t].tirar_objeto()
+                personaje.tirar_objeto()
             elif(seleccion == 5):
-                turnos[t].energia = turnos[t].energia_max
+                personaje.energia = personaje.energia_max
                 print("Energia restaurada!!")
                 continue
             elif(seleccion == 6):
-                turnos[t].energetizar()
+                personaje.energetizar()
             elif(seleccion == 7):
-                turnos[t].activar_habilidad("Jugar")
+                personaje.activar_habilidad("Jugar")
             elif(seleccion == 8):
                 fin = True
                 return ""
@@ -152,140 +156,127 @@ class Juego:
                 print("¿Que enemigo intentaras domar?")
                 contador = 0
                 jaulas = []
-                for jaula in t.ubicacion.jaulas:
+                for jaula in personaje.ubicacion.jaulas:
                     for jaula_enemigo in jaula:
                         print(str(contador) + jaula + ": " 
-                              + t.ubicacion.jaulas[jaula][jaula_enemigo].nombre)
+                              + personaje.ubicacion.jaulas[
+                                      jaula][jaula_enemigo].nombre)
                         jaulas.append(jaula_enemigo)
                         contador += 1
                 jaula_select = jaulas[int(input())]
-        # t = objeto personaje, 
-        # t.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
-        # objeto enemigo, jaula_select = objeto jaula, defensas, cancel, hist
-                self.peleas_doma.append(self.domar(t, 
-                t.ubicacion.jaulas[jaula_select.nombre][jaula_select], jaula_select, 
-                [0, 0], [], []))
+#               personaje = objeto personaje, 
+#               personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
+#               objeto enemigo, jaula_select = objeto jaula, defensas, omitidos, historial
+                self.peleas_doma.append(self.domar(personaje, 
+                personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select], 
+                jaula_select, [0, 0], [], []))
             else:
                 print("Tas tonto shavo")
-                t -= 2
+                turno -= 2
                 continue
         
         p_presentes = []
-        peleas = []
-        zonas = []
-        
         zonas_vistas = []
         
-        for p in gm.personajes:
-            p.actualizar_stats()
-            for i in p.inventario_nombres:
-                if(i == "Pistola laser"):
-                    indio = p.inventario_nombres.index("Pistola laser")
-                    p.inventario[indio].uso -= 2
-                elif(i == "Pistola laser mejorada"):
-                    indio = p.inventario_nombres.index("Pistola laser mejorada")
-                    p.inventario[indio].uso -= 2
+        for personaje in gm.personajes:
+            personaje.actualizar_stats()
+            for objeto in personaje.inventario_nombres:
+                if(objeto == "Pistola laser"):
+                    indice = personaje.inventario_nombres.index("Pistola laser")
+                    personaje.inventario[indice].uso -= 2
+                elif(objeto == "Pistola laser mejorada"):
+                    indice = personaje.inventario_nombres.index(
+                            "Pistola laser mejorada")
+                    personaje.inventario[indice].uso -= 2
             
-            z = p.ubicacion.zonas.index(p.zona)
-            if(p.ubicacion.enemigos_activos[z] != []):
-                p_presentes.append(p)
-#                print(p.nombre)
-#                print(p.ubicacion.enemigos_activos)
+            zona = personaje.ubicacion.zonas.index(personaje.zona)
+            if(personaje.ubicacion.enemigos_activos[zona] != []):
+                p_presentes.append(personaje)
+#                print(personaje.nombre)
+#                print(personaje.ubicacion.enemigos_activos)
                 
             # revisar zonas vistas de todos
-            for m in p.mapa[p.zona]:
-                zonas_vistas.append(m)
-            zonas_vistas.append(p.zona)
+            for zona in personaje.mapa[personaje.zona]:
+                zonas_vistas.append(zona)
+            zonas_vistas.append(personaje.zona)
         
         #Listas de enemigos activos de zonas vistas
         for zona_vista in zonas_vistas:
             lugar_visto = gm.buscaLugar(zona_vista)
-            z = lugar_visto.index(zona_vista)
+            zona = lugar_visto.index(zona_vista)
             #Obtener todas las jaulas de todos los tipos de jaula de la zona actual
             jaulas_activas=[]
-            for jaulas in lugar_visto[z].jaulas:
+            for jaulas in lugar_visto[zona].jaulas:
                 for jaula in jaulas:
                     if(gm.dados(1, 2)[0] == 1 and jaulas[jaula] != ""):
                         jaulas_activas.append(jaula)
             
             if(jaulas_activas != []):
-                for enemigo in lugar_visto.enemgios_activos()[z]:
+                for enemigo in lugar_visto.enemgios_activos()[zona]:
                     for trampa in jaulas_activas:
-                        if(trampa.nombre == "Trampa de osos"):
-                            if(enemigo in gm.atrapables_t_osos):
+                        if((trampa.nombre == "Trampa de osos") 
+                        and (enemigo in gm.atrapables_t_osos)):
                                 tirada = gm.dados(1, 10)[0]
-                                if(enemigo.sabiduria + tirada <= 20):
-                                    #Enemigo atrapado
-                                    enemigo.condicion.update({"Atrapado": 1})
-                                    lugar_visto[z].jaulas[
-                                            trampa.nombre][trampa] = enemigo.nombre
-                                    lugar_visto[z].objetos_activos.remove(trampa)
-                                    break
-                        elif(trampa.nombre == "Jaula"):
-                            if(enemigo in gm.atrapables_medianos):
+                        elif((trampa.nombre == "Jaula")
+                        and (enemigo in gm.atrapables_medianos)):
                                 tirada = gm.dados(1, 10)[0]
-                                if(enemigo.sabiduria + tirada <= 20):
-                                    #Enemigo atrapado
-                                    enemigo.condicion.update({"Atrapado": 1})
-                                    lugar_visto[z].jaulas[
-                                            trampa.nombre][trampa] = enemigo.nombre
-                                    lugar_visto[z].objetos_activos.remove(trampa)
-                                    break
-                        elif(trampa.nombre == "Jaula mas grande"):
-                            if(enemigo in gm.atrapables):
+                        elif((trampa.nombre == "Jaula mas grande")
+                        and (enemigo in gm.atrapables)):
                                 tirada = gm.dados(1, 20)[0]
-                                if(enemigo.sabiduria/2 + tirada <= 25):
-                                    #Enemigo atrapado
-                                    enemigo.condicion.update({"Atrapado": 1})
-                                    lugar_visto[z].jaulas[
-                                            trampa.nombre][trampa] = enemigo.nombre
-                                    lugar_visto[z].objetos_activos.remove(trampa)
-                                    break
+                        if(enemigo.sabiduria + tirada <= 20):
+                            #Enemigo atrapado
+                            enemigo.condicion.update({"Atrapado": 1})
+                            lugar_visto[zona].jaulas[
+                                    trampa.nombre][trampa] = enemigo.nombre
+                            lugar_visto[zona].objetos_activos.remove(trampa)
+                            break
+        
+        peleas = []
+        zonas = []
         
         if(p_presentes != []):
-            for p in p_presentes:
-                zonas.append(p.zona)
+            for personaje in p_presentes:
+                zonas.append(personaje.zona)
                 
-            zona = ""
-            c=0  # Numero de pelea
-            c2=0 # Cuantos personajes ha anadido a peleas
+            zona_personaje = ""
+            cantidad_peleas = 0  # Numero de pelea
+            personajes_peleando = 0 # Cuantos personajes ha anadido a peleas
             saltar = False
 
-            for p in p_presentes:
+            for personaje in p_presentes:
                 for pelea in range(0, len(peleas)):
-                    if(p in peleas[pelea]):
+                    if(personaje in peleas[pelea]):
                         saltar = True
                 if(saltar):
                     saltar = False
                     continue
-                if(c2 < len(p_presentes)):
+                if(personajes_peleando < len(p_presentes)):
                     peleas.append([])
-                zona = p.zona
-                for z in range(0, len(zonas)):
-                    if(zona == zonas[z]):
-                        peleas[c].append(p_presentes[z])
-                        c2+=1
-                c+=1
+                zona_personaje = personaje.zona
+                for zona in range(0, len(zonas)):
+                    if(zona_personaje == zonas[zona]):
+                        peleas[cantidad_peleas].append(p_presentes[zona])
+                        personajes_peleando += 1
+                cantidad_peleas += 1
                 
             for pelea in peleas:
-                for i in pelea:
-                    print(i.nombre, end = ", ")
+                for personaje in pelea:
+                    print(personaje.nombre, end = ", ")
                 print()
 #            print(peleas)
 #            print(resultados)
             for pelea in peleas:
                 omitir = True
-                cancel = []
+                omitidos = []
                 defensas = []
                 turnos_pelea = []
                 empezar = False
-                for r in range(0,len(resultados)):
-                    for r1 in resultados[r][1]:
-                        if(r1 in pelea):
-                            
-                            cancel = resultados[r][5].copy()
-                            defensas = resultados[r][3].copy()
-                            turnos_pelea = resultados[r][4].copy()
+                for resultado in range(0,len(resultados)):
+                    for personaje in resultados[resultado][1]:
+                        if(personaje in pelea):
+                            omitidos = resultados[resultado][5].copy()
+                            defensas = resultados[resultado][3].copy()
+                            turnos_pelea = resultados[resultado][4].copy()
                             omitir = False
                             break
                     if(not omitir):
@@ -294,23 +285,24 @@ class Juego:
                     #Esta en pelea y no en resultados (la pelea esta comenzando)
                     empezar = True
 #                if(resultados != []):
-                if(resultados != [] and not resultados[r][0]):
-                    resultados.remove(r)
-                elif(resultados != [] and resultados[r] == []):
-                    cancel = []
+                if(resultados != [] and not resultados[resultado][0]):
+                    resultados.remove(resultado)
+                elif(resultados != [] and resultados[resultado] == []):
+                    omitidos = []
                     defensas = []
                     turnos_pelea = []
                     empezar = True
-                print(cancel)
+                print(omitidos)
                 print(pelea[0].nombre, pelea[0].zona)
-                z = pelea[0].ubicacion.zonas.index(pelea[0].zona)
-                e_presentes = pelea[0].ubicacion.enemigos_activos[z]
+                zona = pelea[0].ubicacion.zonas.index(pelea[0].zona)
+                e_presentes = pelea[0].ubicacion.enemigos_activos[zona]
                 e_presentes_aux = e_presentes.copy()
                 if(empezar):
-                    for e in e_presentes_aux:
-                        if(e.categoria == "Humano" 
-                           and e not in gm.jefes.keys() and e.salud > 0):
-                            e_presentes.remove(e)
+                    for enemigo in e_presentes_aux:
+                        if(enemigo.categoria == "Humano" 
+                           and enemigo not in gm.jefes.keys() 
+                           and enemigo.salud > 0):
+                            e_presentes.remove(enemigo)
 #                print(pelea)
 #                print(pelea[0].nombre)
 #                print(e_presentes)
@@ -318,147 +310,153 @@ class Juego:
                 if(empezar):
                     print("La pelea ha comenzado")
                     resultados.append(self.iniciar_pelea(self, pelea, 
-                                                    e_presentes, cancel))
+                                                    e_presentes, omitidos))
                 else:
                     print("Que siga la pelea")
                     # La r se sobreescribe de las resultados, 
                     # r5 esta antes por el orden en que recibe iniciar pelea
-                    # r1 = p_presentes, r2 = e_presentes, r5 = cancel, 
+                    # r1 = p_presentes, r2 = e_presentes, r5 = omitidos, 
                     # r3 = defensas, r4 = turnos, per = personajes peleando
 #                    print("resultados")
 #                    print(resultados)
-                    resultados[r] = self.iniciar_pelea(self, pelea, e_presentes, cancel, 
-                                                  defensas, turnos_pelea, per)
-#                    print("\nr")
+                    resultados[resultado] = self.iniciar_pelea(self, pelea, 
+                                                  e_presentes, omitidos, defensas, 
+                                                  turnos_pelea, personajes_peleando)
+#                    print("\n")
 #                    print(resultados[r])
         
         if(not fin):
             return resultados
             
-    def iniciar_pelea(self, p_presentes, e_presentes, cancel = [], defensas = [], 
-                      turnos = [], per = [], victima = None, mult = 1):
+    def iniciar_pelea(self, p_presentes, e_presentes, omitidos = [], defensas = [], 
+                   turnos = [], personajes_peleando = [], victima = None, mult = 1):
         #DEBUG
         print("----------------------------------------------Metodo iniciar_pelea")
         if(e_presentes == []):
                 print("Disfruta tu estadia")
                 return [False, p_presentes]
-        estemen = False
-        for ie in e_presentes:
-            if(ie in gm.jefes.keys()):
-                estemen = True
+        jefes_presentes = False
+        for enemigo in e_presentes:
+            if(enemigo in gm.jefes.keys()):
+                jefes_presentes = True
         e_sabiduria = 0
         p_pelea = []
         enemigos_op_activos = []        
-        for e in e_presentes:
-            if(e.sabiduria > e_sabiduria):
-                e_sabiduria = e.sabiduria
-            if(e.nombre in gm.enemigos_op):
-                enemigos_op_activos.append(e)
+        for enemigo in e_presentes:
+            if(enemigo.sabiduria > e_sabiduria):
+                e_sabiduria = enemigo.sabiduria
+            if(enemigo.nombre in gm.enemigos_op):
+                enemigos_op_activos.append(enemigo)
                 
         if(victima != None): # Cuando estas robando
             p_presentes.remove(victima)
             if(victima.sabiduria < e_sabiduria):
                 p_pelea.append(victima)
                 print(f"{victima.nombre} has sido detectado, hora de pelear!")
-                for p in p_presentes:
-                    decision = input(f"¿{p.nombre}, quieres hacer la guerra? (S/N)")
+                for personaje in p_presentes:
+                    decision = input(f"¿{personaje.nombre}, quieres hacer la guerra? (S/N)")
                     if(decision == "S"):
-                        p_pelea.append(p)
-                        for a in p.asistentes:
-                            p_pelea.append(a)
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
             else:
                 print("Oof, te has salvado...")
-                for e in e_presentes:
-                    e.salud /= mult
-                    e.fuerza /= mult
-                    e.resistencia /= mult
-                    e.carisma /= mult
-                    e.inteligencia /= mult
-                    e.sabiduria /= mult
+                for enemigo in e_presentes:
+                    enemigo.salud /= mult
+                    enemigo.fuerza /= mult
+                    enemigo.resistencia /= mult
+                    enemigo.carisma /= mult
+                    enemigo.inteligencia /= mult
+                    enemigo.sabiduria /= mult
         else:
             # Anadir asistentes de personajes muertos
-            for p_m in gm.personajes_muertos: 
-                if(p_m.zona == p_presentes[0].zona):
-                    for a in p_m.asistentes:
-                        p_pelea.append(a)
-            for p in p_presentes:
+            for personaje_muerto in gm.personajes_muertos: 
+                if(personaje_muerto.zona == p_presentes[0].zona):
+                    for asistente in personaje_muerto.asistentes:
+                        p_pelea.append(asistente)
+            for personaje in p_presentes:
                 sigilo = False
-                if(p in per):
-                    p_pelea.append(p)
-                    for a in p.asistentes:
-                        p_pelea.append(a)
+                if(personaje in personajes_peleando):
+                    p_pelea.append(personaje)
+                    for asistente in personaje.asistentes:
+                        p_pelea.append(asistente)
                     continue
-                if("Invisible" not in p.condicion or enemigos_op_activos != []):
-                    if(p.sabiduria < e_sabiduria):
-                        p_pelea.append(p)
-                        for a in p.asistentes:
-                            p_pelea.append(a)
-                        print(f"{p.nombre} has sido detectado, hora de pelear!")
+                if("Invisible" not in personaje.condicion 
+                   or enemigos_op_activos != []):
+                    if(personaje.sabiduria < e_sabiduria):
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
+                        print(f"{personaje.nombre} has sido detectado, " 
+                              + "hora de pelear!")
                     else:
                         sigilo = True
                 else:
                     sigilo = True
                     
                 if(sigilo):
-                    if(p.nombre == "Ruben" and p.arbol["A3"][0] == 1):
+                    if(personaje.nombre == "Ruben" 
+                       and personaje.arbol["A3"][0] == 1):
                         decision = input("¿Ruben, "
                                          + "quieres utilizar tu habilidad? (S/N)")
                         if(decision == "S"):
-                            p.activar_habilidad("Iniciar pelea", cancel)
+                            personaje.activar_habilidad("Iniciar pelea", omitidos)
                     else:
-                        zonas = p.ubicacion.zonas
-                        z = zonas.index(p.zona)
+                        zonas = personaje.ubicacion.zonas
+                        zona = zonas.index(personaje.zona)
                         tirada = gm.dados(1, 
-                                            len(p.ubicacion.enemigos_activos[z]))[0]
-                        print(f"{p.nombre}, has avistado a {tirada} enemigos...")
+                                 len(personaje.ubicacion.enemigos_activos[zona]))[0]
+                        print(f"{personaje.nombre}, " 
+                              + f"has avistado a {tirada} enemigos...")
                         enemigos_vistos = []
                         for i in range(0, tirada):
                             print("... hay un " 
-                                  + f"{p.ubicacion.enemigos_activos[z][i].nombre} "
-                                  + "cerca...")
+                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
+                        + "cerca...")
                             enemigos_vistos.append(
-                                    p.ubicacion.enemigos_activos[z][i])
+                                     personaje.ubicacion.enemigos_activos[zona][i])
                         print("\n..posiblemente hayan mas enemigos en la zona..\n")
-                    print(f"{p.nombre}"
+                    print(f"{personaje.nombre}"
                           + ", estas en modo sigilo sigilozo ¿que deseas hacer?")
                     decision = int(input("0: Atacar\n1: Unirse a la pelea"
                                          + "\n2: Usar objeto\n3: Tirar objeto "
                                          + "\n4: Moverte\n5: Esperar\n"))
                     if(decision == 0):
-                        ataque = p.atacar(enemigos_vistos, 1.5)
-                        ataque[0].cambiar_hp(-ataque[1], p)
-                        if(p.sabiduria < e_sabiduria+gm.dados(1, 
-                                                (e_sabiduria//2)+1)[0] or estemen):
-                            p_pelea.append(p)
-                            for a in p.asistentes:
-                                p_pelea.append(a)
-                            print(f"{p.nombre} has sido detectado, hora de pelear!")
+                        ataque = personaje.atacar(enemigos_vistos, 1.5)
+                        ataque[0].cambiar_hp(-ataque[1], personaje)
+                        if(personaje.sabiduria < e_sabiduria+gm.dados(1, 
+                                        (e_sabiduria//2)+1)[0] or jefes_presentes):
+                            p_pelea.append(personaje)
+                            for asistente in personaje.asistentes:
+                                p_pelea.append(asistente)
+                            print(f"{personaje.nombre} has sido detectado, " 
+                                  + "hora de pelear!")
                         else:
                             print("Te mantienes detras de las sombras..")
                     elif(decision == 1):
-                        p_pelea.append(p)
-                        for a in p.asistentes:
-                            p_pelea.append(a)
-                        print(f"{p.nombre}, hora de pelear!!")
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
+                        print(f"{personaje.nombre}, hora de pelear!!")
                     elif(decision == 2):
-                        p.usar_obj(p_presentes+enemigos_vistos)
+                        personaje.usar_obj(p_presentes+enemigos_vistos)
                     elif(decision == 3):
-                        p.tirar_objeto()
+                        personaje.tirar_objeto()
                     elif(decision == 4):
-                        p.moverse()
+                        personaje.moverse()
                     else:
-                        print(f"{p.nombre} se esconde...")
+                        print(f"{personaje.nombre} se esconde...")
                         for i in range(tirada, tirada + gm.dados(1, 3)[0]):
-                            if(i >= len(p.ubicacion.enemigos_activos[z])):
+                            if(i>= len(personaje.ubicacion.enemigos_activos[zona])):
                                 break
                             print("... has avistado a " 
-                                  + f"{p.ubicacion.enemigos_activos[z][i].nombre} "
-                                  + "tambien...")
+                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
+                        + "tambien...")
                 if(e_presentes == []):
                     print("Victoria!")
-                    if(estemen):
-                        for ip in p_presentes:
-                            ip.subir_nivel()
+                    if(jefes_presentes):
+                        for personaje in p_presentes:
+                            personaje.subir_nivel()
                     p_presentes = []
                     return [False, p_presentes]
         enemigos = []
@@ -467,279 +465,291 @@ class Juego:
                 enemigos.append(enemigo)
         
         if(p_pelea != []):
-            return self.pelea(self, p_pelea, enemigos, defensas, turnos, cancel)
+            return self.pelea(self, p_pelea, enemigos, defensas, turnos, omitidos)
         return [False, p_pelea]
 
     def pelea(self, p_presentes, e_presentes, defensas = [], 
-              turnos = [], cancel = []):
+              turnos = [], omitidos = []):
         #DEBUG
 #        print("------------------------------------------------------Metodo pelea")
-        for j in gm.jefes.keys():
-            gm.notaxeables.append(j)
-        estemen = False
-        for ie in e_presentes:
-            if(ie in gm.jefes.keys()):
-                estemen = True
-        for p in gm.personaje: # Anadir asistentes de personajes vivos no peleando
-            if(p in gm.personajes):
-                for a in p.asistentes:
-                    if(a not in p_presentes):
-                        p_presentes.append(a)
-        for p_m in gm.personajes_muertos: # Anadir asistentes de personajes muertos
-            if(p_m.zona == p_presentes[0].zona):
-                for a in p_m.asistentes:
-                    if(a not in p_presentes):
-                        p_presentes.append(a)
+        for jefe in gm.jefes.keys():
+            gm.notaxeables.append(jefe)
+        jefes_presentes = False
+        for enemigo in e_presentes:
+            if(enemigo in gm.jefes.keys()):
+                jefes_presentes = True
+        for personaje in gm.personajes: # Anadir asistentes de personajes vivos no peleando
+            if(personaje in gm.personajes):
+                for asistente in personaje.asistentes:
+                    if(asistente not in p_presentes):
+                        p_presentes.append(asistente)
+        for personaje_muerto in gm.personajes_muertos: # Anadir asistentes de personajes muertos
+            if(personaje_muerto.zona == p_presentes[0].zona):
+                for asistente in personaje_muerto.asistentes:
+                    if(asistente not in p_presentes):
+                        p_presentes.append(asistente)
         if(turnos == []):
             turnos = p_presentes + e_presentes
         velocidades = []
-        hist = []
-        for pr in turnos:
-            velocidades.append(pr.velocidad)
-        for numPasada in range(len(velocidades)-1,0,-1):
-            for i in range(numPasada):
-                if velocidades[i]>velocidades[i+1]:
-                    temp = velocidades[i]
-                    velocidades[i] = velocidades[i+1]
-                    velocidades[i+1] = temp
-                    temp1 = turnos[i]
-                    turnos[i] = turnos[i+1]
-                    turnos[i+1] = temp1
+        historial = []
+        for personaje in turnos:
+            velocidades.append(personaje.velocidad)
+        for velocidad in range(len(velocidades)-1, 0, -1):
+            for indice in range(velocidad):
+                if velocidades[indice]>velocidades[indice + 1]:
+                    temp = velocidades[indice]
+                    velocidades[indice] = velocidades[indice + 1]
+                    velocidades[indice + 1] = temp
+                    temp1 = turnos[indice]
+                    turnos[indice] = turnos[indice + 1]
+                    turnos[indice + 1] = temp1
         
         turnos_aux = []
-        for t in range(len(turnos)-1, 0, -1):
-            turnos_aux.append(turnos[t])
+        for turno in range(len(turnos)-1, 0, -1):
+            turnos_aux.append(turnos[turno])
         turnos_aux.append(turnos[0])
         turnos = []
-        for t in turnos_aux:
-            turnos.append(t)
+        for turno in turnos_aux:
+            turnos.append(turno)
         # ----------------------------------------------------------turnos asignados
         
         if(defensas == []):
-            for d in turnos:
+            for defensa in turnos:
                 defensas.append(0)
-        for tu in turnos:
-            print(tu.nombre)
-            tu.efecto()
-        for j in (turnos_aux):
-#            print(cancel)
-            if(j in cancel):
-                cancel.remove(j)
-                turnos.pop(turnos.index(j))
+        for turno in turnos:
+            print(turno.nombre)
+            turno.efecto()
+        for personaje in (turnos_aux):
+#            print(omitidos)
+            if(personaje in omitidos):
+                omitidos.remove(personaje)
+                turnos.pop(turnos.index(personaje))
                 continue
-            elif(j not in turnos or "Indefenso" in j.condicion):
+            elif(personaje not in turnos or "Indefenso" in personaje.condicion):
                 continue
-            print(f"Es turno de: {j.nombre}\n")
-            if(j in e_presentes):# ------------------------------------Turno enemigo
+            print(f"Es turno de: {personaje.nombre}\n")
+            if(personaje in e_presentes):# ----------------------------Turno enemigo
                 (p_presentes, e_presentes, 
-                 defensas, turnos, cancel, hist) = self.turno_enemigo(self, 
+                 defensas, turnos, omitidos, historial) = self.turno_enemigo(self, 
                                                    p_presentes, e_presentes, 
-                                                   defensas, turnos, cancel, 
-                                                   turnos_aux, j, hist)
-            elif(j in gm.personajes):# ------------------------------Turno personaje
+                                                   defensas, turnos, omitidos, 
+                                                   turnos_aux, personaje, historial)
+            elif(personaje in gm.personajes):# ----------------------Turno personaje
                 (p_presentes, e_presentes, 
-                 defensas, turnos, cancel, hist) = self.turno_personaje(self, 
+                 defensas, turnos, omitidos, historial) = self.turno_personaje(self, 
                                                    p_presentes, e_presentes, 
-                                                   defensas, turnos, cancel, 
-                                                   turnos_aux, j, hist)
+                                                   defensas, turnos, omitidos, 
+                                                   turnos_aux, personaje, historial)
             else:
                 # turno asistente
                 (p_presentes, e_presentes, 
-                 defensas, turnos, cancel, hist) = self.turno_enemigo(self, 
+                 defensas, turnos, omitidos, historial) = self.turno_enemigo(self, 
                                                    p_presentes, e_presentes, 
-                                                   defensas, turnos, cancel, 
-                                                   turnos_aux, j, hist)
+                                                   defensas, turnos, omitidos, 
+                                                   turnos_aux, personaje, historial)
             if(p_presentes == []):
                 return [False, p_presentes, e_presentes, 
-                        defensas, turnos_aux, cancel]
+                        defensas, turnos_aux, omitidos]
             elif(e_presentes == []):
                 print("Victoria!")
-                if(estemen):
-                    for ip in p_presentes:
-                        ip.subir_nivel()
-                for p in p_presentes: # Revivir a quien tenia SCP 427
-                    if("Temporal" in p.condicion):
-                        gm.personajes_muertos.remove(p.dueno)
-                        gm.personajes.append(p.dueno)
-                        p.dueno.asistentes.remove(p)
-                        p.zona = "Vacio"
+                if(jefes_presentes):
+                    for personaje in p_presentes:
+                        personaje.subir_nivel()
+                for personaje in p_presentes: # Revivir a quien tenia SCP 427
+                    if("Temporal" in personaje.condicion):
+                        gm.personajes_muertos.remove(personaje.dueno)
+                        gm.personajes.append(personaje.dueno)
+                        personaje.dueno.asistentes.remove(personaje)
+                        personaje.zona = "Vacio"
                 p_presentes = []
                 return [False, p_presentes, e_presentes, 
-                        defensas, turnos_aux, cancel]
+                        defensas, turnos_aux, omitidos]
         turnos_aux = p_presentes + e_presentes
-        return [True, p_presentes, e_presentes, defensas, turnos_aux, cancel]
+        return [True, p_presentes, e_presentes, defensas, turnos_aux, omitidos]
     
     
-    def turno_enemigo(self, p_presentes, e_presentes, defensas, turnos, cancel, 
-                      turnos_aux, enemigo, hist, jaula = None):
-        if(enemigo in cancel):
-            cancel.remove(enemigo)
+    def turno_enemigo(self, p_presentes, e_presentes, defensas, turnos, omitidos, 
+                      turnos_aux, enemigo, historial, jaula = None):
+        if(enemigo in omitidos):
+            omitidos.remove(enemigo)
             turnos.pop(turnos.index(enemigo))
-            return p_presentes, e_presentes, defensas, turnos, cancel, hist
+            return p_presentes, e_presentes, defensas, turnos, omitidos, historial
         elif(enemigo not in turnos or "Indefenso" in enemigo.condicion):
-            return p_presentes, e_presentes, defensas, turnos, cancel, hist
-        indio_e = turnos.index(enemigo)
-        indio_e_aux = turnos_aux.index(enemigo)
+            return p_presentes, e_presentes, defensas, turnos, omitidos, historial
+        indice_enemigo = turnos.index(enemigo)
+        indice_enemigo_aux = turnos_aux.index(enemigo)
         
         if("Confundido" in enemigo.condicion):
-            accion = enemigo.decidir(turnos_aux, hist, turnos_aux, defensas)
+            accion = enemigo.decidir(turnos_aux, historial, turnos_aux, defensas)
         elif(issubclass(enemigo, Enemigo)):
-            accion = enemigo.decidir(e_presentes, hist, turnos_aux, defensas)
+            accion = enemigo.decidir(e_presentes, historial, turnos_aux, defensas)
         else:
-            accion = enemigo.decidir(p_presentes, hist, turnos_aux, defensas)
+            accion = enemigo.decidir(p_presentes, historial, turnos_aux, defensas)
         
         if("Atacando normal" in enemigo.condicion 
            or "Atacando especial" in enemigo.condicion):
-            for a in accion[0]:
-                print(f"{enemigo.nombre} se dispone a atacar a {a.nombre}!!")
-                indio_aux = turnos_aux.index(a)
-                if(a in turnos and a in gm.personajes):
-                    indio = turnos.index(a)
+            for personaje in accion[0]:
+                print(f"{enemigo.nombre} se dispone a atacar a {personaje.nombre}!")
+                indice_aux = turnos_aux.index(personaje)
+                if(personaje in turnos and personaje in gm.personajes):
+                    indice = turnos.index(personaje)
                     salida = True
                     while salida:
-                        print(f"¿{a.nombre}, que deseas hacer?")#Respuesta personaje                        
-                        if(a.nombre == "Sebas" and a.arbol["B1"][0] == 1):
+                        #----------------------------------------Respuesta personaje
+                        print(f"¿{personaje.nombre}, que deseas hacer?")
+                        if(personaje.nombre == "Sebas" 
+                           and personaje.arbol["B1"][0] == 1):
                             print("0: Anticipacion")
                         
                         decision = int(input("1: Defenderte\n2: Usar objeto"
                                              + "\n3: No hacer nada\n"))
                         
                         if(decision == 0):
-                            if(not a.activar_habilidad("anticipacion")[0]):
+                            if(not personaje.activar_habilidad("anticipacion")[0]):
                                 continue
                             else:
                                 print("Dano posible = "+ str(accion[1]))
                                 decision = input("¿Vas a querer atacar?(S/N)")
                                 if(decision == "S"):
-                                    a.atacar(enemigo)
+                                    personaje.atacar(enemigo)
                                 salida = False
                         elif(decision == 1):
-                            defensas[indio_aux] = a.defender()
-                            turnos.pop(indio)
+                            defensas[indice_aux] = personaje.defender()
+                            turnos.pop(indice)
                             break
                         elif(decision == 2):
                             #-----------------------------------------Usar objeto
                             objetos_permitidos = []
-                            for i in range(0, len(a.inventario)):
-                                if(a.inventario[i].estadistica != "F" 
-                                   or "Pocion" in a.inventario_nombres[i] 
-                                   or a.inventario_nombres[i] not in gm.multiples):
+                            for indice in range(0, len(personaje.inventario)):
+                                if(personaje.inventario[indice].estadistica != "F" 
+                                   or "Pocion" 
+                                   in personaje.inventario_nombres[indice] 
+                                   or personaje.inventario_nombres[indice] 
+                                   not in gm.multiples):
                                     objetos_permitidos.append(
-                                            a.inventario[i].nombre)
+                                            personaje.inventario[indice].nombre)
                             
                             print("¿Que quieres usar?")
                             print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA "
                                   + "\t BOOSTEO")      
-                            i=0
-                            for llave in a.cartera_obj:
+                            contador = 0
+                            for llave in personaje.cartera_obj:
                                 if(llave in objetos_permitidos):
-                                    print(f"{i+1}, \t{llave:.24s}: \t\t" 
-                                          + a.cartera_obj[llave] + " | \t\t" 
-                                          + a.inventario[
-                                            a.inventario_nombres.index(
-                                                    llave)].estadistica
+                                    print(f"{contador + 1}, \t{llave:.24s}: \t\t" 
+                                          + personaje.cartera_obj[llave] + " | \t\t" 
+                                          + personaje.inventario[
+                                            personaje.inventario_nombres.index(
+                                                            llave)].estadistica
                                           + " | \t" 
-                                          + a.inventario[
-                                                  a.inventario_nombres.index(
-                                                          llave)].boosteo) 
-                                    i+=1
+                                          + personaje.inventario[
+                                            personaje.inventario_nombres.index(
+                                                                llave)].boosteo)
+                                    contador += 1
                             
-                            obj = int(input())-1
-                            for llave in a.cartera_obj:
+                            indice_objeto = int(input())-1
+                            for llave in personaje.cartera_obj:
                                 if(llave in objetos_permitidos):
-                                    if(obj == 0):
+                                    if(indice_objeto == 0):
                                         break
-                                    obj -= 1
-                            objeto = a.inventario[a.inventario_nombres.index(llave)]
+                                    indice_objeto -= 1
+                            objeto = personaje.inventario[
+                                    personaje.inventario_nombres.index(llave)]
                             #------------------------------------Objeto seleccionado
                             print("¿Con quien usaras el objeto?")
                             if(objeto.estadistica == "Revivir"):
                                 print("0: Regresar")
-                                for inv in range (0, len(a.inventario_nombres)):
-                                    if("Cadaver" in a.inventario_nombres[inv]):
-                                        print(f"{inv+1}: "
-                                              +f"{a.inventario_nombres[inv]}")
-                                q = int(input())-1
-                                if(q == -1):
+                                for objeto in range (0, len(
+                                        personaje.inventario_nombres)):
+                                    if("Cadaver" in personaje.inventario_nombres[
+                                                                        objeto]):
+                                        print(f"{objeto + 1}: "
+                                        + f"{personaje.inventario_nombres[objeto]}")
+                                seleccion = int(input())-1
+                                if(seleccion == -1):
                                     continue
                                 else:
-                                    uso = a.usar_obj(
-                                            a.inventario_nombres[q], objeto)
+                                    uso = personaje.usar_obj(
+                                            personaje.inventario_nombres[seleccion], 
+                                            objeto)
                                     salida = not uso
                             else:
-                                for p in range(0, len(turnos_aux)):
-                                    print(f"{p+1}: {turnos_aux[p].nombre}")
-                                print(f"{len(turnos_aux)+1}: Regresar")
-                                q = int(input())-1
-                                if(q == len(turnos_aux)):
+                                for personaje in range(0, len(turnos_aux)):
+                                    print(f"{personaje + 1}: " 
+                                          + f"{turnos_aux[personaje].nombre}")
+                                print(f"{len(turnos_aux) + 1}: Regresar")
+                                seleccion = int(input())-1
+                                if(seleccion == len(turnos_aux)):
                                     continue
-                                elif(a.nombre == turnos_aux[q].nombre):
-                                    uso = a.usar_obj(a, objeto)
+                                elif(personaje.nombre == 
+                                     turnos_aux[seleccion].nombre):
+                                    uso = personaje.usar_obj(personaje, objeto)
                                     if(type(uso) == bool):
                                         salida = not uso
                                     elif(list(uso.keys())[0] == "Escudo"):
-                                        defensas[q] = list(uso.values())[0]
+                                        defensas[seleccion] = list(uso.values())[0]
                                         break
                                 else:
-                                    uso = a.usar_obj(turnos_aux[q], objeto)
+                                    uso = personaje.usar_obj(turnos_aux[seleccion], 
+                                                             objeto)
                                     if(type(uso) != bool):
                                         if(list(uso.keys())[0] == "Escudo"):
-                                            defensas[q] += list(uso.values())[0]
+                                            defensas[seleccion] += list(
+                                                        uso.values())[0]
                                         else:
                                             if(type(accion)!=int):
                                                 accion[1] = 0
-                                            defensas[indio_e_aux] = uso
-                                            print(turnos[indio_e].nombre 
+                                            defensas[indice_enemigo_aux] = uso
+                                            print(turnos[indice_enemigo].nombre 
                                                   + " ha sido confundido!")
-                                            turnos.pop(indio)
+                                            turnos.pop(indice)
                                         break
                                     else:
                                         salida = not uso
                             if(not salida):
-                                turnos.pop(indio)
+                                turnos.pop(indice)
                         elif(decision == 3):
                             break
-                dano = defensas[indio_aux] - accion[1]
+                dano = defensas[indice_aux] - accion[1]
                 if(enemigo.salud <= 0):
                     dano = 0
                 if(dano < 0):
-                    print(f"{a.nombre} recibio {abs(dano)} de dano!\n")
-                    defensas[indio_aux] = 0
-                    ded = a.cambiar_hp(dano, enemigo)
-                    if(ded):
-                        if(a in turnos):
-                            turnos.pop(indio)
-                        if(a in gm.personajes_muertos):
-                            p_presentes.remove(a)
-#                                    print(f"{a.nombre} ha muerto...")
-#                                    print(p_presentes)
-#                                    print("\n\n")
-#                            defensas.pop(indio_aux)
-#                            turnos_aux.pop(indio_aux)
+                    print(f"{personaje.nombre} recibio {abs(dano)} de dano!\n")
+                    defensas[indice_aux] = 0
+                    muerto = personaje.cambiar_hp(dano, enemigo)
+                    if(muerto):
+                        if(personaje in turnos):
+                            turnos.pop(indice)
+                        if(personaje in gm.personajes_muertos):
+                            p_presentes.remove(personaje)
+#                            print(f"{a.nombre} ha muerto...")
+#                            print(p_presentes)
+#                            print("\n\n")
+#                            defensas.pop(indice_aux)
+#                            turnos_aux.pop(indice_aux)
                 else:
-                    defensas[indio_aux] = dano
-                    print(f"{a.nombre} bloqueo el ataque")
+                    defensas[indice_aux] = dano
+                    print(f"{personaje.nombre} bloqueo el ataque")
         elif("Defendiendose" in enemigo.condicion):
             print(f"{enemigo.nombre} se defiende... {accion}")
-            defensas[indio_e_aux] = accion
+            defensas[indice_enemigo_aux] = accion
         elif("Huyendo" in enemigo.condicion):
             e_presentes.remove(enemigo)
         elif("Atacando con carisma" in enemigo.condicion):
                                 # objetivo, defensa del objetivo
             self.pelea_carisma(accion[0], defensas[turnos_aux.index(accion[0])], 
                                dano_enemigo = accion[1], enemigo = enemigo)
-        turnos.pop(indio_e)
-        return p_presentes, e_presentes, defensas, turnos, cancel, hist
+        turnos.pop(indice_enemigo)
+        return p_presentes, e_presentes, defensas, turnos, omitidos, historial
     
     
-    def turno_personaje(self, p_presentes, e_presentes, defensas, turnos, cancel, 
-                        turnos_aux, personaje, hist, jaula = None):
-        if(personaje in cancel):
-            cancel.remove(personaje)
+    def turno_personaje(self, p_presentes, e_presentes, defensas, turnos, omitidos, 
+                        turnos_aux, personaje, historial, jaula = None):
+        if(personaje in omitidos):
+            omitidos.remove(personaje)
             turnos.pop(turnos.index(personaje))
-            return p_presentes, e_presentes, defensas, turnos, cancel, hist
+            return p_presentes, e_presentes, defensas, turnos, omitidos, historial
         elif(personaje not in turnos or "Indefenso" in personaje.condicion):
-            return p_presentes, e_presentes, defensas, turnos, cancel, hist
+            return p_presentes, e_presentes, defensas, turnos, omitidos, historial
         
         captura = ""
         habilidad = ""
@@ -753,7 +763,7 @@ class Juego:
                 habilidad = "7: Usar habilidad\n"
         
         salida = True
-        indio=turnos_aux.index(personaje)
+        indice = turnos_aux.index(personaje)
         while salida:
             print(f"¿{personaje.nombre}, que deseas hacer?")
             decision = int(input("0: Atacar\n1: Influenciar\n2: Defenderte"
@@ -761,55 +771,56 @@ class Juego:
                                  + "\n6: Curarse\n" + captura + habilidad))
             if(decision == 0):
 #                        print(e_presentes)
-                res = personaje.atacar(e_presentes)
+                resultado = personaje.atacar(e_presentes)
 #                        print(e_presentes)
-                indio_e_aux=turnos_aux.index(res[0])
-                eleccion = input(f"¿Deseas atacar a {res[0].nombre}? (S/N)\n")
+                indice_enemigo_aux = turnos_aux.index(resultado[0])
+                eleccion = input(f"¿Deseas atacar a {resultado[0].nombre}? (S/N)\n")
                 if(eleccion == "S"):
                     if("Confundido" in personaje.condicion):
-                        res[0] = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
-                    print(f"{personaje.nombre} ataca a {res[0].nombre} con "
-                          +f"{res[2].nombre} con una increible fuerza de {res[1]}")
+                        resultado[0] = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
+                    print(f"{personaje.nombre} ataca a {resultado[0].nombre} con "
+                          + f"{resultado[2].nombre} con una increible fuerza " 
+                          + f"de {resultado[1]}")
                     salida = False
                 elif(eleccion == "N"):
                     continue
                 else:
                     print("Tas tonto shavo")
                     continue
-                hist.append([personaje, res[0]])
-                dano = defensas[indio_e_aux] - res[1]
-#                        print(defensas)
+                historial.append([personaje, resultado[0]])
+                dano = defensas[indice_enemigo_aux] - resultado[1]
+#                print(defensas)
                 if(dano < 0):
-                    defensas[indio_e_aux] = 0
-                    ded = res[0].cambiar_hp(dano, personaje)
-                    print(f"{res[0].nombre} recibio {dano} de dano!")
-#                            print(e_presentes)
-                    if(ded):
-                        if(res[2] in gm.armash_shidas):
-                            if(res[0].categoria == "Humano"):
+                    defensas[indice_enemigo_aux] = 0
+                    muerto = resultado[0].cambiar_hp(dano, personaje)
+                    print(f"{resultado[0].nombre} recibio {dano} de dano!")
+#                    print(e_presentes)
+                    if(muerto):
+                        if(resultado[2] in gm.armash_shidas):
+                            if(resultado[0].categoria == "Humano"):
                                 gm.anadir_obj_manual("Carne humana", personaje)
-                        if(res[0] in turnos):
-                            indio_e=turnos.index(res[0])
-                            turnos.pop(indio_e)
-#                                print(e_presentes)
-#                                print(res[0])
-#                                e_presentes.remove(res[0])
-#                                defensas.pop(indio_e_aux)
-#                                turnos_aux.pop(indio_e_aux)
-                    elif(res[2].nombre == "Taxer" 
-                         and res[0].nombre not in gm.notaxeables):
-                        print(res[0].nombre +" ha sido paralizado!")
-                        if(res[0] not in turnos):
-                            cancel.append(res[0])
-                            print(cancel)
+                        if(resultado[0] in turnos):
+                            indice_enemigo=turnos.index(resultado[0])
+                            turnos.pop(indice_enemigo)
+#                            print(e_presentes)
+#                            print(res[0])
+#                            e_presentes.remove(res[0])
+#                            defensas.pop(indice_enemigo_aux)
+#                            turnos_aux.pop(indice_enemigo_aux)
+                    elif(resultado[2].nombre == "Taxer" 
+                         and resultado[0].nombre not in gm.notaxeables):
+                        print(resultado[0].nombre +" ha sido paralizado!")
+                        if(resultado[0] not in turnos):
+                            omitidos.append(resultado[0])
+                            print(omitidos)
                 else:
-                    defensas[indio_e_aux] = dano
-                    print(f"{res[0].nombre} bloqueo el ataque")
+                    defensas[indice_enemigo_aux] = dano
+                    print(f"{resultado[0].nombre} bloqueo el ataque")
             elif(decision == 1):
                 self.pelea_carisma(personaje, defensas[turnos_aux.index(personaje)], 
                                                        e_presentes = e_presentes)
             elif(decision == 2):
-                defensas[indio] = personaje.defender()
+                defensas[indice] = personaje.defender()
                 salida = False
             elif(decision == 3):
                 #-----------------------------------------Usar objeto
@@ -848,7 +859,7 @@ class Juego:
                 #----------------------------------------Objeto seleccionado
                 muerto = True
                 if(objeto.nombre in gm.multiples):
-                    q = -1
+                    seleccion = -1
                 else:
                     print("¿Con quien usaras el objeto?")
                     if(objeto.estadistica == "Revivir"):
@@ -859,12 +870,12 @@ class Juego:
                             if("Cadaver" in personaje.inventario_nombres[inv]):
                                 print(f"{inv+1}: "
                                       +f"{personaje.inventario_nombres[inv]}")
-                        q = int(input())-1
-                        if(q == -1):
+                        seleccion = int(input())-1
+                        if(seleccion == -1):
                             continue
                         else:
                             uso = personaje.usar_obj(
-                                    personaje.inventario_nombres[q], objeto)
+                                    personaje.inventario_nombres[seleccion], objeto)
                             salida = not uso
                             muerto = False
                     else:
@@ -872,36 +883,37 @@ class Juego:
                             if(turnos_aux[p].salud > 0):
                                 print(f"{p+1}: {turnos_aux[p].nombre}")
                         print(f"{len(turnos_aux)+1}: Regresar")
-                        q = int(input())-1
+                        seleccion = int(input())-1
                     
                 if(muerto): # Uso normal de objeto, callate
                     if("Confundido" in personaje.condicion):
-                        q = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
-                    if(q == len(turnos_aux)): # Regresar
+                        seleccion = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
+                    if(seleccion == len(turnos_aux)): # Regresar
                         continue
-                    elif(q == -1): # Objetivo multiple
+                    elif(seleccion == -1): # Objetivo multiple
                         personaje.usar_obj(turnos_aux, objeto)
-                    elif(personaje.nombre == turnos_aux[q].nombre):
+                    elif(personaje.nombre == turnos_aux[seleccion].nombre):
                         uso = personaje.usar_obj(personaje, objeto)
                         if(type(uso) == bool):
                             salida = not uso
                         elif(list(uso.keys())[0] == "Escudo"):
-                            defensas[q] = list(uso.values())[0]
+                            defensas[seleccion] = list(uso.values())[0]
                             break
                     else:
-                        uso = personaje.usar_obj(turnos_aux[q], objeto)
+                        uso = personaje.usar_obj(turnos_aux[seleccion], objeto)
                         if(type(uso) != bool):
                             if(list(uso.keys())[0] == "Escudo"):
-                                defensas[q] += list(uso.values())[0]
+                                defensas[seleccion] += list(uso.values())[0]
                             else:
-                                defensas[q] = uso[objeto.nombre]
+                                defensas[seleccion] = uso[objeto.nombre]
                                 salida = False
-                                print(turnos_aux[q].nombre+" ha sido confundido!")
-                                if(turnos_aux[q] not in turnos):
-                                    cancel.append(turnos_aux[q])
-#                                            print(cancel)
+                                print(turnos_aux[seleccion].nombre 
+                                      + " ha sido confundido!")
+                                if(turnos_aux[seleccion] not in turnos):
+                                    omitidos.append(turnos_aux[seleccion])
+#                                   print(omitidos)
                                 else:
-                                    salto = turnos.index(turnos_aux[q])
+                                    salto = turnos.index(turnos_aux[seleccion])
                                     turnos.pop(salto)
                         else:
                             salida = not uso
@@ -931,17 +943,17 @@ class Juego:
                             if(enemigo.nombre in gm.domables 
                                and gm.dados(1, 100)[0] <= pelear):
                                 if(personaje in turnos):
-                                    indio = turnos.index(personaje)
-                                    turnos.pop(indio)
+                                    indice = turnos.index(personaje)
+                                    turnos.pop(indice)
                                 return (p_presentes, e_presentes, defensas, 
-                                        turnos, cancel, hist)
+                                        turnos, omitidos, historial)
                             else:
                                 #[enemigo] = para que siempre escape
                                 enemigo.huir([enemigo]) 
                                 e_presentes.remove(enemigo)
                                 turnos.pop(turnos.index(enemigo))
                     print("y lo ha logrado!!")
-#                            defensas.pop(indio)
+#                            defensas.pop(indice)
                     p_presentes.remove(personaje)
                     turnos.pop(turnos.index(personaje))
                     if(personaje.inteligencia >= (13 + 5 *(personaje.nivel))* 3/4):
@@ -970,36 +982,36 @@ class Juego:
                     personaje.reclutar(enemigo)
             elif(decision == 7 and habilidad[0] == "7" 
                  or decision == 8 and habilidad[0] == "8"):
-                resultado = self.activar_habilidad("Turno personaje", cancel)
+                resultado = self.activar_habilidad("Turno personaje", omitidos)
                 if(not resultado[1]):
                     salida = False
                 else:
-                    hist.append([personaje, resultado[1][0]])
-                    dano = defensas[indio_e_aux] - resultado[1][1]
+                    historial.append([personaje, resultado[1][0]])
+                    dano = defensas[indice_enemigo_aux] - resultado[1][1]
                     if(dano < 0):
-                        defensas[indio_e_aux] = 0
-                        ded = resultado[1][0].cambiar_hp(dano, personaje)
+                        defensas[indice_enemigo_aux] = 0
+                        muerto = resultado[1][0].cambiar_hp(dano, personaje)
                         print(f"{resultado[1][0].nombre} recibio {dano} de dano!")
-                        if(ded):
+                        if(muerto):
                             if(resultado[1][2] in gm.armash_shidas):
                                 if(resultado[1][0].categoria == "Humano"):
                                     gm.anadir_obj_manual("Carne humana", personaje)
                             if(resultado[1][0] in turnos):
-                                indio_e=turnos.index(resultado[1][0])
-                                turnos.pop(indio_e)
+                                indice_enemigo=turnos.index(resultado[1][0])
+                                turnos.pop(indice_enemigo)
                         elif(resultado[1][2].nombre == "Taxer" 
                              and resultado[1][0].nombre not in gm.notaxeables):
                             print(resultado[1][0].nombre +" ha sido paralizado!")
                             if(resultado[1][0] not in turnos):
-                                cancel.append(resultado[1][0])
-                                print(cancel)
+                                omitidos.append(resultado[1][0])
+                                print(omitidos)
                     else:
-                        defensas[indio_e_aux] = dano
+                        defensas[indice_enemigo_aux] = dano
                         print(f"{resultado[1][0].nombre} bloqueo el ataque")
             if(personaje in turnos):
-                indio = turnos.index(personaje)
-                turnos.pop(indio)
-        return p_presentes, e_presentes, defensas, turnos, cancel, hist
+                indice = turnos.index(personaje)
+                turnos.pop(indice)
+        return p_presentes, e_presentes, defensas, turnos, omitidos, historial
     
     
     def pelea_carisma(self, personaje, defensa, e_presentes = None, 
@@ -1036,7 +1048,7 @@ class Juego:
         return True
     
     
-    def domar(self, personaje, enemigo, jaula, defensas, cancel, hist):
+    def domar(self, personaje, enemigo, jaula, defensas, omitidos, historial):
         personaje.condicion.update({"Domando": 1})
         enemigo.condicion.update({"Domando": 1})
         if(jaula.nombre == "Trampa de osos"):
@@ -1053,27 +1065,27 @@ class Juego:
         if(p_primero):     
             #Turno personaje
             (personaje, enemigo, 
-             defensas, turnos, cancel, hist) = self.turno_personaje([personaje], 
-                                           [enemigo], defensas, turnos, cancel, 
-                                           turnos, personaje, hist, jaula = jaula)
+             defensas, turnos, omitidos, historial) = self.turno_personaje([personaje], 
+                                           [enemigo], defensas, turnos, omitidos, 
+                                           turnos, personaje, historial, jaula = jaula)
             #Turno enemigo
             (personaje, enemigo, 
-             defensas, turnos, cancel, hist) = self.turno_enemigo(personaje, 
-                                           enemigo, defensas, turnos, cancel, 
-                                           turnos, enemigo[0], hist, jaula = jaula)
+             defensas, turnos, omitidos, historial) = self.turno_enemigo(personaje, 
+                                           enemigo, defensas, turnos, omitidos, 
+                                           turnos, enemigo[0], historial, jaula = jaula)
         else:
             #Turno enemigo
             (personaje, enemigo, 
-             defensas, turnos, cancel, hist) = self.turno_enemigo([personaje], 
-                                           [enemigo], defensas, turnos, cancel, 
-                                           turnos, enemigo, hist, jaula = jaula)
+             defensas, turnos, omitidos, historial) = self.turno_enemigo([personaje], 
+                                           [enemigo], defensas, turnos, omitidos, 
+                                           turnos, enemigo, historial, jaula = jaula)
             #Turno personaje
             (personaje, enemigo, 
-             defensas, turnos, cancel, hist) = self.turno_personaje(personaje, 
-                                           enemigo, defensas, turnos, cancel, 
-                                           turnos, personaje[0], hist, jaula=jaula)
+             defensas, turnos, omitidos, historial) = self.turno_personaje(personaje, 
+                                           enemigo, defensas, turnos, omitidos, 
+                                           turnos, personaje[0], historial, jaula=jaula)
             
-        return [True, personaje[0], enemigo[0], jaula, defensas, cancel, hist]
+        return [True, personaje[0], enemigo[0], jaula, defensas, omitidos, historial]
     
     def casino(self, personaje, premio = 0):
         print(f"---------- {personaje.nombre}, bienvenido al casino!! ---------- "
@@ -1296,9 +1308,9 @@ class Juego:
         #DEBUG
         
         self.generar_jefes(lugar, zona)
-        indio = lugar.zonas.index(zona)
-        enemigos,cantidades = gm.mezclar_listas(lugar.enemigos[indio],
-                                                lugar.cantidades_enemigos[indio], 1)
+        indice = lugar.zonas.index(zona)
+        enemigos,cantidades = gm.mezclar_listas(lugar.enemigos[indice],
+                                                lugar.cantidades_enemigos[indice], 1)
         lugar.enemigos_zona_s(enemigos, zona)
         lugar.cantidades_enemigos_zona_s(cantidades, zona)
         from Enemigos import Enemigo
@@ -1384,7 +1396,7 @@ class Juego:
                                     inteligencia, sabiduria, enemigos_a[j], 
                                     {"Saludable": 1}, dropeos, categoria, 
                                     rango, cantidad, zona)
-                        lugar.enemigos_activos[indio].append(e)
+                        lugar.enemigos_activos[indice].append(e)
                         if(e.nombre == "Oso marino"):
                             self.oso_marino = e
                             print("AAAAAAAAAAAAA")
@@ -1410,9 +1422,9 @@ class Juego:
             and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
             lugar.objetos_activos[0].append(fragmento)
             
-        indio = lugar.zonas.index(zona)
-        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indio],
-                                               lugar.cantidades()[indio], 1)
+        indice = lugar.zonas.index(zona)
+        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indice],
+                                               lugar.cantidades()[indice], 1)
         lugar.objetos_zona_s(objetos, zona)
         lugar.cantidades_objetos_zona_s(cantidades, zona)
         
@@ -1442,7 +1454,7 @@ class Juego:
                 and (gm.Dfnombres_o.iloc[h,0] != "Fragmento de Libro de Secretos")):
                     nombre = objetos[j]
                     o = self.tranformar_objeto(nombre, cantidades[j])
-                    lugar.objetos_activos[indio].append(o)
+                    lugar.objetos_activos[indice].append(o)
 #                    o.stats()
                     contador -= 1
 #                    contador2 += 1
@@ -1500,17 +1512,17 @@ class Juego:
         #DEBUG
 #        print("-----------------------------------------Metodo transformar objeto")
         for h in range (0, len(gm.Dfnombres_o)):
-            if (gm.Dfnombres_o.iloc[h,0] == nombre):
+            if (gm.Dfnombres_objetos.iloc[h,0] == nombre):
                 basura = False
-                boosteo = (gm.Data_o2.loc[nombre, "Boosteo"])
+                boosteo = (gm.Data_objetos2.loc[nombre, "Boosteo"])
                 if(type(boosteo) == pd.core.series.Series):
                     basura = True
                     boosteo = int(boosteo.iloc[0])
-                estadistica = (gm.Data_o2.loc[nombre, "Estadistica"])
-                peso = (gm.Data_o2.loc[nombre, "Espacio"])
-                usos = (gm.Data_o2.loc[nombre, "Usos"])
-                cantidad = (gm.Data_o2.loc[nombre, "Cantidad"])
-                precio = (gm.Data_o2.loc[nombre, "Precio"])
+                estadistica = (gm.Data_objetos2.loc[nombre, "Estadistica"])
+                peso = (gm.Data_objetos2.loc[nombre, "Espacio"])
+                usos = (gm.Data_objetos2.loc[nombre, "Usos"])
+                cantidad = (gm.Data_objetos2.loc[nombre, "Cantidad"])
+                precio = (gm.Data_objetos2.loc[nombre, "Precio"])
                 if(basura):
                     estadistica = estadistica.iloc[0]
                     peso = float(peso.iloc[0])
@@ -1534,12 +1546,12 @@ class Juego:
         if(not self.funcional):
             return False
         
-        indio = usuario.inventario_nombres.index(nombre)
-        usuario.peso -= usuario.inventario[indio].peso
+        indice = usuario.inventario_nombres.index(nombre)
+        usuario.peso -= usuario.inventario[indice].peso
         zonas = usuario.ubicacion.zonas
         i = zonas.index(usuario.zona)
-        usuario.inventario_nombres.pop(indio)
-        usuario.inventario.pop(indio)
+        usuario.inventario_nombres.pop(indice)
+        usuario.inventario.pop(indice)
         
         tirada = gm.dados(1, 4)[0]
         i, j = 0, 0

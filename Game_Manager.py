@@ -8,24 +8,23 @@ Data_enemigos = pd.read_csv("D-D_Enemigos_3.csv")
 Data_objetos2 = pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
 
 Data_objetos  = pd.read_csv("D-D_Objetos_3.csv")
-Dfnombres_o   = Data_objetos.loc[:,["Nombre"]]
-Dfstats_o     = Data_objetos.loc[:,["Estadistica"]]
-Dfboosts_o    = Data_objetos.loc[:,["Boosteo"]]
-Dfmejoras_o   = Data_objetos.loc[:,["Mejora"]]
+Dfnombres_objetos       = Data_objetos.loc[:,["Nombre"]]
+Dfestadisticas_objetos  = Data_objetos.loc[:,["Estadistica"]]
+Dfboosteos_objetos      = Data_objetos.loc[:,["Boosteo"]]
+Dfmejoras_objetos       = Data_objetos.loc[:,["Mejora"]]
 #------
-Dfestropeos_o = Data_objetos.loc[:,["Estropeo"]]
-Dfespacios_o  = Data_objetos.loc[:,["Espacio"]]
-Dfusos_o      = Data_objetos.loc[:,["Usos"]]
-Dfcant_o      = Data_objetos.loc[:,["Cantidad"]]
-Dfprecio_t    = Data_objetos.loc[:,["Precio"]]
+Dfestropeos_objetos     = Data_objetos.loc[:,["Estropeo"]]
+Dfespacios_objetos      = Data_objetos.loc[:,["Espacio"]]
+Dfusos_objetos          = Data_objetos.loc[:,["Usos"]]
+Dfcantidades_objetos    = Data_objetos.loc[:,["Cantidad"]]
 
-Dfnombres_e   = Data_enemigos.loc[:,["Nombre"]]
-Dfcant_e      = Data_enemigos.loc[:,["Cantidad"]]
-Dfdifi_e      = Data_enemigos.loc[:,["Dificultad"]]
-Dfcategorias_e = Data_enemigos.loc[:,["Categoria"]]
-Dfintimidar_e = Data_enemigos.loc[:, ["Intimidar"]]
-Dftranquilizar_e = Data_enemigos.loc[:, ["Tranquilizar"]]
-Dfpersuadir_e = Data_enemigos.loc[:, ["Persuadir"]]
+Dfnombres_enemigos      = Data_enemigos.loc[:,["Nombre"]]
+Dfcantidades_enemigos   = Data_enemigos.loc[:,["Cantidad"]]
+Dfdificultad_enemigos   = Data_enemigos.loc[:,["Dificultad"]]
+Dfcategorias_enemigos   = Data_enemigos.loc[:,["Categoria"]]
+Dfintimidar_enemigos    = Data_enemigos.loc[:, ["Intimidar"]]
+Dftranquilizar_enemigos = Data_enemigos.loc[:, ["Tranquilizar"]]
+Dfpersuadir_enemigos    = Data_enemigos.loc[:, ["Persuadir"]]
 
 jefes = {"Zombie policia": "Puesto de seguridad", 
          "Siren Head": "Aire libre", 
@@ -79,14 +78,14 @@ domables = ["Lobo", "Oso", "Murcielago", "Serpiente", "Anguila electrica",
 
 # Añadir zombies, humanos, monstruos, que no son jefes 
 # ni cocineros en atrapables por trampa de osos
-for enemigo in range(0, len(Dfcategorias_e)):
-    if(Dfcategorias_e.iloc[enemigo,0] == "Zombie" 
-       or Dfcategorias_e.iloc[enemigo,0] == "Humano" 
-       or Dfcategorias_e.iloc[enemigo,0] == "Monstruo"):
-        if(Dfnombres_e.iloc[enemigo,0] not in jefes 
-           and Dfnombres_e.iloc[enemigo,0] not in jefes_no_jefes 
-           and Dfnombres_e.iloc[enemigo,0] not in atrapables_trampa_osos):
-            atrapables_trampa_osos.append(Dfnombres_e.iloc[enemigo,0])
+for enemigo in range(0, len(Dfcantidades_enemigos)):
+    if(Dfcantidades_enemigos.iloc[enemigo,0] == "Zombie" 
+       or Dfcantidades_enemigos.iloc[enemigo,0] == "Humano" 
+       or Dfcantidades_enemigos.iloc[enemigo,0] == "Monstruo"):
+        if(Dfnombres_enemigos.iloc[enemigo,0] not in jefes 
+           and Dfnombres_enemigos.iloc[enemigo,0] not in jefes_no_jefes 
+           and Dfnombres_enemigos.iloc[enemigo,0] not in atrapables_trampa_osos):
+            atrapables_trampa_osos.append(Dfnombres_enemigos.iloc[enemigo,0])
 
 lugares = ["Campamento", "Bosque", "Pueblo", "Mina", "Edificio Abandonado", 
            "Puerto", "Normancueva", "Deshuesadero", "Montana", "Mercado", "Puerta", 
@@ -466,8 +465,8 @@ def eliminar(lista):
 
 def generar_carneables():
     categorias_si = ["Animal", "Monstruo", "Zombie"]
-    nombres = Dfnombres_e
-    categorias = Dfcategorias_e
+    nombres = Dfnombres_enemigos
+    categorias = Dfcategorias_enemigos
     for indice in range(0, len(nombres)):
         if(categorias.iloc[indice,0] in categorias_si) and (nombres.iloc[indice,0] 
         not in carneables) and (nombres.iloc[indice,0] not in jefes.keys()):
@@ -566,12 +565,12 @@ def separar(entidades, lugar, zonas, tipo):
 #    print("------------------------------------------------Metodo separar objetos")
     is_enemigos = False
     if(entidades == "objetos"):
-        nombres = Dfnombres_o
-        cantidades = Dfcant_o
+        nombres = Dfnombres_objetos
+        cantidades = Dfcantidades_objetos
         is_enemigos = False
     else:
-        nombres = Dfnombres_e
-        cantidades = Dfcant_e
+        nombres = Dfnombres_enemigos
+        cantidades = Dfcantidades_enemigos
         is_enemigos = True
 
     elementos = []
@@ -594,7 +593,7 @@ def separar(entidades, lugar, zonas, tipo):
                     if(nombres.iloc[indice,0]=="Rat King G" 
                        or nombres.iloc[indice,0]=="Rat King C" 
                        or nombres.iloc[indice,0]=="Cocinero" 
-                       or Dfdifi_e.iloc[indice,0] != dificultad):
+                       or Dfdificultad_enemigos.iloc[indice,0] != dificultad):
                         continue
                 elementos[indice_elemento].append(nombres.iloc[indice,0])
                 cantidad[indice_elemento].append(cantidades.iloc[indice,0])
