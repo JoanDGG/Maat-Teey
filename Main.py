@@ -208,6 +208,9 @@ def main():
 
     # Cambiar nombre variables Juegos
     # gm.dias ?
+    # Dialogo intenso sala misteriosa
+    # Descripcion perra de wendigo
+    # Sabiduria del mas alla
 
     # Arreglar docs
     

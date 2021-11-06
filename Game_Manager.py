@@ -12,7 +12,6 @@ Dfnombres_objetos       = Data_objetos.loc[:,["Nombre"]]
 Dfestadisticas_objetos  = Data_objetos.loc[:,["Estadistica"]]
 Dfboosteos_objetos      = Data_objetos.loc[:,["Boosteo"]]
 Dfmejoras_objetos       = Data_objetos.loc[:,["Mejora"]]
-#------
 Dfestropeos_objetos     = Data_objetos.loc[:,["Estropeo"]]
 Dfespacios_objetos      = Data_objetos.loc[:,["Espacio"]]
 Dfusos_objetos          = Data_objetos.loc[:,["Usos"]]
@@ -122,7 +121,7 @@ consejos = [
             "Si no sabes a donde ir, no importa que camino sigas"
             ]
 
-# 
+# Consejos de meta juego
 sabiduria_del_mas_alla = [
                             ""
                             ]
@@ -417,7 +416,7 @@ equipables = (cabeza + cara + cuello + torso + piernas + pies + espalda
               + cuerpo_completo)
 mochilas = ["Mochila", "Mochila campista", "Mochila mejorada", "Maleta", "Cubeta"]
          
-agua = ["Profundidades", "Mar"]
+zonas_agua = ["Profundidades", "Mar"]
 
 def anadir_obj_manual(nombre, personaje, cantidad = None):
     from Juegos import Juego

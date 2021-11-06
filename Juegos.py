@@ -92,7 +92,7 @@ class Juego:
             if(seleccion == 1):
                 personaje.moverse()
             elif(seleccion == 2):
-                if(gm.mercado == "Buscar"):
+                if(es_mercado == "Buscar"):
                     objeto = input("¿Que quieres " + es_mercado.lower() 
                                    + "? (0 para nada en especifico)\n")
                     if(objeto == "0"):
@@ -166,7 +166,8 @@ class Juego:
                 jaula_select = jaulas[int(input())]
 #               personaje = objeto personaje, 
 #               personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
-#               objeto enemigo, jaula_select = objeto jaula, defensas, omitidos, historial
+#               objeto enemigo, jaula_select = objeto jaula, 
+#               defensas, omitidos, historial
                 self.peleas_doma.append(self.domar(personaje, 
                 personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select], 
                 jaula_select, [0, 0], [], []))
@@ -215,7 +216,7 @@ class Juego:
                 for enemigo in lugar_visto.enemgios_activos()[zona]:
                     for trampa in jaulas_activas:
                         if((trampa.nombre == "Trampa de osos") 
-                        and (enemigo in gm.atrapables_t_osos)):
+                        and (enemigo in gm.atrapables_trampa_osos)):
                                 tirada = gm.dados(1, 10)[0]
                         elif((trampa.nombre == "Jaula")
                         and (enemigo in gm.atrapables_medianos)):
@@ -354,7 +355,8 @@ class Juego:
                 p_pelea.append(victima)
                 print(f"{victima.nombre} has sido detectado, hora de pelear!")
                 for personaje in p_presentes:
-                    decision = input(f"¿{personaje.nombre}, quieres hacer la guerra? (S/N)")
+                    decision = input(f"¿{personaje.nombre}, " 
+                                     + "quieres hacer la guerra?+ (S/N)")
                     if(decision == "S"):
                         p_pelea.append(personaje)
                         for asistente in personaje.asistentes:
@@ -478,12 +480,14 @@ class Juego:
         for enemigo in e_presentes:
             if(enemigo in gm.jefes.keys()):
                 jefes_presentes = True
-        for personaje in gm.personajes: # Anadir asistentes de personajes vivos no peleando
+        # Anadir asistentes de personajes vivos no peleando
+        for personaje in gm.personajes: 
             if(personaje in gm.personajes):
                 for asistente in personaje.asistentes:
                     if(asistente not in p_presentes):
                         p_presentes.append(asistente)
-        for personaje_muerto in gm.personajes_muertos: # Anadir asistentes de personajes muertos
+        # Anadir asistentes de personajes muertos
+        for personaje_muerto in gm.personajes_muertos: 
             if(personaje_muerto.zona == p_presentes[0].zona):
                 for asistente in personaje_muerto.asistentes:
                     if(asistente not in p_presentes):
@@ -858,7 +862,7 @@ class Juego:
                     objeto = personaje.inventario[gm.dados(1, 
                                                   len(personaje.inventario))[0]-1]
                 #----------------------------------------Objeto seleccionado
-                muerto = True
+                revivir = False
                 if(objeto.nombre in gm.multiples):
                     seleccion = -1
                 else:
@@ -878,7 +882,7 @@ class Juego:
                             uso = personaje.usar_obj(
                                     personaje.inventario_nombres[seleccion], objeto)
                             salida = not uso
-                            muerto = False
+                            revivir = True
                     else:
                         for personaje in range(0, len(turnos_aux)):
                             if(turnos_aux[personaje].salud > 0):
@@ -887,7 +891,7 @@ class Juego:
                         print(f"{len(turnos_aux) + 1}: Regresar")
                         seleccion = int(input())-1
                     
-                if(muerto): # Uso normal de objeto, callate
+                if(not revivir): # Uso normal de objeto, callate
                     if("Confundido" in personaje.condicion):
                         seleccion = turnos_aux[gm.dados(1, len(turnos_aux))[0]-1]
                     if(seleccion == len(turnos_aux)): # Regresar
@@ -1092,7 +1096,7 @@ class Juego:
                                          omitidos, turnos, personaje[0], historial, 
                                          jaula = jaula)
             
-        return [True, personaje[0], enemigo[0], jaula, defensas, omitidos, historial]
+        return[True, personaje[0], enemigo[0], jaula, defensas, omitidos, historial]
     
     def casino(self, personaje, premio = 0):
         print(f"---------- {personaje.nombre}, bienvenido al casino!! ---------- "
@@ -1215,7 +1219,7 @@ class Juego:
     def escalera(self, personaje, nivel = 0, niv_maquina = 0, niv_nina = 0, 
                                                               niv_monstruo = 0):
         #DEBUG
-#        print("-------------------------------------------------------Metodo escalera")
+#        print("---------------------------------------------------Metodo escalera")
         print(f"{personaje.nombre}, estas en el nivel {nivel}")
         if(nivel == 0):
             niv_maquina = gm.dados(1, 10)[0]
@@ -1265,7 +1269,7 @@ class Juego:
 #        print("----------------------------------------------Metodo generar jefes")
         indice_zona = lugar.zonas.index(zona)
         jefes = []
-        lugar_original = gm.lugares_o_originales[gm.lugares_o.index(lugar)]
+        lugar_original = gm.lugares_o_originales[gm.objetos_lugares.index(lugar)]
         from Enemigos import Enemigo
         
         print(lugar.enemigos[indice_zona])
@@ -1276,28 +1280,28 @@ class Juego:
         contador = -1
 #        print(gm.jefes_no_jefes)
 #        print(jefes)
-        for indice_nombre in range (0, len(gm.Dfnombres_e)):
+        for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
             if(abs(contador) > len(jefes)):
                 break
-            if ((gm.Dfnombres_e.iloc[indice_nombre,0] in jefes) 
+            if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
                 and (lugar_original.cantidades()[indice_zona][contador] > 0) 
                 and (not self.repetido(lugar, indice_zona, 
-                                       gm.Dfnombres_e.iloc[indice_nombre,0]))):
-                nombre = gm.Dfnombres_e.iloc[indice_nombre,0]
+                                     gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
+                nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
                 multiples = False
-                salud = gm.Data_e.iloc[indice_nombre,1]
+                salud = gm.Data_enemigos.iloc[indice_nombre,1]
                 if(type(salud) == pd.core.series.Series):
                         multiples = True
                         salud = salud.iloc[0]
-                fuerza = gm.Data_e.iloc[indice_nombre,2]
-                resistencia = gm.Data_e.iloc[indice_nombre,3]
-                hostilidad = gm.Data_e.iloc[indice_nombre,4]
-                inteligencia = gm.Data_e.iloc[indice_nombre,5]
-                sabiduria = gm.Data_e.iloc[indice_nombre,6]
-                categoria = gm.Data_e.iloc[indice_nombre,7]
-                rango = gm.Data_e.iloc[indice_nombre,8]
-                dropeos = gm.Data_e.iloc[indice_nombre,9]
-                cantidad = gm.Data_e.iloc[indice_nombre,10]
+                fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
+                resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
+                hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
+                inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
+                sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
+                categoria = gm.Data_enemigos.iloc[indice_nombre,7]
+                rango = gm.Data_enemigos.iloc[indice_nombre,8]
+                dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
+                cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
                 if(multiples):
                         fuerza = fuerza.iloc[0]
                         resistencia = resistencia.iloc[0]
@@ -1370,28 +1374,28 @@ class Juego:
         print(contador)
         while(contador > 0):
             for indice in range(0, len(enemigos_activos)):
-                for indice_nombre in range (0, len(gm.Dfnombres_e)):
+                for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
                     if(contador<=0):
                         break
-                    if((gm.Dfnombres_e.iloc[indice_nombre,0] == enemigos_activos[
-                                                                            indice])  
+                    if((gm.Dfnombres_enemigos.iloc[
+                            indice_nombre,0] == enemigos_activos[indice])  
                         and (cantidades[indice] > 0.0) 
-                        and (gm.Dfnombres_e.iloc[indice_nombre,0] 
+                        and (gm.Dfnombres_enemigos.iloc[indice_nombre,0] 
                         not in gm.jefes.keys())):
                         multiples = False
-                        salud = gm.Data_e.iloc[indice_nombre,1]
+                        salud = gm.Data_enemigos.iloc[indice_nombre,1]
                         if(type(salud) == pd.core.series.Series):
                                 multiples = True
                                 salud = salud.iloc[0]
-                        fuerza = gm.Data_e.iloc[indice_nombre,2]
-                        resistencia = gm.Data_e.iloc[indice_nombre,3]
-                        hostilidad = gm.Data_e.iloc[indice_nombre,4]
-                        inteligencia = gm.Data_e.iloc[indice_nombre,5]
-                        sabiduria = gm.Data_e.iloc[indice_nombre,6]
-                        categoria = gm.Data_e.iloc[indice_nombre,7]
-                        rango = gm.Data_e.iloc[indice_nombre,8]
-                        dropeos = gm.Data_e.iloc[indice_nombre,9]
-                        cantidad = gm.Data_e.iloc[indice_nombre,10]
+                        fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
+                        resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
+                        hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
+                        inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
+                        sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
+                        categoria = gm.Data_enemigos.iloc[indice_nombre,7]
+                        rango = gm.Data_enemigos.iloc[indice_nombre,8]
+                        dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
+                        cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
                         if(multiples):
                                 fuerza = fuerza.iloc[0]
                                 resistencia = resistencia.iloc[0]
@@ -1454,12 +1458,12 @@ class Juego:
 #        print("----------------------------------------------------------")
 #                print("contador: " + str(contador))
         for indice in range(0, len(objetos)):
-            for indice_nombre in range (0, len(gm.Dfnombres_o)):
+            for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
                 if(contador<=0):
                     break
-                if((gm.Dfnombres_o.iloc[indice_nombre,0] == objetos[indice]) 
+                if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == objetos[indice]) 
                 and (cantidades[indice] > 0.0) 
-                and (gm.Dfnombres_o.iloc[indice_nombre,0] 
+                and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
                 != "Fragmento de Libro de Secretos")):
                     nombre = objetos[indice]
                     objeto = self.tranformar_objeto(nombre, cantidades[indice])
@@ -1497,10 +1501,10 @@ class Juego:
             print("\t\t"+lugar.zonas[indice_zona])
             print("--------------------------------------------------------------")
             for indice_objeto in range(0, len(lugar.objetos[indice_zona])):
-                for indice_nombre in range (0, len(gm.Dfnombres_o)):
+                for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
                     if(contador<=0):
                         break
-                    if ((gm.Dfnombres_o.iloc[indice_nombre,0] == lugar.objetos[
+                    if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == lugar.objetos[
                                                                     indice_zona][
                                                                     indice_objeto]) 
                     and (lugar.cantidades()[indice_zona][indice_objeto] > 0.0) 
@@ -1518,7 +1522,7 @@ class Juego:
     def tranformar_objeto(self, nombre: str, cantidad_manual = None):
         #DEBUG
 #        print("-----------------------------------------Metodo transformar objeto")
-        for indice_nombre in range (0, len(gm.Dfnombres_o)):
+        for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
             if (gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
                 multiples = False
                 boosteo = (gm.Data_objetos2.loc[nombre, "Boosteo"])
@@ -1555,23 +1559,20 @@ class Juego:
         
         indice = usuario.inventario_nombres.index(nombre)
         usuario.peso -= usuario.inventario[indice].peso
-        zonas = usuario.ubicacion.zonas
-        i = zonas.index(usuario.zona)
         usuario.inventario_nombres.pop(indice)
         usuario.inventario.pop(indice)
         
         tirada = gm.dados(1, 4)[0]
-        i, j = 0, 0
-        for i in range(0, len(gm.Dfnombres_o)):
-            if(gm.Dfnombres_o.iloc[i,0] == nombre):
+        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
+            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
                 break
         if(tirada < 4 * mult):
-            objetos = gm.Dfmejoras_o
+            objetos = gm.Dfmejoras_objetos
         else:
-            objetos = gm.Dfestropeos_o
-        objeto = objetos.iloc[i,0]
-        for j in range(0, len(gm.Dfnombres_o)):
-            if(gm.Dfnombres_o.iloc[j,0] == objeto):
+            objetos = gm.Dfestropeos_objetos
+        objeto = objetos.iloc[indice_nombre,0]
+        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
+            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == objeto):
                 break
         nombre = objeto
         
