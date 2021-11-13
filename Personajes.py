@@ -821,7 +821,6 @@ class Personaje(Individuo):
                     
                 Juego.iniciar_pelea(personajes_presentes, enemigos_presentes,
                                     [], self, multiplicador)
-        return True
             
     def cambiar_dueno(self, asistente):
         personajes_temporal = []
@@ -1156,7 +1155,6 @@ class Personaje(Individuo):
         
         self.actualizar_stats()
         print("--------------------------------------------------------------")
-        #return algo?
     
     def exceso_peso(self):
         #DEBUG
@@ -1206,7 +1204,7 @@ class Personaje(Individuo):
         gm.personajes_muertos.append(self)
         gm.personajes.remove(self)
         objeto = Juego.tranformar_objeto("Cadaver de "+self.nombre)
-        objeto.stats()
+        print(objeto)
         self.ubicacion.objetos_activos[zona].append(objeto)
 #        self.ubicacion.cantidades_objetos_activos[z].append(1)
         self.ubicacion.objetos[zona].append(objeto.nombre)
@@ -1466,7 +1464,6 @@ class Personaje(Individuo):
             self.actualizar_stats()
             print("\nSUBISTE DE NIVEL!!\n")
         print(self)
-        return ""
     
     def subir_salud_max(self):
         #DEBUG
