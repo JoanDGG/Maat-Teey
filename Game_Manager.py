@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from Lugares import Lugar
 
-
 Data_enemigos = pd.read_csv("D-D_Enemigos_3.csv")
 Data_objetos2 = pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
 
