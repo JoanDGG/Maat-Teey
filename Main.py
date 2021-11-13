@@ -207,6 +207,7 @@ def main():
     # Comentar TODO
 
     # Cambiar nombre variables Juegos
+    # Llamar a casino
     # gm.dias ?
     # Dialogo intenso sala misteriosa
     # Descripcion perra de wendigo

@@ -13,6 +13,607 @@ class Juego:
         self.peleas_doma = []
         self.oso_marino = None
     
+    def casino(self, personaje, premio = 0):
+        print(f"---------- {personaje.nombre}, bienvenido al casino!! ---------- "
+              + f"Premio actual: {premio}")
+        print("¿Que quieres hacer?")
+        seleccion = int(input("1: Jugar una ronda\n2: Ver premios\n3:Salir\n"))
+        if(premio <= -500):
+            seleccion = 3
+        if(seleccion == 1):
+            apuesta = int(input(f"\n----- A jugar! ----- "
+                                + f"Premio actual: {premio}"
+                                + "\n¿Cuánto deseas apostar?\n"))
+            premio -= apuesta    
+            
+            lista1 = [1, 2, 3, 4, 5]
+            lista2 = [1, 2, 3, 4, 5]
+            lista3 = [1, 2, 3, 4, 5]
+            lista4 = [1, 2, 3, 4, 5]
+            lista5 = [1, 2, 3, 4, 5]
+            listas = [lista1, lista2, lista3, lista4, lista5]
+            print(" \t_____\t_____\t_____\t_____\t_____\n")
+            columna = 1
+            for indice in range(0, 3):
+                print("\t", end = "")
+                for fila in range(0, 5):
+                    print(listas[fila][columna], end="\t")
+                    if(columna >= 4):
+                        break
+                columna += 1
+                print()
+            print(" \t_____\t_____\t_____\t_____\t_____\n")
+            print("\nA jugar!\n")
+            
+            lista_final = []
+            for lista in listas:
+                np.random.shuffle(lista)
+                lista_final.append(lista[2])
+            
+            print(" \t_____\t_____\t_____\t_____\t_____\n")
+            columna = 1
+            for indice in range(0, 3):
+                print("\t", end = "")
+                for fila in range(0, 5):
+                    print(listas[fila][columna], end="\t")
+                    if(columna >= 4):
+                        break
+                columna += 1
+                print()
+            print(" \t_____\t_____\t_____\t_____\t_____\n")
+            
+            premio_base = sum(lista_final)
+            mult = []
+            for indice in range(1, 6):
+                mult.append(lista_final.count(indice))
+            mult_final = 0
+            if(max(mult) >= 3):
+                mult_final = mult.index(max(mult))+1
+            premio_actual = premio_base * mult_final * max(mult)
+            print(f"Ganaste {premio_actual} puntos!!")
+            
+            # calculo automatico de dineros
+            rangos = [0, 1, 22, 46, 190, 335, 480]
+            multi = [0, 1, 2, 4, 6, 8, 10]
+            bonificacion = 0
+            for indice in range(0, len(rangos)):
+                if(premio_actual > rangos[indice]):
+                    bonificacion = multi[indice]
+                else:
+                    break
+            print(f"Obtuviste {bonificacion * apuesta} dineros!!\n")
+            if(bonificacion != 0):
+                premio += bonificacion * apuesta + apuesta
+            else:
+                premio += bonificacion * apuesta
+        elif(seleccion == 2):
+            print(f"\n----- Premios ----- Premio actual: {premio}"
+                  + "\n 481 - 625 puntos: apuesta x 10 (PREMIO MAXIMO!!!!!!!)"
+                  + "\n 336 - 480 puntos: apuesta x 8"
+                  + "\n 191 - 335 puntos: apuesta x 6"
+                  + "\n 46 - 190  puntos: apuesta x 4"
+                  + "\n 22 - 45   puntos: apuesta x 2"
+                  + "\n 1 - 21    puntos: apuesta x 1"
+                  + "\n 0         puntos: 0\n")
+        elif(seleccion == 3):
+            presupuesto = personaje.cartera
+            if(premio >= 0):
+                personaje.anadir_obj(premio)
+            else:
+                deuda = presupuesto + premio
+                if(deuda < 0):
+                    personaje.anadir_obj(-presupuesto)
+                    for inventario in range(len(personaje.inventario)-1, 0, -1):
+                        for indice in range(inventario):
+                            if (personaje.inventario[indice].precio 
+                                > personaje.inventario[indice + 1].precio):
+                                temp = personaje.inventario[indice]
+                                personaje.inventario[indice] = personaje.inventario[
+                                                                         indice + 1]
+                                personaje.inventario[indice + 1] = temp
+                    deuda = abs(deuda)
+                    while(deuda > 0):
+                        if(personaje.inventario == []):
+                            break
+                        deuda -= personaje.inventario[0].precio
+                        personaje.inventario.pop(0)
+                        personaje.inventario_nombres.pop(0)
+                    if(deuda > 0):
+                        print("Me las vas a pagar con tu vida shavo!\n..."
+                              + f"{personaje.nombre}" 
+                              + " ha recibido una paliza... "
+                              + f"-{personaje.salud/4}")
+                        personaje.cambiar_hp(-(personaje.salud/4))
+                else:
+                    personaje.anadir_obj(-premio)
+            return True
+        self.casino(personaje, premio)
+        
+    def domar(self, personaje, enemigo, jaula, defensas, omitidos, historial):
+        personaje.condicion.update({"Domando": 1})
+        enemigo.condicion.update({"Domando": 1})
+        if(jaula.nombre == "Trampa de osos"):
+            enemigo.cambiar_hp(-5)
+            enemigo.carisma += 1
+            enemigo.fuerza += 1
+        elif(jaula.nombre == "Jaula mas grande"):
+            enemigo.fuerza -= int(enemigo.fuerza*.1)
+        enemigo.actualizar_stats()
+        empieza_personaje = (personaje.velocidad >= enemigo.velocidad)
+        turnos = [personaje, enemigo]
+        for individuo in turnos:
+            individuo.efecto()
+        if(empieza_personaje):     
+            #Turno personaje
+            (personaje, enemigo, 
+             defensas, turnos, omitidos, historial) = self.turno_personaje(
+                                         [personaje], [enemigo], defensas, turnos, 
+                                         omitidos, turnos, personaje, historial, 
+                                         jaula = jaula)
+            #Turno enemigo
+            (personaje, enemigo, 
+             defensas, turnos, omitidos, historial) = self.turno_enemigo(
+                                         personaje, enemigo, defensas, turnos, 
+                                         omitidos, turnos, enemigo[0], historial, 
+                                         jaula = jaula)
+        else:
+            #Turno enemigo
+            (personaje, enemigo, 
+             defensas, turnos, omitidos, historial) = self.turno_enemigo(
+                                         [personaje], [enemigo], defensas, turnos, 
+                                         omitidos, turnos, enemigo, historial, 
+                                         jaula = jaula)
+            #Turno personaje
+            (personaje, enemigo, 
+             defensas, turnos, omitidos, historial) = self.turno_personaje(
+                                         personaje, enemigo, defensas, turnos, 
+                                         omitidos, turnos, personaje[0], historial, 
+                                         jaula = jaula)
+            
+        return[True, personaje[0], enemigo[0], jaula, defensas, omitidos, historial]
+        
+
+    def escalera(self, personaje, nivel = 0, niv_maquina = 0, niv_nina = 0, 
+                                                              niv_monstruo = 0):
+        #DEBUG
+#        print("---------------------------------------------------Metodo escalera")
+        print(f"{personaje.nombre}, estas en el nivel {nivel}")
+        if(nivel == 0):
+            niv_maquina = gm.dados(1, 10)[0]
+            niv_nina = gm.dados(1, 20)[0]
+            niv_monstruo = gm.dados(1, 25)[0]
+        seleccion = input(f"{personaje.nombre}, ¿quieres bajar? (S/N)\n")
+        if(seleccion == "S"):
+            nivel += 1
+        elif(seleccion == "N"):
+            print("Has vuelto al inicio de las escaleras")
+            nivel = 0
+        else:
+            print("Tas tonto shavo")
+        if(nivel == niv_monstruo):
+            print("Has encontrado al monstruo!! :O")
+            probabilidad = (nivel*100)/25
+            tirada = gm.dados(1, 100)[0]
+            if(tirada <= probabilidad):
+                print("Empiezas a oir un llanto en la distancia...")
+                personaje.cambiar_hp(-2000)
+            else:
+                print("Lograste escapar con éxito! "
+                      + "Has vuelto al inicio de las escaleras")
+                nivel = 0
+        if(nivel == niv_nina):
+            seleccion = input("Has encontrado una sala misteriosa... "
+                      + "¿Quieres entrar? (S/N)\n")
+            if(seleccion == "S"):
+                print("Dialogo intenso...")
+                objeto = Objeto("Pelo", "--", "--", 0, 1, 10000, 0)
+                zonas = personaje.ubicacion.zonas
+                zona = zonas.index(personaje.zona)
+                personaje.ubicacion.objetos[zona].append(objeto.nombre)
+                personaje.ubicacion.objetos_activos[zona].append(objeto)
+                personaje.ubicacion.cantidades[zona].append(10000)
+                personaje.anadir_obj(objeto)
+        if(nivel == niv_maquina):
+            seleccion = input("Has encontrado la sala de la maquina!! "
+                      + "¿Quieres entrar? (S/N)\n")
+            if(seleccion == "S"):
+                personaje.moverse(gm.edificio, "Maquina")
+                personaje.usar_maquina()
+        return [personaje, nivel, niv_maquina, niv_nina, niv_monstruo]
+
+    def generar_enemigos_zona(self, lugar:Lugar, zona:str):
+        #DEBUG
+#        print("--------------------------------------Metodo generar enemigos zona")
+        self.generar_jefes(lugar, zona)
+        indice = lugar.zonas.index(zona)
+        enemigos, cantidades = gm.mezclar_listas(lugar.enemigos[indice],
+                                               lugar.cantidades_enemigos[indice], 1)
+        lugar.enemigos_zona_s(enemigos, zona)
+        lugar.cantidades_enemigos_zona_s(cantidades, zona)
+        from Enemigos import Enemigo
+        
+        enemigos_aux = []
+        cantidades_aux = []
+        contador = 0
+        for enemigo in range(0, len(enemigos)):
+            if(enemigos[enemigo] not in gm.jefes.keys()):
+                enemigos_aux.append(enemigos[enemigo])
+                cantidades_aux.append(cantidades[enemigo])
+            else:
+                contador += 1
+                
+        enemigos, cantidades = enemigos_aux, cantidades_aux
+        minimo_enemigos = 2
+        if(zona == "Mercado"):
+            minimo_enemigos *= 2
+            
+        maximo_enemigos = len(enemigos)//4
+        if(maximo_enemigos == 0):
+            maximo_enemigos = 1
+        contador = minimo_enemigos + gm.dados(1, maximo_enemigos)[0]
+        if(sum(cantidades) < contador):
+            contador = sum(cantidades) + contador
+        contador -= contador
+        
+#        print("----------------------------------------------------------")
+#        print("\t\t"+zona)
+#        print("----------------------------------------------------------")
+        enemigos_activos = []
+        enemigos_activos_aux = []
+        for indice_enemigo in range(0, len(enemigos)):
+            enemigos_activos.append(enemigos[gm.dados(1, len(enemigos))[0]-1])
+#                print("contador: " + str(contador))
+        
+        for enemigo in enemigos_activos:
+            if(enemigo not in gm.jefes_no_jefes):
+                enemigos_activos_aux.append(enemigo)
+            else:
+                contador -= 1
+        enemigos_activos = enemigos_activos_aux
+        print(enemigos_activos)
+        print(contador)
+        while(contador > 0):
+            for indice in range(0, len(enemigos_activos)):
+                for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
+                    if(contador<=0):
+                        break
+                    if((gm.Dfnombres_enemigos.iloc[
+                            indice_nombre,0] == enemigos_activos[indice])  
+                        and (cantidades[indice] > 0.0) 
+                        and (gm.Dfnombres_enemigos.iloc[indice_nombre,0] 
+                        not in gm.jefes.keys())):
+                        multiples = False
+                        salud = gm.Data_enemigos.iloc[indice_nombre,1]
+                        if(type(salud) == pd.core.series.Series):
+                                multiples = True
+                                salud = salud.iloc[0]
+                        fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
+                        resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
+                        hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
+                        inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
+                        sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
+                        categoria = gm.Data_enemigos.iloc[indice_nombre,7]
+                        rango = gm.Data_enemigos.iloc[indice_nombre,8]
+                        dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
+                        cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
+                        if(multiples):
+                                fuerza = fuerza.iloc[0]
+                                resistencia = resistencia.iloc[0]
+                                hostilidad = hostilidad.iloc[0]
+                                inteligencia = inteligencia.iloc[0]
+                                sabiduria = sabiduria.iloc[0]
+                                categoria = categoria.iloc[0]
+                                rango = rango.iloc[0]
+                                dropeos = dropeos.iloc[0]
+                                cantidad = cantidad.iloc[0]
+                        
+                        enemigo = Enemigo(salud, fuerza, resistencia, hostilidad, 
+                                  inteligencia, sabiduria, enemigos_activos[indice], 
+                                  {"Saludable": 1}, dropeos, categoria, 
+                                  rango, cantidad, zona)
+                        lugar.enemigos_activos[indice].append(enemigo)
+                        if(enemigo.nombre == "Oso marino"):
+                            self.oso_marino = enemigo
+#                            print("AAAAAAAAAAAAA")
+#                        e.stats()
+                        contador -= 1
+                        break
+    
+    def generar_jefes(self, lugar, zona:str):
+        #DEBUG
+#        print("----------------------------------------------Metodo generar jefes")
+        indice_zona = lugar.zonas.index(zona)
+        jefes = []
+        lugar_original = gm.lugares_o_originales[gm.objetos_lugares.index(lugar)]
+        from Enemigos import Enemigo
+        
+        print(lugar.enemigos[indice_zona])
+        
+        for enemigo in lugar.enemigos[indice_zona]:
+            if(enemigo in gm.jefes_no_jefes):
+                jefes.append(enemigo)
+        contador = -1
+#        print(gm.jefes_no_jefes)
+#        print(jefes)
+        for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
+            if(abs(contador) > len(jefes)):
+                break
+            if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
+                and (lugar_original.cantidades()[indice_zona][contador] > 0) 
+                and (not self.repetido(lugar, indice_zona, 
+                                     gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
+                nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
+                multiples = False
+                salud = gm.Data_enemigos.iloc[indice_nombre,1]
+                if(type(salud) == pd.core.series.Series):
+                        multiples = True
+                        salud = salud.iloc[0]
+                fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
+                resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
+                hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
+                inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
+                sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
+                categoria = gm.Data_enemigos.iloc[indice_nombre,7]
+                rango = gm.Data_enemigos.iloc[indice_nombre,8]
+                dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
+                cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
+                if(multiples):
+                        fuerza = fuerza.iloc[0]
+                        resistencia = resistencia.iloc[0]
+                        hostilidad = hostilidad.iloc[0]
+                        inteligencia = inteligencia.iloc[0]
+                        sabiduria = sabiduria.iloc[0]
+                        categoria = categoria.iloc[0]
+                        rango = rango.iloc[0]
+                        dropeos = dropeos.iloc[0]
+                        cantidad = cantidad.iloc[0]
+                
+                enemigo = Enemigo(salud, fuerza, resistencia, hostilidad, 
+                                  inteligencia, sabiduria, nombre, {"Saludable": 1}, 
+                                  dropeos, categoria, rango, cantidad, zona)
+                lugar.enemigos_activos[indice_zona].append(enemigo)
+                contador -= 1
+                enemigo.stats()
+    
+    def generar_objetos_zona(self, lugar, zona:str):
+        #DEBUG
+#        print("--------------------------------------------Metodo generar objetos")
+        fragmento = Objeto("Fragmento de libro de secretos", 
+                           0, "Habilidad", 0, 1, 1, 300)
+        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
+            lugar.objetos_activos[1].append(fragmento)
+        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
+            lugar.objetos_activos[1].append(fragmento)
+        elif((lugar == gm.normancueva) 
+            and (gm.normancueva_original.cantidades()[1][0] > 0)):
+            lugar.objetos_activos[1].append(fragmento)
+        elif((lugar == gm.fondo_del_mar) 
+            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
+            lugar.objetos_activos[0].append(fragmento)
+            
+        indice = lugar.zonas.index(zona)
+        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indice],
+                                               lugar.cantidades()[indice], 1)
+        lugar.objetos_zona_s(objetos, zona)
+        lugar.cantidades_objetos_zona_s(cantidades, zona)
+        
+#        print(lugar.objetos)
+#        print(objetos)
+        if(len(objetos) == 0):
+            contador = 0
+        elif(len(objetos) == 1):
+            contador = 1
+        else:
+            contador = gm.dados(1, len(objetos))[0]//2
+#        if(contador<1):
+#            contador+=1
+            
+#        print("----------------------------------------------------------")
+#        print("\t\t"+zona)
+#        print("----------------------------------------------------------")
+#                print("contador: " + str(contador))
+        for indice in range(0, len(objetos)):
+            for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
+                if(contador<=0):
+                    break
+                if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == objetos[indice]) 
+                and (cantidades[indice] > 0.0) 
+                and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
+                != "Fragmento de Libro de Secretos")):
+                    nombre = objetos[indice]
+                    objeto = self.tranformar_objeto(nombre, cantidades[indice])
+                    lugar.objetos_activos[indice].append(objeto)
+#                    o.stats()
+                    contador -= 1
+                    break
+    
+    def generar_objetos(self, lugar):
+        #DEBUG
+        print("---------------------------------------------Metodo generar objetos")
+        fragmento = Objeto("Fragmento de libro de secretos", 0, 
+                           "Habilidad", 0, 1, 1, 300)
+        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
+            lugar.objetos_activos[1].append(fragmento)
+        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
+            lugar.objetos_activos[1].append(fragmento)
+        elif((lugar == gm.normancueva) 
+            and (gm.normancueva_original.cantidades()[1][0] > 0)):
+            lugar.objetos_activos[1].append(fragmento)
+        elif((lugar == gm.fondo_del_mar) 
+            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
+            lugar.objetos_activos[0].append(fragmento)
+        objetos,cantidades = gm.mezclar_listas(lugar.objetos, lugar.cantidades(), 2)
+        lugar.objetos = objetos
+        lugar.cantidades = cantidades
+#        print(lugar.objetos)
+#        print(objetos)
+        for indice_zona in range (0, len(lugar.zonas)):
+            contador = len(lugar.objetos[indice_zona])//2
+            if(contador < 1):
+                contador += 1
+            print("--------------------------------------------------------------")
+            print("\t\t"+lugar.zonas[indice_zona])
+            print("--------------------------------------------------------------")
+            for indice_objeto in range(0, len(lugar.objetos[indice_zona])):
+                for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
+                    if(contador<=0):
+                        break
+                    if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == lugar.objetos[
+                                                                    indice_zona][
+                                                                    indice_objeto]) 
+                    and (lugar.cantidades()[indice_zona][indice_objeto] > 0.0) 
+                    and (lugar.objetos[indice_zona][indice_objeto] 
+                        != "Fragmento de Libro de Secretos")):
+                        nombre = lugar.objetos[indice_zona][indice_objeto]
+                        objeto = self.tranformar_objeto(nombre, lugar.cantidades()[
+                                                        indice_zona][indice_objeto])
+                        lugar.objetos_activos[indice_zona].append(objeto)
+                        objeto.stats()
+                        contador -= 1
+                        break
+
+    def iniciar_pelea(self, p_presentes, e_presentes, omitidos = [], defensas = [], 
+                   turnos = [], personajes_peleando = [], victima = None, mult = 1):
+        #DEBUG
+        print("----------------------------------------------Metodo iniciar_pelea")
+        if(e_presentes == []):
+                print("Disfruta tu estadia")
+                return [False, p_presentes]
+        jefes_presentes = False
+        for enemigo in e_presentes:
+            if(enemigo in gm.jefes.keys()):
+                jefes_presentes = True
+        e_sabiduria = 0
+        p_pelea = []
+        enemigos_op_activos = []        
+        for enemigo in e_presentes:
+            if(enemigo.sabiduria > e_sabiduria):
+                e_sabiduria = enemigo.sabiduria
+            if(enemigo.nombre in gm.enemigos_op):
+                enemigos_op_activos.append(enemigo)
+                
+        if(victima != None): # Cuando estas robando
+            p_presentes.remove(victima)
+            if(victima.sabiduria < e_sabiduria):
+                p_pelea.append(victima)
+                print(f"{victima.nombre} has sido detectado, hora de pelear!")
+                for personaje in p_presentes:
+                    decision = input(f"¿{personaje.nombre}, " 
+                                     + "quieres hacer la guerra?+ (S/N)")
+                    if(decision == "S"):
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
+            else:
+                print("Oof, te has salvado...")
+                for enemigo in e_presentes:
+                    enemigo.salud /= mult
+                    enemigo.fuerza /= mult
+                    enemigo.resistencia /= mult
+                    enemigo.carisma /= mult
+                    enemigo.inteligencia /= mult
+                    enemigo.sabiduria /= mult
+        else:
+            # Anadir asistentes de personajes muertos
+            for personaje_muerto in gm.personajes_muertos: 
+                if(personaje_muerto.zona == p_presentes[0].zona):
+                    for asistente in personaje_muerto.asistentes:
+                        p_pelea.append(asistente)
+            for personaje in p_presentes:
+                sigilo = False
+                if(personaje in personajes_peleando):
+                    p_pelea.append(personaje)
+                    for asistente in personaje.asistentes:
+                        p_pelea.append(asistente)
+                    continue
+                if("Invisible" not in personaje.condicion 
+                   or enemigos_op_activos != []):
+                    if(personaje.sabiduria < e_sabiduria):
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
+                        print(f"{personaje.nombre} has sido detectado, " 
+                              + "hora de pelear!")
+                    else:
+                        sigilo = True
+                else:
+                    sigilo = True
+                    
+                if(sigilo):
+                    if(personaje.nombre == "Ruben" 
+                       and personaje.arbol["A3"][0] == 1):
+                        decision = input("¿Ruben, "
+                                         + "quieres utilizar tu habilidad? (S/N)")
+                        if(decision == "S"):
+                            personaje.activar_habilidad("Iniciar pelea", omitidos)
+                    else:
+                        zonas = personaje.ubicacion.zonas
+                        zona = zonas.index(personaje.zona)
+                        tirada = gm.dados(1, 
+                                 len(personaje.ubicacion.enemigos_activos[zona]))[0]
+                        print(f"{personaje.nombre}, " 
+                              + f"has avistado a {tirada} enemigos...")
+                        enemigos_vistos = []
+                        for i in range(0, tirada):
+                            print("... hay un " 
+                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
+                        + "cerca...")
+                            enemigos_vistos.append(
+                                     personaje.ubicacion.enemigos_activos[zona][i])
+                        print("\n..posiblemente hayan mas enemigos en la zona..\n")
+                    print(f"{personaje.nombre}"
+                          + ", estas en modo sigilo sigilozo ¿que deseas hacer?")
+                    decision = int(input("0: Atacar\n1: Unirse a la pelea"
+                                         + "\n2: Usar objeto\n3: Tirar objeto "
+                                         + "\n4: Moverte\n5: Esperar\n"))
+                    if(decision == 0):
+                        ataque = personaje.atacar(enemigos_vistos, 1.5)
+                        ataque[0].cambiar_hp(-ataque[1], personaje)
+                        if(personaje.sabiduria < e_sabiduria+gm.dados(1, 
+                                        (e_sabiduria//2)+1)[0] or jefes_presentes):
+                            p_pelea.append(personaje)
+                            for asistente in personaje.asistentes:
+                                p_pelea.append(asistente)
+                            print(f"{personaje.nombre} has sido detectado, " 
+                                  + "hora de pelear!")
+                        else:
+                            print("Te mantienes detras de las sombras..")
+                    elif(decision == 1):
+                        p_pelea.append(personaje)
+                        for asistente in personaje.asistentes:
+                            p_pelea.append(asistente)
+                        print(f"{personaje.nombre}, hora de pelear!!")
+                    elif(decision == 2):
+                        personaje.usar_obj(p_presentes+enemigos_vistos)
+                    elif(decision == 3):
+                        personaje.tirar_objeto()
+                    elif(decision == 4):
+                        personaje.moverse()
+                    else:
+                        print(f"{personaje.nombre} se esconde...")
+                        for i in range(tirada, tirada + gm.dados(1, 3)[0]):
+                            if(i>= len(personaje.ubicacion.enemigos_activos[zona])):
+                                break
+                            print("... has avistado a " 
+                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
+                        + "tambien...")
+                if(e_presentes == []):
+                    print("Victoria!")
+                    if(jefes_presentes):
+                        for personaje in p_presentes:
+                            personaje.subir_nivel()
+                    p_presentes = []
+                    return [False, p_presentes]
+        enemigos = []
+        for enemigo in e_presentes:
+            if("Atrapado" not in enemigo.condicion):
+                enemigos.append(enemigo)
+        
+        if(p_pelea != []):
+            return self.pelea(self, p_pelea, enemigos, defensas, turnos, omitidos)
+        return [False, p_pelea]
+
+
     def jugar(self, resultados = []):
         #DEBUG
 #        print("------------------------------------------------------Metodo jugar")
@@ -328,147 +929,57 @@ class Juego:
         
         if(not fin):
             return resultados
-            
-    def iniciar_pelea(self, p_presentes, e_presentes, omitidos = [], defensas = [], 
-                   turnos = [], personajes_peleando = [], victima = None, mult = 1):
+
+    def maquina(self, nombre: str, usuario, mult = 1):
         #DEBUG
-        print("----------------------------------------------Metodo iniciar_pelea")
-        if(e_presentes == []):
-                print("Disfruta tu estadia")
-                return [False, p_presentes]
-        jefes_presentes = False
-        for enemigo in e_presentes:
-            if(enemigo in gm.jefes.keys()):
-                jefes_presentes = True
-        e_sabiduria = 0
-        p_pelea = []
-        enemigos_op_activos = []        
-        for enemigo in e_presentes:
-            if(enemigo.sabiduria > e_sabiduria):
-                e_sabiduria = enemigo.sabiduria
-            if(enemigo.nombre in gm.enemigos_op):
-                enemigos_op_activos.append(enemigo)
-                
-        if(victima != None): # Cuando estas robando
-            p_presentes.remove(victima)
-            if(victima.sabiduria < e_sabiduria):
-                p_pelea.append(victima)
-                print(f"{victima.nombre} has sido detectado, hora de pelear!")
-                for personaje in p_presentes:
-                    decision = input(f"¿{personaje.nombre}, " 
-                                     + "quieres hacer la guerra?+ (S/N)")
-                    if(decision == "S"):
-                        p_pelea.append(personaje)
-                        for asistente in personaje.asistentes:
-                            p_pelea.append(asistente)
-            else:
-                print("Oof, te has salvado...")
-                for enemigo in e_presentes:
-                    enemigo.salud /= mult
-                    enemigo.fuerza /= mult
-                    enemigo.resistencia /= mult
-                    enemigo.carisma /= mult
-                    enemigo.inteligencia /= mult
-                    enemigo.sabiduria /= mult
-        else:
-            # Anadir asistentes de personajes muertos
-            for personaje_muerto in gm.personajes_muertos: 
-                if(personaje_muerto.zona == p_presentes[0].zona):
-                    for asistente in personaje_muerto.asistentes:
-                        p_pelea.append(asistente)
-            for personaje in p_presentes:
-                sigilo = False
-                if(personaje in personajes_peleando):
-                    p_pelea.append(personaje)
-                    for asistente in personaje.asistentes:
-                        p_pelea.append(asistente)
-                    continue
-                if("Invisible" not in personaje.condicion 
-                   or enemigos_op_activos != []):
-                    if(personaje.sabiduria < e_sabiduria):
-                        p_pelea.append(personaje)
-                        for asistente in personaje.asistentes:
-                            p_pelea.append(asistente)
-                        print(f"{personaje.nombre} has sido detectado, " 
-                              + "hora de pelear!")
-                    else:
-                        sigilo = True
-                else:
-                    sigilo = True
-                    
-                if(sigilo):
-                    if(personaje.nombre == "Ruben" 
-                       and personaje.arbol["A3"][0] == 1):
-                        decision = input("¿Ruben, "
-                                         + "quieres utilizar tu habilidad? (S/N)")
-                        if(decision == "S"):
-                            personaje.activar_habilidad("Iniciar pelea", omitidos)
-                    else:
-                        zonas = personaje.ubicacion.zonas
-                        zona = zonas.index(personaje.zona)
-                        tirada = gm.dados(1, 
-                                 len(personaje.ubicacion.enemigos_activos[zona]))[0]
-                        print(f"{personaje.nombre}, " 
-                              + f"has avistado a {tirada} enemigos...")
-                        enemigos_vistos = []
-                        for i in range(0, tirada):
-                            print("... hay un " 
-                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
-                        + "cerca...")
-                            enemigos_vistos.append(
-                                     personaje.ubicacion.enemigos_activos[zona][i])
-                        print("\n..posiblemente hayan mas enemigos en la zona..\n")
-                    print(f"{personaje.nombre}"
-                          + ", estas en modo sigilo sigilozo ¿que deseas hacer?")
-                    decision = int(input("0: Atacar\n1: Unirse a la pelea"
-                                         + "\n2: Usar objeto\n3: Tirar objeto "
-                                         + "\n4: Moverte\n5: Esperar\n"))
-                    if(decision == 0):
-                        ataque = personaje.atacar(enemigos_vistos, 1.5)
-                        ataque[0].cambiar_hp(-ataque[1], personaje)
-                        if(personaje.sabiduria < e_sabiduria+gm.dados(1, 
-                                        (e_sabiduria//2)+1)[0] or jefes_presentes):
-                            p_pelea.append(personaje)
-                            for asistente in personaje.asistentes:
-                                p_pelea.append(asistente)
-                            print(f"{personaje.nombre} has sido detectado, " 
-                                  + "hora de pelear!")
-                        else:
-                            print("Te mantienes detras de las sombras..")
-                    elif(decision == 1):
-                        p_pelea.append(personaje)
-                        for asistente in personaje.asistentes:
-                            p_pelea.append(asistente)
-                        print(f"{personaje.nombre}, hora de pelear!!")
-                    elif(decision == 2):
-                        personaje.usar_obj(p_presentes+enemigos_vistos)
-                    elif(decision == 3):
-                        personaje.tirar_objeto()
-                    elif(decision == 4):
-                        personaje.moverse()
-                    else:
-                        print(f"{personaje.nombre} se esconde...")
-                        for i in range(tirada, tirada + gm.dados(1, 3)[0]):
-                            if(i>= len(personaje.ubicacion.enemigos_activos[zona])):
-                                break
-                            print("... has avistado a " 
-                        + f"{personaje.ubicacion.enemigos_activos[zona][i].nombre} "
-                        + "tambien...")
-                if(e_presentes == []):
-                    print("Victoria!")
-                    if(jefes_presentes):
-                        for personaje in p_presentes:
-                            personaje.subir_nivel()
-                    p_presentes = []
-                    return [False, p_presentes]
-        enemigos = []
-        for enemigo in e_presentes:
-            if("Atrapado" not in enemigo.condicion):
-                enemigos.append(enemigo)
+#        print("----------------------------------------------------Metodo maquina")
+        if(not self.funcional):
+            return False
         
-        if(p_pelea != []):
-            return self.pelea(self, p_pelea, enemigos, defensas, turnos, omitidos)
-        return [False, p_pelea]
+        indice = usuario.inventario_nombres.index(nombre)
+        usuario.peso -= usuario.inventario[indice].peso
+        usuario.inventario_nombres.pop(indice)
+        usuario.inventario.pop(indice)
+        
+        tirada = gm.dados(1, 4)[0]
+        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
+            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
+                break
+        if(tirada < 4 * mult):
+            objetos = gm.Dfmejoras_objetos
+        else:
+            objetos = gm.Dfestropeos_objetos
+        objeto = objetos.iloc[indice_nombre,0]
+        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
+            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == objeto):
+                break
+        nombre = objeto
+        
+        if(nombre[0] == "XXX"):
+            self.funcional = False
+        
+        if(nombre[0] == "%"):
+            nombre = gm.revisar_string(nombre)
+        
+        if("Cadaver " in nombre):
+            nombre = "Cadaver de " + usuario.nombre
+            
+        if(nombre[0].isdigit() and nombre[2:] != "Dinero"):
+            for indice in range(0, int(nombre[0])):
+                gm.anadir_obj_manual(nombre[2:], usuario)
+            return True
+        
+        if(nombre == "3 Dinero"):
+            usuario.anadir_obj(3)
+            return True
+        
+#        o = self.tranformar_objeto(nombre, 9999)
+#        edificio.objetos_activos[1].append(o)
+#        edificio.objetos[1].append(o.nombre)
+#        edificio.cantidades()[1].append(o.cantidad)
+        gm.anadir_obj_manual(nombre, usuario, 9999)
+#        print("------------------------------------------------------------------")
+
 
     def pelea(self, p_presentes, e_presentes, defensas = [], 
               turnos = [], omitidos = []):
@@ -570,7 +1081,72 @@ class Juego:
                         defensas, turnos_aux, omitidos]
         turnos_aux = p_presentes + e_presentes
         return [True, p_presentes, e_presentes, defensas, turnos_aux, omitidos]
-    
+
+    def pelea_carisma(self, personaje, defensa, e_presentes = None, 
+                      dano_enemigo = None, enemigo = None):
+        if(enemigo == None):
+            print(f"\n¿{personaje.nombre}, quién será tu victima?")
+            print("INDICE \t NOMBRE \t SALUD")
+            for indice in range (0, len(e_presentes)):
+                print(f"{indice + 1}: {e_presentes[indice].nombre}\t" 
+                      + f"{e_presentes[indice].salud}")
+            enemigo = e_presentes[int(input())-1]
+            dano_enemigo = enemigo.ataque_carisma(objetivo = personaje)[1]
+        dano_personaje = personaje.atacar_carisma(enemigo)[1]
+        if("Indefenso" not in personaje.condicion):
+            if(dano_personaje < dano_enemigo):
+                print(f"{personaje.nombre} ha perdido el duelo de carisma")
+                personaje.carisma -= dano_enemigo-dano_personaje
+                if(personaje.carisma <= 0):
+                    personaje.condicion.update({"Indefenso":2})
+            elif(dano_personaje > dano_enemigo):
+                print(f"{enemigo.nombre} ha perdido el duelo de carisma")
+                enemigo.carisma -= dano_personaje-dano_enemigo
+                if(enemigo.carisma <= 0):
+                    enemigo.condicion.update({"Indefenso":2})
+            else:
+                print("El duelo fue un empate!!")
+        else:
+            print(f"{personaje.nombre} esta indefenso, {enemigo.nombre} ataca!!")
+            dano = defensa - dano_enemigo
+            if(dano < 0):
+                print(f"{personaje.nombre} recibe {dano_enemigo} de dano")
+                personaje.cambiar_hp(-dano_enemigo)
+            else:
+                print(f"El ataque de {enemigo.nombre} ha sido bloqueado!")
+
+    def tranformar_objeto(self, nombre: str, cantidad_manual = None):
+        #DEBUG
+#        print("-----------------------------------------Metodo transformar objeto")
+        for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
+            if (gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
+                multiples = False
+                boosteo = (gm.Data_objetos2.loc[nombre, "Boosteo"])
+                if(type(boosteo) == pd.core.series.Series):
+                    multiples = True
+                    boosteo = int(boosteo.iloc[0])
+                estadistica = (gm.Data_objetos2.loc[nombre, "Estadistica"])
+                peso = (gm.Data_objetos2.loc[nombre, "Espacio"])
+                usos = (gm.Data_objetos2.loc[nombre, "Usos"])
+                cantidad = (gm.Data_objetos2.loc[nombre, "Cantidad"])
+                precio = (gm.Data_objetos2.loc[nombre, "Precio"])
+                if(multiples):
+                    estadistica = estadistica.iloc[0]
+                    peso = float(peso.iloc[0])
+                    usos = int(usos.iloc[0])   
+                    cantidad = int(cantidad.iloc[0])
+                    precio = int(precio.iloc[0])
+                if(cantidad_manual != None):
+                    cantidad = cantidad_manual
+                if(nombre == "Nota de consejo"):
+                    boosteo = gm.consejos[gm.dados(1, len(gm.consejos))[0]-1]
+                objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
+                                cantidad, precio)
+#                objeto.stats()
+                break
+#        print("------------------------------------------------------------------")
+        return objeto
+
     
     def turno_enemigo(self, p_presentes, e_presentes, defensas, turnos, omitidos, 
                       turnos_aux, enemigo, historial, jaula = None):
@@ -1018,588 +1594,6 @@ class Juego:
                 indice = turnos.index(personaje)
                 turnos.pop(indice)
         return p_presentes, e_presentes, defensas, turnos, omitidos, historial
-    
-    
-    def pelea_carisma(self, personaje, defensa, e_presentes = None, 
-                      dano_enemigo = None, enemigo = None):
-        if(enemigo == None):
-            print(f"\n¿{personaje.nombre}, quién será tu victima?")
-            print("INDICE \t NOMBRE \t SALUD")
-            for indice in range (0, len(e_presentes)):
-                print(f"{indice + 1}: {e_presentes[indice].nombre}\t" 
-                      + f"{e_presentes[indice].salud}")
-            enemigo = e_presentes[int(input())-1]
-            dano_enemigo = enemigo.ataque_carisma(objetivo = personaje)[1]
-        dano_personaje = personaje.atacar_carisma(enemigo)[1]
-        if("Indefenso" not in personaje.condicion):
-            if(dano_personaje < dano_enemigo):
-                print(f"{personaje.nombre} ha perdido el duelo de carisma")
-                personaje.carisma -= dano_enemigo-dano_personaje
-                if(personaje.carisma <= 0):
-                    personaje.condicion.update({"Indefenso":2})
-            elif(dano_personaje > dano_enemigo):
-                print(f"{enemigo.nombre} ha perdido el duelo de carisma")
-                enemigo.carisma -= dano_personaje-dano_enemigo
-                if(enemigo.carisma <= 0):
-                    enemigo.condicion.update({"Indefenso":2})
-            else:
-                print("El duelo fue un empate!!")
-        else:
-            print(f"{personaje.nombre} esta indefenso, {enemigo.nombre} ataca!!")
-            dano = defensa - dano_enemigo
-            if(dano < 0):
-                print(f"{personaje.nombre} recibe {dano_enemigo} de dano")
-                personaje.cambiar_hp(-dano_enemigo)
-            else:
-                print(f"El ataque de {enemigo.nombre} ha sido bloqueado!")
-        return True
-    
-    
-    def domar(self, personaje, enemigo, jaula, defensas, omitidos, historial):
-        personaje.condicion.update({"Domando": 1})
-        enemigo.condicion.update({"Domando": 1})
-        if(jaula.nombre == "Trampa de osos"):
-            enemigo.cambiar_hp(-5)
-            enemigo.carisma += 1
-            enemigo.fuerza += 1
-        elif(jaula.nombre == "Jaula mas grande"):
-            enemigo.fuerza -= int(enemigo.fuerza*.1)
-        enemigo.actualizar_stats()
-        empieza_personaje = (personaje.velocidad >= enemigo.velocidad)
-        turnos = [personaje, enemigo]
-        for individuo in turnos:
-            individuo.efecto()
-        if(empieza_personaje):     
-            #Turno personaje
-            (personaje, enemigo, 
-             defensas, turnos, omitidos, historial) = self.turno_personaje(
-                                         [personaje], [enemigo], defensas, turnos, 
-                                         omitidos, turnos, personaje, historial, 
-                                         jaula = jaula)
-            #Turno enemigo
-            (personaje, enemigo, 
-             defensas, turnos, omitidos, historial) = self.turno_enemigo(
-                                         personaje, enemigo, defensas, turnos, 
-                                         omitidos, turnos, enemigo[0], historial, 
-                                         jaula = jaula)
-        else:
-            #Turno enemigo
-            (personaje, enemigo, 
-             defensas, turnos, omitidos, historial) = self.turno_enemigo(
-                                         [personaje], [enemigo], defensas, turnos, 
-                                         omitidos, turnos, enemigo, historial, 
-                                         jaula = jaula)
-            #Turno personaje
-            (personaje, enemigo, 
-             defensas, turnos, omitidos, historial) = self.turno_personaje(
-                                         personaje, enemigo, defensas, turnos, 
-                                         omitidos, turnos, personaje[0], historial, 
-                                         jaula = jaula)
-            
-        return[True, personaje[0], enemigo[0], jaula, defensas, omitidos, historial]
-    
-    def casino(self, personaje, premio = 0):
-        print(f"---------- {personaje.nombre}, bienvenido al casino!! ---------- "
-              + f"Premio actual: {premio}")
-        print("¿Que quieres hacer?")
-        seleccion = int(input("1: Jugar una ronda\n2: Ver premios\n3:Salir\n"))
-        if(premio <= -500):
-            seleccion = 3
-        if(seleccion == 1):
-            apuesta = int(input(f"\n----- A jugar! ----- "
-                                + f"Premio actual: {premio}"
-                                + "\n¿Cuánto deseas apostar?\n"))
-            
-            premio -= apuesta    
-            
-            lista1 = [1, 2, 3, 4, 5]
-            lista2 = [1, 2, 3, 4, 5]
-            lista3 = [1, 2, 3, 4, 5]
-            lista4 = [1, 2, 3, 4, 5]
-            lista5 = [1, 2, 3, 4, 5]
-            listas = [lista1, lista2, lista3, lista4, lista5]
-            print(" \t_____\t_____\t_____\t_____\t_____\n")
-            columna = 1
-            for indice in range(0, 3):
-                print("\t", end = "")
-                for fila in range(0, 5):
-                    print(listas[fila][columna], end="\t")
-                    if(columna >= 4):
-                        break
-                columna += 1
-                print()
-            print(" \t_____\t_____\t_____\t_____\t_____\n")
-            print("\nA jugar!\n")
-            
-            lista_final = []
-            for lista in listas:
-                np.random.shuffle(lista)
-                lista_final.append(lista[2])
-            
-            
-            print(" \t_____\t_____\t_____\t_____\t_____\n")
-            columna = 1
-            for indice in range(0, 3):
-                print("\t", end = "")
-                for fila in range(0, 5):
-                    print(listas[fila][columna], end="\t")
-                    if(columna >= 4):
-                        break
-                columna += 1
-                print()
-            print(" \t_____\t_____\t_____\t_____\t_____\n")
-            
-            premio_base = sum(lista_final)
-            mult = []
-            for indice in range(1, 6):
-                mult.append(lista_final.count(indice))
-            mult_final = 0
-            if(max(mult) >= 3):
-                mult_final = mult.index(max(mult))+1
-            premio_actual = premio_base * mult_final * max(mult)
-            print(f"Ganaste {premio_actual} puntos!!")
-            
-            # calculo automatico de dineros
-            rangos = [0, 1, 22, 46, 190, 335, 480]
-            multi = [0, 1, 2, 4, 6, 8, 10]
-            bonificacion = 0
-            for indice in range(0, len(rangos)):
-                if(premio_actual > rangos[indice]):
-                    bonificacion = multi[indice]
-                else:
-                    break
-            print(f"Obtuviste {bonificacion * apuesta} dineros!!\n")
-            if(bonificacion != 0):
-                premio += bonificacion * apuesta + apuesta
-            else:
-                premio += bonificacion * apuesta
-        elif(seleccion == 2):
-            print(f"\n----- Premios ----- Premio actual: {premio}"
-                  + "\n 481 - 625 puntos: apuesta x 10 (PREMIO MAXIMO!!!!!!!)"
-                  + "\n 336 - 480 puntos: apuesta x 8"
-                  + "\n 191 - 335 puntos: apuesta x 6"
-                  + "\n 46 - 190  puntos: apuesta x 4"
-                  + "\n 22 - 45   puntos: apuesta x 2"
-                  + "\n 1 - 21    puntos: apuesta x 1"
-                  + "\n 0         puntos: 0\n")
-        elif(seleccion == 3):
-            presupuesto = personaje.cartera
-            if(premio >= 0):
-                personaje.anadir_obj(premio)
-            else:
-                deuda = presupuesto + premio
-                if(deuda < 0):
-                    personaje.anadir_obj(-presupuesto)
-                    for inventario in range(len(personaje.inventario)-1, 0, -1):
-                        for indice in range(inventario):
-                            if (personaje.inventario[indice].precio 
-                                > personaje.inventario[indice + 1].precio):
-                                temp = personaje.inventario[indice]
-                                personaje.inventario[indice] = personaje.inventario[
-                                                                         indice + 1]
-                                personaje.inventario[indice + 1] = temp
-                    deuda = abs(deuda)
-                    while(deuda > 0):
-                        if(personaje.inventario == []):
-                            break
-                        deuda -= personaje.inventario[0].precio
-                        personaje.inventario.pop(0)
-                        personaje.inventario_nombres.pop(0)
-                    if(deuda > 0):
-                        print("Me las vas a pagar con tu vida shavo!\n..."
-                              + f"{personaje.nombre}" 
-                              + " ha recibido una paliza... "
-                              + f"-{personaje.salud/4}")
-                        personaje.cambiar_hp(-(personaje.salud/4))
-                else:
-                    personaje.anadir_obj(-premio)
-            return True
-        self.casino(personaje, premio)
-    
-    def escalera(self, personaje, nivel = 0, niv_maquina = 0, niv_nina = 0, 
-                                                              niv_monstruo = 0):
-        #DEBUG
-#        print("---------------------------------------------------Metodo escalera")
-        print(f"{personaje.nombre}, estas en el nivel {nivel}")
-        if(nivel == 0):
-            niv_maquina = gm.dados(1, 10)[0]
-            niv_nina = gm.dados(1, 20)[0]
-            niv_monstruo = gm.dados(1, 25)[0]
-        seleccion = input(f"{personaje.nombre}, ¿quieres bajar? (S/N)\n")
-        if(seleccion == "S"):
-            nivel += 1
-        elif(seleccion == "N"):
-            print("Has vuelto al inicio de las escaleras")
-            nivel = 0
-        else:
-            print("Tas tonto shavo")
-        if(nivel == niv_monstruo):
-            print("Has encontrado al monstruo!! :O")
-            probabilidad = (nivel*100)/25
-            tirada = gm.dados(1, 100)[0]
-            if(tirada <= probabilidad):
-                print("Empiezas a oir un llanto en la distancia...")
-                personaje.cambiar_hp(-2000)
-            else:
-                print("Lograste escapar con éxito! "
-                      + "Has vuelto al inicio de las escaleras")
-                nivel = 0
-        if(nivel == niv_nina):
-            seleccion = input("Has encontrado una sala misteriosa... "
-                      + "¿Quieres entrar? (S/N)\n")
-            if(seleccion == "S"):
-                print("Dialogo intenso...")
-                objeto = Objeto("Pelo", "--", "--", 0, 1, 10000, 0)
-                zonas = personaje.ubicacion.zonas
-                zona = zonas.index(personaje.zona)
-                personaje.ubicacion.objetos[zona].append(objeto.nombre)
-                personaje.ubicacion.objetos_activos[zona].append(objeto)
-                personaje.ubicacion.cantidades[zona].append(10000)
-                personaje.anadir_obj(objeto)
-        if(nivel == niv_maquina):
-            seleccion = input("Has encontrado la sala de la maquina!! "
-                      + "¿Quieres entrar? (S/N)\n")
-            if(seleccion == "S"):
-                personaje.moverse(gm.edificio, "Maquina")
-                personaje.usar_maquina()
-        return [personaje, nivel, niv_maquina, niv_nina, niv_monstruo]
-    
-    def generar_jefes(self, lugar, zona:str):
-        #DEBUG
-#        print("----------------------------------------------Metodo generar jefes")
-        indice_zona = lugar.zonas.index(zona)
-        jefes = []
-        lugar_original = gm.lugares_o_originales[gm.objetos_lugares.index(lugar)]
-        from Enemigos import Enemigo
-        
-        print(lugar.enemigos[indice_zona])
-        
-        for enemigo in lugar.enemigos[indice_zona]:
-            if(enemigo in gm.jefes_no_jefes):
-                jefes.append(enemigo)
-        contador = -1
-#        print(gm.jefes_no_jefes)
-#        print(jefes)
-        for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
-            if(abs(contador) > len(jefes)):
-                break
-            if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
-                and (lugar_original.cantidades()[indice_zona][contador] > 0) 
-                and (not self.repetido(lugar, indice_zona, 
-                                     gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
-                nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
-                multiples = False
-                salud = gm.Data_enemigos.iloc[indice_nombre,1]
-                if(type(salud) == pd.core.series.Series):
-                        multiples = True
-                        salud = salud.iloc[0]
-                fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
-                resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
-                hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
-                inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
-                sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
-                categoria = gm.Data_enemigos.iloc[indice_nombre,7]
-                rango = gm.Data_enemigos.iloc[indice_nombre,8]
-                dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
-                cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
-                if(multiples):
-                        fuerza = fuerza.iloc[0]
-                        resistencia = resistencia.iloc[0]
-                        hostilidad = hostilidad.iloc[0]
-                        inteligencia = inteligencia.iloc[0]
-                        sabiduria = sabiduria.iloc[0]
-                        categoria = categoria.iloc[0]
-                        rango = rango.iloc[0]
-                        dropeos = dropeos.iloc[0]
-                        cantidad = cantidad.iloc[0]
-                
-                enemigo = Enemigo(salud, fuerza, resistencia, hostilidad, 
-                                  inteligencia, sabiduria, nombre, {"Saludable": 1}, 
-                                  dropeos, categoria, rango, cantidad, zona)
-                lugar.enemigos_activos[indice_zona].append(enemigo)
-                contador -= 1
-                enemigo.stats()
-        return True
-        
-    def generar_enemigos_zona(self, lugar:Lugar, zona:str):
-        #DEBUG
-#        print("--------------------------------------Metodo generar enemigos zona")
-        self.generar_jefes(lugar, zona)
-        indice = lugar.zonas.index(zona)
-        enemigos, cantidades = gm.mezclar_listas(lugar.enemigos[indice],
-                                               lugar.cantidades_enemigos[indice], 1)
-        lugar.enemigos_zona_s(enemigos, zona)
-        lugar.cantidades_enemigos_zona_s(cantidades, zona)
-        from Enemigos import Enemigo
-        
-        enemigos_aux = []
-        cantidades_aux = []
-        contador = 0
-        for enemigo in range(0, len(enemigos)):
-            if(enemigos[enemigo] not in gm.jefes.keys()):
-                enemigos_aux.append(enemigos[enemigo])
-                cantidades_aux.append(cantidades[enemigo])
-            else:
-                contador += 1
-                
-        enemigos, cantidades = enemigos_aux, cantidades_aux
-        minimo_enemigos = 2
-        if(zona == "Mercado"):
-            minimo_enemigos *= 2
-            
-        maximo_enemigos = len(enemigos)//4
-        if(maximo_enemigos == 0):
-            maximo_enemigos = 1
-        contador = minimo_enemigos + gm.dados(1, maximo_enemigos)[0]
-        if(sum(cantidades) < contador):
-            contador = sum(cantidades) + contador
-        contador -= contador
-        
-#        print("----------------------------------------------------------")
-#        print("\t\t"+zona)
-#        print("----------------------------------------------------------")
-        enemigos_activos = []
-        enemigos_activos_aux = []
-        for indice_enemigo in range(0, len(enemigos)):
-            enemigos_activos.append(enemigos[gm.dados(1, len(enemigos))[0]-1])
-#                print("contador: " + str(contador))
-        
-        for enemigo in enemigos_activos:
-            if(enemigo not in gm.jefes_no_jefes):
-                enemigos_activos_aux.append(enemigo)
-            else:
-                contador -= 1
-        enemigos_activos = enemigos_activos_aux
-        print(enemigos_activos)
-        print(contador)
-        while(contador > 0):
-            for indice in range(0, len(enemigos_activos)):
-                for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
-                    if(contador<=0):
-                        break
-                    if((gm.Dfnombres_enemigos.iloc[
-                            indice_nombre,0] == enemigos_activos[indice])  
-                        and (cantidades[indice] > 0.0) 
-                        and (gm.Dfnombres_enemigos.iloc[indice_nombre,0] 
-                        not in gm.jefes.keys())):
-                        multiples = False
-                        salud = gm.Data_enemigos.iloc[indice_nombre,1]
-                        if(type(salud) == pd.core.series.Series):
-                                multiples = True
-                                salud = salud.iloc[0]
-                        fuerza = gm.Data_enemigos.iloc[indice_nombre,2]
-                        resistencia = gm.Data_enemigos.iloc[indice_nombre,3]
-                        hostilidad = gm.Data_enemigos.iloc[indice_nombre,4]
-                        inteligencia = gm.Data_enemigos.iloc[indice_nombre,5]
-                        sabiduria = gm.Data_enemigos.iloc[indice_nombre,6]
-                        categoria = gm.Data_enemigos.iloc[indice_nombre,7]
-                        rango = gm.Data_enemigos.iloc[indice_nombre,8]
-                        dropeos = gm.Data_enemigos.iloc[indice_nombre,9]
-                        cantidad = gm.Data_enemigos.iloc[indice_nombre,10]
-                        if(multiples):
-                                fuerza = fuerza.iloc[0]
-                                resistencia = resistencia.iloc[0]
-                                hostilidad = hostilidad.iloc[0]
-                                inteligencia = inteligencia.iloc[0]
-                                sabiduria = sabiduria.iloc[0]
-                                categoria = categoria.iloc[0]
-                                rango = rango.iloc[0]
-                                dropeos = dropeos.iloc[0]
-                                cantidad = cantidad.iloc[0]
-                        
-                        enemigo = Enemigo(salud, fuerza, resistencia, hostilidad, 
-                                  inteligencia, sabiduria, enemigos_activos[indice], 
-                                  {"Saludable": 1}, dropeos, categoria, 
-                                  rango, cantidad, zona)
-                        lugar.enemigos_activos[indice].append(enemigo)
-                        if(enemigo.nombre == "Oso marino"):
-                            self.oso_marino = enemigo
-#                            print("AAAAAAAAAAAAA")
-#                        e.stats()
-                        contador -= 1
-                        break
-        return True
-    
-    def generar_objetos_zona(self, lugar, zona:str):
-        #DEBUG
-#        print("--------------------------------------------Metodo generar objetos")
-        fragmento = Objeto("Fragmento de libro de secretos", 
-                           0, "Habilidad", 0, 1, 1, 300)
-        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.normancueva) 
-            and (gm.normancueva_original.cantidades()[1][0] > 0)):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.fondo_del_mar) 
-            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
-            lugar.objetos_activos[0].append(fragmento)
-            
-        indice = lugar.zonas.index(zona)
-        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indice],
-                                               lugar.cantidades()[indice], 1)
-        lugar.objetos_zona_s(objetos, zona)
-        lugar.cantidades_objetos_zona_s(cantidades, zona)
-        
-#        print(lugar.objetos)
-#        print(objetos)
-        if(len(objetos) == 0):
-            contador = 0
-        elif(len(objetos) == 1):
-            contador = 1
-        else:
-            contador = gm.dados(1, len(objetos))[0]//2
-#        if(contador<1):
-#            contador+=1
-            
-#        print("----------------------------------------------------------")
-#        print("\t\t"+zona)
-#        print("----------------------------------------------------------")
-#                print("contador: " + str(contador))
-        for indice in range(0, len(objetos)):
-            for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-                if(contador<=0):
-                    break
-                if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == objetos[indice]) 
-                and (cantidades[indice] > 0.0) 
-                and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
-                != "Fragmento de Libro de Secretos")):
-                    nombre = objetos[indice]
-                    objeto = self.tranformar_objeto(nombre, cantidades[indice])
-                    lugar.objetos_activos[indice].append(objeto)
-#                    o.stats()
-                    contador -= 1
-                    break
-        return True
-    
-    def generar_objetos(self, lugar):
-        #DEBUG
-        print("---------------------------------------------Metodo generar objetos")
-        fragmento = Objeto("Fragmento de libro de secretos", 0, 
-                           "Habilidad", 0, 1, 1, 300)
-        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0] > 0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.normancueva) 
-            and (gm.normancueva_original.cantidades()[1][0] > 0)):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.fondo_del_mar) 
-            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
-            lugar.objetos_activos[0].append(fragmento)
-        objetos,cantidades = gm.mezclar_listas(lugar.objetos, lugar.cantidades(), 2)
-        lugar.objetos = objetos
-        lugar.cantidades = cantidades
-#        print(lugar.objetos)
-#        print(objetos)
-        for indice_zona in range (0, len(lugar.zonas)):
-            contador = len(lugar.objetos[indice_zona])//2
-            if(contador < 1):
-                contador += 1
-            print("--------------------------------------------------------------")
-            print("\t\t"+lugar.zonas[indice_zona])
-            print("--------------------------------------------------------------")
-            for indice_objeto in range(0, len(lugar.objetos[indice_zona])):
-                for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-                    if(contador<=0):
-                        break
-                    if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == lugar.objetos[
-                                                                    indice_zona][
-                                                                    indice_objeto]) 
-                    and (lugar.cantidades()[indice_zona][indice_objeto] > 0.0) 
-                    and (lugar.objetos[indice_zona][indice_objeto] 
-                        != "Fragmento de Libro de Secretos")):
-                        nombre = lugar.objetos[indice_zona][indice_objeto]
-                        objeto = self.tranformar_objeto(nombre, lugar.cantidades()[
-                                                        indice_zona][indice_objeto])
-                        lugar.objetos_activos[indice_zona].append(objeto)
-                        objeto.stats()
-                        contador -= 1
-                        break
-        return True
-
-    def tranformar_objeto(self, nombre: str, cantidad_manual = None):
-        #DEBUG
-#        print("-----------------------------------------Metodo transformar objeto")
-        for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-            if (gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
-                multiples = False
-                boosteo = (gm.Data_objetos2.loc[nombre, "Boosteo"])
-                if(type(boosteo) == pd.core.series.Series):
-                    multiples = True
-                    boosteo = int(boosteo.iloc[0])
-                estadistica = (gm.Data_objetos2.loc[nombre, "Estadistica"])
-                peso = (gm.Data_objetos2.loc[nombre, "Espacio"])
-                usos = (gm.Data_objetos2.loc[nombre, "Usos"])
-                cantidad = (gm.Data_objetos2.loc[nombre, "Cantidad"])
-                precio = (gm.Data_objetos2.loc[nombre, "Precio"])
-                if(multiples):
-                    estadistica = estadistica.iloc[0]
-                    peso = float(peso.iloc[0])
-                    usos = int(usos.iloc[0])   
-                    cantidad = int(cantidad.iloc[0])
-                    precio = int(precio.iloc[0])
-                if(cantidad_manual != None):
-                    cantidad = cantidad_manual
-                if(nombre == "Nota de consejo"):
-                    boosteo = gm.consejos[gm.dados(1, len(gm.consejos))[0]-1]
-                objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
-                                cantidad, precio)
-#                objeto.stats()
-                break
-#        print("------------------------------------------------------------------")
-        return objeto
-
-    def maquina(self, nombre: str, usuario, mult = 1):
-        #DEBUG
-#        print("----------------------------------------------------Metodo maquina")
-        if(not self.funcional):
-            return False
-        
-        indice = usuario.inventario_nombres.index(nombre)
-        usuario.peso -= usuario.inventario[indice].peso
-        usuario.inventario_nombres.pop(indice)
-        usuario.inventario.pop(indice)
-        
-        tirada = gm.dados(1, 4)[0]
-        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
-            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
-                break
-        if(tirada < 4 * mult):
-            objetos = gm.Dfmejoras_objetos
-        else:
-            objetos = gm.Dfestropeos_objetos
-        objeto = objetos.iloc[indice_nombre,0]
-        for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
-            if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == objeto):
-                break
-        nombre = objeto
-        
-        if(nombre[0] == "XXX"):
-            self.funcional = False
-        
-        if(nombre[0] == "%"):
-            nombre = gm.revisar_string(nombre)
-        
-        if("Cadaver " in nombre):
-            nombre = "Cadaver de " + usuario.nombre
-            
-        if(nombre[0].isdigit() and nombre[2:] != "Dinero"):
-            for indice in range(0, int(nombre[0])):
-                gm.anadir_obj_manual(nombre[2:], usuario)
-            return True
-        
-        if(nombre == "3 Dinero"):
-            usuario.anadir_obj(3)
-            return True
-        
-#        o = self.tranformar_objeto(nombre, 9999)
-#        edificio.objetos_activos[1].append(o)
-#        edificio.objetos[1].append(o.nombre)
-#        edificio.cantidades()[1].append(o.cantidad)
-        gm.anadir_obj_manual(nombre, usuario, 9999)
-#        print("------------------------------------------------------------------")
 
 lugar = Lugar("A", [], [3], [], [], [], [], [])
 print(lugar.enemigos)
