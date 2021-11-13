@@ -206,9 +206,12 @@ def main():
     # Reducir funciones
     # Comentar TODO
 
-    # Cambiar nombre variables Juegos
-    # Llamar a casino
-    # gm.dias ?
+    # Cambiar nombre variables Juegos COMPLETADO
+    # Llamar a casino COMPLETADO
+    # gm.dias ? 
+        #Cada jugador tiene cuenta de turnos, asi como el servidor
+        #El servidor tiene la menor cuenta de turnos. El servidor aumenta de
+        #turno cuando sea menor que el turno de todos (+1)
     # Dialogo intenso sala misteriosa
     # Descripcion perra de wendigo
     # Sabiduria del mas alla

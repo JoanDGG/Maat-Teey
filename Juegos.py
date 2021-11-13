@@ -21,7 +21,7 @@ class Juego:
         if(premio <= -500):
             seleccion = 3
         if(seleccion == 1):
-            apuesta = int(input(f"\n----- A jugar! ----- "
+            apuesta = int(input("\n----- A jugar! ----- "
                                 + f"Premio actual: {premio}"
                                 + "\n¿Cuánto deseas apostar?\n"))
             premio -= apuesta    
@@ -687,16 +687,18 @@ class Juego:
                     domar_posible = ""
                     break
             
-            es_mercado = "Buscar"
+            accion_lugar = "Buscar"
             if(personaje in personajes_peleando):
                 continue
             if(personaje.zona == "Mercado"):
-                es_mercado = "Robar"
+                accion_lugar = "Robar"
+            elif(personaje.zona == "Casino"):
+                accion_lugar = "Apostar"
             personaje.stats()
             
             personaje.efecto() # efecto a personajes que no esten peleando
             print(f"{personaje.nombre}, ¿Que deseas hacer?")
-            seleccion = int(input("1: Moverte\n2: " + es_mercado 
+            seleccion = int(input("1: Moverte\n2: " + accion_lugar 
                                   + "\n3: Usar objeto\n4: Tirar objeto"
                                   + "\n5: Esperar\n6: Curarse"
                                   + "\n7: Usar habilidad\n8: Guardar(Salir)\n" 
@@ -704,19 +706,21 @@ class Juego:
             if(seleccion == 1):
                 personaje.moverse()
             elif(seleccion == 2):
-                if(es_mercado == "Buscar"):
-                    objeto = input("¿Que quieres " + es_mercado.lower() 
+                if(accion_lugar == "Buscar"):
+                    objeto = input("¿Que quieres " + accion_lugar.lower() 
                                    + "? (0 para nada en especifico)\n")
                     if(objeto == "0"):
                         personaje.buscar()
                     else:
                         personaje.buscar(objeto)
-                else:
-                    print("¿Que quieres "+es_mercado.lower()+"?\n")
+                elif(accion_lugar == "Robar"):
+                    print("¿Que quieres "+accion_lugar.lower()+"?\n")
                     for objeto in gm.mercado.objetos_activos[0]:
                         print(f"{objeto.nombre}")
                     objeto_seleccionado = input()
                     personaje.buscar(objeto_seleccionado)
+                elif(accion_lugar == "Apostar"):
+                    self.casino(personaje)
                     
             elif(seleccion == 3):
                 objetos_permitidos = []
