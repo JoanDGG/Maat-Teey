@@ -205,6 +205,9 @@ def main():
     # Anadir funciones
     # Reducir funciones
     # Comentar TODO
+    
+    # str Lugares
+    # Generador de nombres 2000
 
     # Cambiar nombre variables Juegos COMPLETADO
     # Llamar a casino COMPLETADO

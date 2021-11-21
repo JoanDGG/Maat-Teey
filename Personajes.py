@@ -69,10 +69,6 @@ class Personaje(Individuo):
                         contexto_habilidad].keys())[numero_habilidad]
                     if(habilidad in self.arbol[codigo_habilidad][2] 
                        and self.arbol[codigo_habilidad][0] == 1):
-                        gm_hab = gm.habilidades[contexto_habilidad]
-                        gm_hab = gm_hab[list(gm.habilidades[
-                            contexto_habilidad].keys())[
-                            numero_habilidad]]
                         print(f"{codigo_habilidad}: "
                               + f"{self.arbol[codigo_habilidad][2]}:\t"
                               + str(gm.habilidades[contexto_habilidad][
@@ -277,7 +273,7 @@ class Personaje(Individuo):
                                 "Pelaje", "Animal", 5, 1, self.zona,
                                 self, "Oso")
                 oso.condicion.update({"Lealtad": 5})
-                self.asistentes.append(gm.nuevo)
+                self.asistentes.append(oso)
             elif(self.arbol[codigo_habilidad][2] == "Special curry"):
                 for enemigo in range(0, len(self.ubicacion.enemigos_activos[
                         self.ubicacion.zonas.index(self.zona)])):
@@ -324,7 +320,7 @@ class Personaje(Individuo):
                                   "Tornillo", "Robot", 2, 1, self.zona, self,
                                   "Robot")
                 robot.condicion.update({"Lealtad": 5})
-                self.asistentes.append(gm.nuevo)
+                self.asistentes.append(robot)
             elif(self.arbol[codigo_habilidad][2] == "Llamar al viento"):
                 for enemigo in range(0, len(self.ubicacion.enemigos_activos[
                         self.ubicacion.zonas.index(self.zona)])):
@@ -365,11 +361,11 @@ class Personaje(Individuo):
             elif(self.arbol[codigo_habilidad][2] == "Smash ball"):
                 tirada = Juego.dados(1, 2)
                 if(tirada == 1):
-                    objetivo, dano, arma = gm.atacar(
+                    objetivo, dano, arma = self.atacar(
                         self.ubicacion.enemigos_activos[
                             self.ubicacion.zonas.index(self.zona)], 5)
                 else:
-                    objetivo, dano, arma = gm.atacar(
+                    objetivo, dano, arma = self.atacar(
                         self.ubicacion.enemigos_activos[
                             self.ubicacion.zonas.index(self.zona)])
                     self.cambiar_hp(-dano * 3)
@@ -1617,7 +1613,7 @@ class Personaje(Individuo):
                     objetivo = personaje_muerto
                     break
             limite_nivel = 13 + 5 * (objetivo.nivel)
-        elif(objeto in gm.personajes):
+        elif(objetivo in gm.personajes):
             for personaje in gm.personajes:
                 if(personaje.nombre == objetivo):
                     objetivo = personaje
