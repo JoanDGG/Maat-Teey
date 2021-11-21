@@ -293,12 +293,11 @@ class Enemigo(Individuo):
         lugar.enemigos_activos[indice_zona].remove(self)
         lugar.cantidades_enemigos[indice_zona][indice] -= 1
         
-        from Juegos import Juego
         dropeos = self.dropear()
         
         for dropeo in dropeos:
             indice = lugar.zonas.index(self.zona)
-            objeto = Juego.tranformar_objeto(dropeo)
+            objeto = gm.transformar_objeto(dropeo)
             lugar.objetos_activos[indice].append(objeto)
             lugar.cantidades[indice].append(1)
             lugar.objetos[indice].append(objeto.nombre)

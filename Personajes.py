@@ -1203,7 +1203,7 @@ class Personaje(Individuo):
         self.condicion = {"Muerto": 1}
         gm.personajes_muertos.append(self)
         gm.personajes.remove(self)
-        objeto = Juego.tranformar_objeto("Cadaver de "+self.nombre)
+        objeto = gm.transformar_objeto("Cadaver de "+self.nombre)
         print(objeto)
         self.ubicacion.objetos_activos[zona].append(objeto)
 #        self.ubicacion.cantidades_objetos_activos[z].append(1)
@@ -1662,7 +1662,7 @@ class Personaje(Individuo):
                 pocion += " II"
             else:
                 pocion += " I"
-            objeto = Juego.transformar_objeto(pocion)
+            objeto = gm.transformar_objeto(pocion)
             self.quitar_equipo(objeto)
             
         if(objeto.nombre in gm.equipables):

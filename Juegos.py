@@ -424,7 +424,7 @@ class Juego:
                 and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
                 != "Fragmento de Libro de Secretos")):
                     nombre = objetos[indice]
-                    objeto = self.tranformar_objeto(nombre, cantidades[indice])
+                    objeto = gm.transformar_objeto(nombre, cantidades[indice])
                     lugar.objetos_activos[indice].append(objeto)
 #                    o.stats()
                     contador -= 1
@@ -470,7 +470,7 @@ class Juego:
                     and (lugar.objetos[indice_zona][indice_objeto] 
                         != "Fragmento de Libro de Secretos")):
                         nombre = lugar.objetos[indice_zona][indice_objeto]
-                        objeto = self.tranformar_objeto(nombre, 
+                        objeto = gm.transformar_objeto(nombre, 
                                                    lugar.cantidades()[
                                                    indice_zona][indice_objeto])
                         lugar.objetos_activos[indice_zona].append(objeto)
@@ -990,7 +990,7 @@ class Juego:
             usuario.anadir_obj(3)
             return True
         
-#        o = self.tranformar_objeto(nombre, 9999)
+#        o = gm.transformar_objeto(nombre, 9999)
 #        edificio.objetos_activos[1].append(o)
 #        edificio.objetos[1].append(o.nombre)
 #        edificio.cantidades()[1].append(o.cantidad)
@@ -1133,39 +1133,6 @@ class Juego:
                 personaje.cambiar_hp(-dano_enemigo)
             else:
                 print(f"El ataque de {enemigo.nombre} ha sido bloqueado!")
-
-    def tranformar_objeto(self, nombre: str, cantidad_manual = None):
-        #DEBUG
-#        print("------------------------------------Metodo transformar objeto")
-        for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-            if (gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
-                multiples = False
-                boosteo = (gm.Data_objetos2.loc[nombre, "Boosteo"])
-                if(type(boosteo) == pd.core.series.Series):
-                    multiples = True
-                    boosteo = int(boosteo.iloc[0])
-                estadistica = (gm.Data_objetos2.loc[nombre, "Estadistica"])
-                peso = (gm.Data_objetos2.loc[nombre, "Espacio"])
-                usos = (gm.Data_objetos2.loc[nombre, "Usos"])
-                cantidad = (gm.Data_objetos2.loc[nombre, "Cantidad"])
-                precio = (gm.Data_objetos2.loc[nombre, "Precio"])
-                if(multiples):
-                    estadistica = estadistica.iloc[0]
-                    peso = float(peso.iloc[0])
-                    usos = int(usos.iloc[0])   
-                    cantidad = int(cantidad.iloc[0])
-                    precio = int(precio.iloc[0])
-                if(cantidad_manual != None):
-                    cantidad = cantidad_manual
-                if(nombre == "Nota de consejo"):
-                    boosteo = gm.consejos[gm.dados(1, len(gm.consejos))[0]-1]
-                objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
-                                cantidad, precio)
-#                objeto.stats()
-                break
-#        print("-------------------------------------------------------------")
-        return objeto
-
     
     def turno_enemigo(self, p_presentes, e_presentes, defensas, turnos, 
                       omitidos, turnos_aux, enemigo, historial, jaula = None):

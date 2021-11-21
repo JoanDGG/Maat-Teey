@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from Lugares import Lugar
+from Objetos import Objeto
 
 Data_enemigos = pd.read_csv("D-D_Enemigos_3.csv")
 Data_objetos2 = pd.read_csv("D-D_Objetos_3.csv", index_col = "Nombre")
@@ -422,17 +423,16 @@ mochilas = ["Mochila", "Mochila campista",
 zonas_agua = ["Profundidades", "Mar"]
 
 def anadir_obj_manual(nombre, personaje, cantidad = None):
-    from Juegos import Juego
 
     indice = personaje.ubicacion.zonas.index(personaje.zona)    
     if("sabia" in nombre):
         boosteo = sabiduria_del_mas_alla[dados(1, 
                                              len(sabiduria_del_mas_alla))[0]-1]
         nombre = "Nota de consejo"
-        objeto = Juego.tranformar_objeto(nombre, cantidad)
+        objeto = transformar_objeto(nombre, cantidad)
         objeto.boosteo = boosteo
     else:
-        objeto = Juego.tranformar_objeto(nombre, cantidad)
+        objeto = transformar_objeto(nombre, cantidad)
     
     if(objeto.nombre == "Nota de consejo" and "sabia" not in objeto.nombre):
         objeto.boosteo = consejos[dados(1, len(consejos))[0]-1]
@@ -610,6 +610,38 @@ def separar(entidades, lugar, zonas, tipo):
         return elementos
     elif(tipo == "cantidades"):
         return cantidad
+
+def transformar_objeto(self, nombre: str, cantidad_manual = None):
+    #DEBUG
+#        print("------------------------------------Metodo transformar objeto")
+    for indice_nombre in range (0, len(Dfnombres_objetos)):
+        if (Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
+            multiples = False
+            boosteo = (Data_objetos2.loc[nombre, "Boosteo"])
+            if(type(boosteo) == pd.core.series.Series):
+                multiples = True
+                boosteo = int(boosteo.iloc[0])
+            estadistica = (Data_objetos2.loc[nombre, "Estadistica"])
+            peso = (Data_objetos2.loc[nombre, "Espacio"])
+            usos = (Data_objetos2.loc[nombre, "Usos"])
+            cantidad = (Data_objetos2.loc[nombre, "Cantidad"])
+            precio = (Data_objetos2.loc[nombre, "Precio"])
+            if(multiples):
+                estadistica = estadistica.iloc[0]
+                peso = float(peso.iloc[0])
+                usos = int(usos.iloc[0])   
+                cantidad = int(cantidad.iloc[0])
+                precio = int(precio.iloc[0])
+            if(cantidad_manual != None):
+                cantidad = cantidad_manual
+            if(nombre == "Nota de consejo"):
+                boosteo = consejos[dados(1, len(consejos))[0]-1]
+            objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
+                            cantidad, precio)
+#                objeto.stats()
+            break
+#        print("-------------------------------------------------------------")
+    return objeto
 
 def ubicar(self):
     #DEBUG
