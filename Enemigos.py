@@ -222,18 +222,18 @@ class Enemigo(Individuo):
             if(self.salud/self.salud_max < .15 
                and self.carisma/self.carisma_max < .15):
                 #Actualiza condicion en mover enemigo
-                return Enemigo.huir(self, turnos_aux) 
+                return self.huir(self, turnos_aux) 
             #Actualiza condicion en individuo defender
-            return Enemigo.defender(self) 
+            return self.defender(self) 
         elif(self.carisma > self.fuerza):
-            return Enemigo.ataque_carisma(self, p_presentes, historial,
+            return self.ataque_carisma(self, p_presentes, historial,
                                           turnos_aux, defensas)
         else:
             if(presentes.count(0) > len(presentes)//2 
                and self.nombre in gm.jefes.keys() and self.energia >= 2):
                 # --------------------Mayoria de objetivos posibles se defiende
-                return Enemigo.ataque_especial(self, p_presentes)
-            return Enemigo.atacar(self, p_presentes, historial, turnos_aux,
+                return self.ataque_especial(self, p_presentes)
+            return self.atacar(self, p_presentes, historial, turnos_aux,
                                   defensas)
         
     def dropear(self):
@@ -243,7 +243,6 @@ class Enemigo(Individuo):
         dropeo_aleatorio=""
         if(self.dropeo == "--"):
             print("Dropeo Owo")
-            return dropeos
         elif(self.dropeo[0] == "%"):
             dropeo_aleatorio = gm.revisar_string(self.dropeo)
             if(dropeo_aleatorio[0].isdigit()):
@@ -252,8 +251,8 @@ class Enemigo(Individuo):
             else:
                 dropeos.append(dropeo_aleatorio)
             print("Dropeo: " + dropeo_aleatorio + " y Owo")
-            return dropeos
         elif(self.dropeo == "Dialogo"):
+            dropeos = None
             print("\nDi lo tuyo...\n")
         else:
             dropeos.append(self.dropeo)
@@ -263,7 +262,7 @@ class Enemigo(Individuo):
                 dropeos.append("Carne humana")
                 
             print("Dropeo: " + self.dropeo + dropeo_carne_humana + " y Owo")
-            return dropeos 
+        return dropeos
         
     def efecto(self):
         super().efecto()

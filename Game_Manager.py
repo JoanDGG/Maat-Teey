@@ -499,7 +499,8 @@ def queso():
     print("Queso")
 
 def malo():
-    return personajes[dados(1, len(personajes))[0]-1]
+    personaje_malo = personajes[dados(1, len(personajes))[0]-1]
+    return personaje_malo
 
 def mezclar_listas(lista1, lista2, tipo):
     # Tipo 1 = Lista simple, tipo 2 = Lista de listas

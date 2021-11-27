@@ -206,6 +206,19 @@ def main():
     # Reducir funciones
     # Comentar TODO
     
+    # Personajes.arbol_habilidades es recursivo y no se llama en Juegos.jugar()
+    # Personajes.comprar no se usa en Juegos.jugar()
+    # Personajes.craftear no se usa en Juegos.jugar()
+    # Personajes.desequipar no se usa
+    # Personajes.equipar es recursivo
+    # Personajes.explorar no se usa en Juegos.jugar()
+    
+    # Menu automatico:
+    # Funcion que va llenando un diccionario/lista con opciones de menu
+    # Decoradores en funciones que queremos que se añandan a esa lista/diccionario
+    # String de menu se llena con las acciones posibles en el momento (ifs de Juego.jugar) y eso
+    
+    
     # str Lugares
     # Generador de nombres 2000
 

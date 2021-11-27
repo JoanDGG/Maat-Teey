@@ -26,6 +26,7 @@ class Lugar:
         self.cantidades[self.indice_zona(zona)] = cantidades
         
     def indice_zona(self, zona):
-        return self.zonas.index(zona)
+        indice = self.zonas.index(zona)
+        return indice
 
 #lug = Lugar("A", [], [], [], [], [], [], [])

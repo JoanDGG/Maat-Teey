@@ -43,7 +43,8 @@ class Individuo:
         print("Has recuperado el 30% de energia")
         if(self.energia > self.energia_max):
             self.energia = self.energia_max
-        return self.resistencia + gm.dados(1, 10)[0]
+        defensa = self.resistencia + gm.dados(1, 10)[0]
+        return defensa
     
     def efecto(self):
         #DEBUG

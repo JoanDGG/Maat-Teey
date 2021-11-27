@@ -429,54 +429,6 @@ class Juego:
 #                    o.stats()
                     contador -= 1
                     break
-    
-    def generar_objetos(self, lugar):
-        #DEBUG
-        print("---------------------------------------Metodo generar objetos")
-        fragmento = Objeto("Fragmento de libro de secretos", 0, 
-                           "Habilidad", 0, 1, 1, 300)
-        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0]>0):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.normancueva) 
-            and (gm.normancueva_original.cantidades()[1][0] > 0)):
-            lugar.objetos_activos[1].append(fragmento)
-        elif((lugar == gm.fondo_del_mar) 
-            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
-            lugar.objetos_activos[0].append(fragmento)
-        objetos,cantidades = gm.mezclar_listas(lugar.objetos, 
-                                               lugar.cantidades(), 2)
-        lugar.objetos = objetos
-        lugar.cantidades = cantidades
-#        print(lugar.objetos)
-#        print(objetos)
-        for indice_zona in range (0, len(lugar.zonas)):
-            contador = len(lugar.objetos[indice_zona])//2
-            if(contador < 1):
-                contador += 1
-            print("---------------------------------------------------------")
-            print("\t\t"+lugar.zonas[indice_zona])
-            print("---------------------------------------------------------")
-            for indice_objeto in range(0, len(lugar.objetos[indice_zona])):
-                for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-                    if(contador<=0):
-                        break
-                    if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == lugar.
-                                                                objetos[
-                                                                indice_zona][
-                                                                indice_objeto]) 
-                    and (lugar.cantidades()[indice_zona][indice_objeto] > 0.0) 
-                    and (lugar.objetos[indice_zona][indice_objeto] 
-                        != "Fragmento de Libro de Secretos")):
-                        nombre = lugar.objetos[indice_zona][indice_objeto]
-                        objeto = gm.transformar_objeto(nombre, 
-                                                   lugar.cantidades()[
-                                                   indice_zona][indice_objeto])
-                        lugar.objetos_activos[indice_zona].append(objeto)
-                        objeto.stats()
-                        contador -= 1
-                        break
 
     def iniciar_pelea(self, p_presentes, e_presentes, omitidos=[], defensas=[], 
                    turnos=[], personajes_peleando=[], victima = None, mult =1):
@@ -768,7 +720,7 @@ class Juego:
                 personaje.activar_habilidad("Jugar")
             elif(seleccion == 8):
                 fin = True
-                return ""
+                return True
             elif(seleccion == 9 and domar_posible != ""):
                 print("¿Que enemigo intentaras domar?")
                 contador = 0
