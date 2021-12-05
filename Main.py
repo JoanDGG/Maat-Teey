@@ -212,6 +212,9 @@ def main():
     # Personajes.desequipar no se usa
     # Personajes.equipar es recursivo
     # Personajes.explorar no se usa en Juegos.jugar()
+    # Juegos.casino es recursivo
+    # Juegos.escalera no se usa
+    # Enemigos.ataque_carisma es recursivo
     
     # Menu automatico:
     # Funcion que va llenando un diccionario/lista con opciones de menu
@@ -424,7 +427,6 @@ def main():
 #    norman.stats()
 #    master.stats()
     
-#    
 #    master.moverse()
 #    master.moverse()
 #    master.moverse()
@@ -513,7 +515,7 @@ def main():
 #    mirek.buscar("Disfraz")
 #    mirek.buscar()
 #    mirek.stats()
-#    print(buscaLugar("Cabana").nombre)
+#    print(busca_lugar("Cabana").nombre)
     
     #----------------------- Condiciones de batalla --------------------------------
 #    mirek.condicion.pop('Saludable')

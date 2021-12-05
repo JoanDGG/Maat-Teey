@@ -342,7 +342,7 @@ class Juego:
                 break
             if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
                 and (lugar_original.cantidades()[indice_zona][contador] > 0) 
-                and (not self.repetido(lugar, indice_zona, 
+                and (not gm.repetido(lugar, indice_zona, 
                                 gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
                 nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
                 multiples = False
@@ -773,7 +773,7 @@ class Juego:
         
         #Listas de enemigos activos de zonas vistas
         for zona_vista in zonas_vistas:
-            lugar_visto = gm.buscaLugar(zona_vista)
+            lugar_visto = gm.busca_lugar(zona_vista)
             zona = lugar_visto.index(zona_vista)
             #Obtener las jaulas de todos los tipos de jaula de la zona actual
             jaulas_activas=[]

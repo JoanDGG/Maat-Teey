@@ -304,25 +304,25 @@ class Enemigo(Individuo):
     
     def mover_enemigo(self, zona):
         self.condicion.update({"Huyendo": 1})
-        origen = gm.buscaLugar(zona)
+        origen = gm.busca_lugar(zona)
         zonas = gm.mapa_master[zona]
         tirada = gm.dados(1, len(zonas))[0]
-        destino = gm.buscaLugar(zonas[tirada])
+        destino = gm.busca_lugar(zonas[tirada])
         origen.enemigos_activos[origen.indice_zona(zona)].remove(self)
         destino.enemigos_activos[destino.indice_zona(zonas[tirada
                                                            ])].append(self)
         return True
     
     def no_faccion(self, turnos_aux, p_presentes):
-        no_faccion = []
+        no_faccion_lista = []
         if("Confundido" in self.condicion):
-            no_faccion = turnos_aux
+            no_faccion_lista = turnos_aux
         elif(issubclass(type(self), Enemigo)):
             for turno in turnos_aux:
                 if(type(turno) == Enemigo):
-                    no_faccion.append(turno)
+                    no_faccion_lista.append(turno)
         else:
-            no_faccion = p_presentes.copy()
+            no_faccion_lista = p_presentes.copy()
             for turno in turnos_aux:
                 # Si sus categorias no son iguales
                 #Si es animal y el otro tambien
@@ -337,6 +337,6 @@ class Enemigo(Individuo):
                             and (self.categoria == "SCP"))) 
                    and (turno.nombre not in gm.jefes.keys()) 
                    and (turno not in p_presentes)):
-                    no_faccion.append(turno)
+                    no_faccion_lista.append(turno)
                     # animales, scp y no jefes
-        return no_faccion
+        return no_faccion_lista
