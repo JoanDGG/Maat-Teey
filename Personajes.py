@@ -791,6 +791,7 @@ class Personaje(Individuo):
             
             self.anadir_obj(objeto)
             if(self.zona == "Mercado"):
+                print("Eh! Las vas a pagar con tu vida")
                 # lista personajes
                 personajes_presentes = []
                 for personaje in gm.personajes:
@@ -1545,7 +1546,7 @@ class Personaje(Individuo):
         objeto = self.inventario[self.inventario_nombres.index(llave)]
         return Juego.maquina(objeto.nombre, self)
     
-    def usar_obj(self, objetivo = None, objeto = None):
+    def usar_objeto(self, objetivo = None, objeto = None):
         robots = ["Sub Bismark"]
         borrachos = ["Alumno Pasio", "Mentor Pasio", "Policia",
                      "Guardabosques", "Pueblerino", "Obrero", "Burgues"]
@@ -2173,26 +2174,3 @@ class Personaje(Individuo):
 
 from Juegos import Juego
 import Game_Manager as gm
-
-gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek",
-                       {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1,
-                       gm.mapa_mirek, 0, 10, gm.arbol_mirek)
-gm.bugatti = Personaje(39, 8, 7, 18, 16, 9,    "Turati", {"Saludable": 1}, 25,
-                       [], gm.campamento, "Cabana", 1, gm.mapa_bugatti, 0, 10,
-                       gm.arbol_bugatti)
-gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 20,
-                       [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 0, 10,
-                       gm.arbol_ruben)
-gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 25,
-                       [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 0, 10,
-                       gm.arbol_sebas)
-gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 15,
-                       [], gm.campamento, "Cabana", 1, gm.mapa_norman, 0, 10,
-                       gm.arbol_norman)
-
-gm.master  = Personaje(420, 5, 69, 69, 69, 69,  "Tu dios", {"Saludable": 1},
-                       69, [], gm.bosque, "Aire libre", 69, gm.mapa_master,
-                       666, 420, gm.arbol_norman)
-gm.ninja   = Personaje(420, 69, 69, 69, 69, 69,  "Tu segundo dios",
-                       {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
-                       69, gm.mapa_master, 666, 420, gm.arbol_norman)

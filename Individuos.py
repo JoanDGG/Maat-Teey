@@ -92,7 +92,7 @@ class Individuo:
     def stats(self):
         espacio_en_texto = 18-(len(str(int(self.energia_max))))
         espacio_en_texto_2 = 19-(len(str(int(self.salud_max))))
-        texto = f"\n{self.nombre:.^50} \n Salud: {int(self.salud)}/"
+        texto = (f"\n{self.nombre:.^50} \n Salud: {int(self.salud)}/"
         + f"{int(self.salud_max):<{espacio_en_texto_2}} | Fuerza: "
         + f"{int(self.fuerza)}"
         + f" \n Resistencia: {int(self.resistencia):<14} | "
@@ -100,5 +100,5 @@ class Individuo:
         + f"{int(self.inteligencia):<13} | Sabiduria: {int(self.sabiduria)} "
         + f"\n Velocidad: {int(self.velocidad):<16} | Condicion: "
         + f"{self.condicion}\n Energia: {int(self.energia)}/"
-        + f"{int(self.energia_max):<{espacio_en_texto}}"
+        + f"{int(self.energia_max):<{espacio_en_texto}}")
         return texto

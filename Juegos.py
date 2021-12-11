@@ -544,7 +544,7 @@ class Juego:
                             p_pelea.append(asistente)
                         print(f"{personaje.nombre}, hora de pelear!!")
                     elif(decision == 2):
-                        personaje.usar_obj(p_presentes+enemigos_vistos)
+                        personaje.usar_objeto(p_presentes+enemigos_vistos)
                     elif(decision == 3):
                         personaje.tirar_objeto()
                     elif(decision == 4):
@@ -584,7 +584,7 @@ class Juego:
         for domar in self.peleas_doma:
             if(domar[0]):
                domar_nuevo.append(domar)
-        self.peleas_doma = domar_nuevo
+               self.peleas_doma = domar_nuevo
 #        print("-----------------"+ str(self.oso_marino.carisma))
         fin = False
         personajes_peleando = []
@@ -629,122 +629,10 @@ class Juego:
                         break
                 continue
             
-            domar_posible = ""
-            zona_personaje = personaje.ubicacion.zonas.index(personaje.zona)
-            for enemigo in personaje.ubicacion.enemigos_activos[
-                    zona_personaje]:
-                if("Atrapado" in enemigo.condicion):
-                    domar_posible = "9: Domar"
-                elif("Atrapado" not in enemigo.condicion):
-                    domar_posible = ""
-                    break
-            
-            accion_lugar = "Buscar"
-            if(personaje in personajes_peleando):
-                continue
-            if(personaje.zona == "Mercado"):
-                accion_lugar = "Robar"
-            elif(personaje.zona == "Casino"):
-                accion_lugar = "Apostar"
             personaje.stats()
-            
             personaje.efecto() # efecto a personajes que no esten peleando
-            print(f"{personaje.nombre}, ¿Que deseas hacer?")
-            seleccion = int(input("1: Moverte\n2: " + accion_lugar 
-                                  + "\n3: Usar objeto\n4: Tirar objeto"
-                                  + "\n5: Esperar\n6: Curarse"
-                                  + "\n7: Usar habilidad\n8: Guardar(Salir)\n" 
-                                  + domar_posible))
-            if(seleccion == 1):
-                personaje.moverse()
-            elif(seleccion == 2):
-                if(accion_lugar == "Buscar"):
-                    objeto = input("¿Que quieres " + accion_lugar.lower() 
-                                   + "? (0 para nada en especifico)\n")
-                    if(objeto == "0"):
-                        personaje.buscar()
-                    else:
-                        personaje.buscar(objeto)
-                elif(accion_lugar == "Robar"):
-                    print("¿Que quieres "+accion_lugar.lower()+"?\n")
-                    for objeto in gm.mercado.objetos_activos[0]:
-                        print(f"{objeto.nombre}")
-                    objeto_seleccionado = input()
-                    personaje.buscar(objeto_seleccionado)
-                elif(accion_lugar == "Apostar"):
-                    self.casino(personaje)
-                    
-            elif(seleccion == 3):
-                objetos_permitidos = []
-                for indice in range(0, len(personaje.inventario)):
-                    if(personaje.inventario[indice].nombre != "F" or "Pocion" 
-                       in personaje.inventario_nombres[indice] 
-                       and personaje.inventario_nombres[indice] != "SCP 427"):
-                        objetos_permitidos.append(personaje.
-                                                  inventario[indice].nombre)
-                
-                print("¿Que quieres usar?")
-                print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
-                contador = 0
-                for llave in personaje.cartera_obj:
-                    if(llave in objetos_permitidos):
-                        print(str(contador + 1) + f", \t{llave:.<24s}: " 
-                              + str(personaje.cartera_obj[llave]) + " | \t\t" 
-                              + personaje.inventario[
-                                self.inventario_nombres.index(
-                                llave)].estadistica + " | \t" 
-                              + personaje.inventario[
-                                personaje.inventario_nombres.index(
-                                        llave)].boosteo)
-                        contador += 1
-                
-                indice_objeto = int(input())-1
-                for llave in personaje.cartera_obj:
-                    if(llave in objetos_permitidos):
-                        if(indice_objeto == 0):
-                            break
-                        indice_objeto -= 1
-                objeto = personaje.inventario[
-                        personaje.inventario_nombres.index(llave)]
-                
-                personaje.usar_obj(objeto)
-            elif(seleccion == 4):
-                personaje.tirar_objeto()
-            elif(seleccion == 5):
-                personaje.energia = personaje.energia_max
-                print("Energia restaurada!!")
-                continue
-            elif(seleccion == 6):
-                personaje.energetizar()
-            elif(seleccion == 7):
-                personaje.activar_habilidad("Jugar")
-            elif(seleccion == 8):
-                fin = True
-                return True
-            elif(seleccion == 9 and domar_posible != ""):
-                print("¿Que enemigo intentaras domar?")
-                contador = 0
-                jaulas = []
-                for jaula in personaje.ubicacion.jaulas:
-                    for jaula_enemigo in jaula:
-                        print(str(contador) + jaula + ": " 
-                              + personaje.ubicacion.jaulas[
-                                      jaula][jaula_enemigo].nombre)
-                        jaulas.append(jaula_enemigo)
-                        contador += 1
-                jaula_select = jaulas[int(input())]
-#               personaje = objeto personaje, 
-#               personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select] = 
-#               objeto enemigo, jaula_select = objeto jaula, 
-#               defensas, omitidos, historial
-                self.peleas_doma.append(self.domar(personaje, 
-                personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select], 
-                jaula_select, [0, 0], [], []))
-            else:
-                print("Tas tonto shavo")
-                turno -= 2
-                continue
-        
+            self.menu(personaje)
+            
         p_presentes = []
         zonas_vistas = []
         
@@ -949,6 +837,154 @@ class Juego:
         gm.anadir_obj_manual(nombre, usuario, 9999)
 #        print("-------------------------------------------------------------")
 
+    def menu(self, personaje):
+        lista_titulos = ["Acciones", "Interactuar", "Inventario", "Evento", 
+                         "Opciones"]
+        lista_menu = [["Administrar habilidades", "Curarse", "Esperar", 
+                       "Moverse", "Usar habilidad", "Ver status"], 
+                     ["Buscar", "Explorar"], 
+                     ["Craftear", "Desequipar", "Tirar objeto", "Usar objeto"],
+                     [],
+                     ["Guardar", "Guardar y salir", "Salir"]]
+        
+        if(personaje.zona == "Casino"):
+            lista_menu[3].append("Apostar")
+        elif(personaje.zona == "Mercado"):
+            lista_menu[3].append("Comprar")
+            lista_menu[3].append("Vender")
+        zona_personaje = personaje.ubicacion.zonas.index(personaje.zona)
+        for enemigo in personaje.ubicacion.enemigos_activos[
+                zona_personaje]:
+            if("Atrapado" in enemigo.condicion):
+                lista_menu[3].append("Domar")
+        
+        decision = "D"
+        indice_titulo = -1
+        while(decision == "I" or decision == "D" or decision == "Quedarse aqui"):
+            if(decision == "D"):
+                indice_titulo += 1
+                if(indice_titulo >= len(lista_titulos)):
+                    indice_titulo = 0
+            elif(decision == "I"):
+                indice_titulo -= 1
+                if(indice_titulo < 0):
+                    indice_titulo = len(lista_titulos) - 1
+            
+            print(f"{lista_titulos[indice_titulo]:-^24s}")
+            for indice in range(0, len(lista_menu[indice_titulo])):
+                print(f"{indice + 1}. {lista_menu[indice_titulo][indice]}")
+            if(len(lista_menu[indice_titulo]) == 0):
+                print("No hay ninguna opcion disponible de momento")
+            print("<-- I | D -->")
+            
+            decision = input()
+            if(decision.isnumeric()):
+                if(int(decision) < 1 or int(decision) > len(
+                                                   lista_menu[indice_titulo])):
+                    print("tas tonto shavo")
+                    decision = "Quedarse aqui"
+                else:
+                    decision = lista_menu[indice_titulo][int(decision) - 1]
+            elif(decision != "I" and decision != "D" and decision != "Quedarse aqui"):
+                print("tas tonto shavo")
+                decision = "Quedarse aqui"
+                    
+        if(decision == "Administrar hablidades"):
+            personaje.arbol_habilidades()
+        elif(decision == "Curarse"):
+            personaje.energetizar()
+        elif(decision == "Esperar"):
+            personaje.energia = personaje.energia_max
+            print("Energia restaurada!!")
+        elif(decision == "Moverse"):
+            personaje.moverse()
+        elif(decision == "Usar habilidad"):
+            personaje.activar_habilidad("Jugar")
+        elif(decision == "Ver status"):
+            print(personaje)
+        elif(decision == "Buscar"):
+            objeto = input("¿Que quieres " + accion_lugar.lower() 
+                           + "? (0 para nada en especifico)\n")
+            if(objeto == "0"):
+                personaje.buscar()
+            else:
+                personaje.buscar(objeto)
+        elif(decision == "Explorar"):
+            personaje.explorar()
+        elif(decision == "Craftear"):
+            personaje.craftear()
+        elif(decision == "Desequipar"):
+            personaje.desequipar()
+        elif(decision == "Tirar objeto"):
+            personaje.tirar_objeto()
+        elif(decision == "Usar objeto"):
+            objetos_permitidos = []
+            # Imprimir objetos utilizables solo en jugar 
+            # (excluyendo los que se usan en pelea)
+            for indice in range(0, len(personaje.inventario)):
+                if(personaje.inventario[indice].estadistica != "F" or "Pocion" 
+                   in personaje.inventario_nombres[indice]
+                   and personaje.inventario_nombres[indice] != "SCP 427"):
+                    objetos_permitidos.append(personaje.
+                                              inventario[indice].nombre)
+            print("¿Que quieres usar?")
+            print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
+            contador = 0
+            for llave in personaje.cartera_obj:
+                if(llave in objetos_permitidos):
+                    print(str(contador + 1) + f", \t{llave:.<24s}: " 
+                          + str(personaje.cartera_obj[llave]) + " | \t\t" 
+                          + personaje.inventario[
+                            self.inventario_nombres.index(
+                            llave)].estadistica + " | \t" 
+                          + personaje.inventario[
+                            personaje.inventario_nombres.index(
+                                    llave)].boosteo)
+                    contador += 1
+            
+            indice_objeto = int(input())-1
+            for llave in personaje.cartera_obj:
+                if(llave in objetos_permitidos):
+                    if(indice_objeto == 0):
+                        break
+                    indice_objeto -= 1
+            objeto = personaje.inventario[
+                    personaje.inventario_nombres.index(llave)]
+            
+            personaje.usar_objeto(objeto)
+        elif(decision == "Apostar"):
+            self.casino(personaje)
+        elif(decision == "Comprar"):
+            personaje.comprar()
+        elif(decision == "Domar"):
+            print("¿Que enemigo intentaras domar?")
+            contador = 0
+            jaulas = []
+            for jaula in personaje.ubicacion.jaulas:
+                for jaula_enemigo in jaula:
+                    print(str(contador) + jaula + ": " 
+                          + personaje.ubicacion.jaulas[
+                                  jaula][jaula_enemigo].nombre)
+                    jaulas.append(jaula_enemigo)
+                    contador += 1
+            jaula_select = jaulas[int(input())]
+            self.peleas_doma.append(self.domar(personaje, 
+            personaje.ubicacion.jaulas[jaula_select.nombre][jaula_select], 
+            jaula_select, [0, 0], [], []))
+        elif(decision == "Vender"):
+            personaje.vender()
+        elif(decision == "Guardar"):
+            # Añadir funcionalidad de guardar
+            pass
+        elif(decision == "Guardar y salir"):
+            # Añadir funcionalidad de guardar
+            return "Salir"
+        elif(decision == "Salir"):
+            return "Salir"
+        else:
+            print("Tas tonto shavo")
+            return False
+        return True
 
     def pelea(self, p_presentes, e_presentes, defensas = [], 
               turnos = [], omitidos = []):
@@ -1193,7 +1229,7 @@ class Juego:
                                 if(seleccion == -1):
                                     continue
                                 else:
-                                    uso = personaje.usar_obj(
+                                    uso = personaje.usar_objeto(
                                             personaje.
                                             inventario_nombres[seleccion], 
                                             objeto)
@@ -1208,7 +1244,8 @@ class Juego:
                                     continue
                                 elif(personaje.nombre == 
                                      turnos_aux[seleccion].nombre):
-                                    uso = personaje.usar_obj(personaje, objeto)
+                                    uso = personaje.usar_objeto(personaje, 
+                                                                objeto)
                                     if(type(uso) == bool):
                                         salida = not uso
                                     elif(list(uso.keys())[0] == "Escudo"):
@@ -1216,7 +1253,7 @@ class Juego:
                                                                uso.values())[0]
                                         break
                                 else:
-                                    uso = personaje.usar_obj(turnos_aux[
+                                    uso = personaje.usar_objeto(turnos_aux[
                                                         seleccion], objeto)
                                     if(type(uso) != bool):
                                         if(list(uso.keys())[0] == "Escudo"):
@@ -1412,7 +1449,7 @@ class Juego:
                         if(seleccion == -1):
                             continue
                         else:
-                            uso = personaje.usar_obj(
+                            uso = personaje.usar_objeto(
                                personaje.inventario_nombres[seleccion], objeto)
                             salida = not uso
                             revivir = True
@@ -1431,16 +1468,17 @@ class Juego:
                     if(seleccion == len(turnos_aux)): # Regresar
                         continue
                     elif(seleccion == -1): # Objetivo multiple
-                        personaje.usar_obj(turnos_aux, objeto)
+                        personaje.usar_objeto(turnos_aux, objeto)
                     elif(personaje.nombre == turnos_aux[seleccion].nombre):
-                        uso = personaje.usar_obj(personaje, objeto)
+                        uso = personaje.usar_objeto(personaje, objeto)
                         if(type(uso) == bool):
                             salida = not uso
                         elif(list(uso.keys())[0] == "Escudo"):
                             defensas[seleccion] = list(uso.values())[0]
                             break
                     else:
-                        uso = personaje.usar_obj(turnos_aux[seleccion], objeto)
+                        uso = personaje.usar_objeto(turnos_aux[seleccion], 
+                                                    objeto)
                         if(type(uso) != bool):
                             if(list(uso.keys())[0] == "Escudo"):
                                 defensas[seleccion] += list(uso.values())[0]
@@ -1561,3 +1599,5 @@ class Juego:
 
 #lugar = Lugar("A", [], [3], [], [], [], [], [])
 #print(lugar.enemigos)
+juego = Juego()
+#juego.jugar()

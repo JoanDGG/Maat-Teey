@@ -1,11 +1,37 @@
 import Game_Manager as gm
-#from Juegos import Juego
+from Personajes import Personaje
+from Juegos import Juego
 
 gm.generar_carneables()
 
 def main():
 
+    gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek",
+                       {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1,
+                       gm.mapa_mirek, 0, 10, gm.arbol_mirek)
+    gm.bugatti = Personaje(39, 8, 7, 18, 16, 9,    "Turati", {"Saludable": 1}, 
+                           25, [], gm.campamento, "Cabana", 1, gm.mapa_bugatti, 
+                           0, 10, gm.arbol_bugatti)
+    gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 20,
+                           [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 0, 10,
+                           gm.arbol_ruben)
+    gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 25,
+                           [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 0, 10,
+                           gm.arbol_sebas)
+    gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 15,
+                           [], gm.campamento, "Cabana", 1, gm.mapa_norman, 0, 10,
+                           gm.arbol_norman)
     
+    gm.master  = Personaje(420, 5, 69, 69, 69, 69,  "Tu dios", {"Saludable": 1},
+                           69, [], gm.bosque, "Aire libre", 69, gm.mapa_master,
+                           666, 420, gm.arbol_norman)
+    gm.ninja   = Personaje(420, 69, 69, 69, 69, 69,  "Tu segundo dios",
+                           {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
+                           69, gm.mapa_master, 666, 420, gm.arbol_norman)
+    
+    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman]
+    juego = Juego()
+    juego.menu(gm.mirek)
 #    dic = {"hola":[{ruben:sebas},1]}
 
 #    for n in dic["hola"][0]:
@@ -206,21 +232,16 @@ def main():
     # Reducir funciones
     # Comentar TODO
     
-    # Personajes.arbol_habilidades es recursivo y no se llama en Juegos.jugar()
-    # Personajes.comprar no se usa en Juegos.jugar()
-    # Personajes.craftear no se usa en Juegos.jugar()
-    # Personajes.desequipar no se usa
+    # Ver equipo (print del inicio de desequipar)
+    
+    # Personajes.arbol_habilidades es recursivo
     # Personajes.equipar es recursivo
-    # Personajes.explorar no se usa en Juegos.jugar()
     # Juegos.casino es recursivo
-    # Juegos.escalera no se usa
+    
+    # Juegos.escalera no se usa en Personajes.moverse()
     # Enemigos.ataque_carisma es recursivo
     
-    # Menu automatico:
-    # Funcion que va llenando un diccionario/lista con opciones de menu
-    # Decoradores en funciones que queremos que se añandan a esa lista/diccionario
-    # String de menu se llena con las acciones posibles en el momento (ifs de Juego.jugar) y eso
-    
+    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
     
     # str Lugares
     # Generador de nombres 2000
