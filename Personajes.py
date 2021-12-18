@@ -62,6 +62,7 @@ class Personaje(Individuo):
         if(contexto_habilidad != "anticipacion"):
             print("Que habilidad quieres activar? (0 para salir)")
             print("HABILIDAD\tCOSTO")
+            vacio = True
             for codigo_habilidad in self.arbol:
                 for numero_habilidad in range(0, len(gm.habilidades[
                         contexto_habilidad])):
@@ -69,13 +70,19 @@ class Personaje(Individuo):
                         contexto_habilidad].keys())[numero_habilidad]
                     if(habilidad in self.arbol[codigo_habilidad][2] 
                        and self.arbol[codigo_habilidad][0] == 1):
+                        vacio = False
                         print(f"{codigo_habilidad}: "
                               + f"{self.arbol[codigo_habilidad][2]}:\t"
                               + str(gm.habilidades[contexto_habilidad][
                                   list(gm.habilidades[
                                       contexto_habilidad].keys())[
                                       numero_habilidad]]))
-            codigo_habilidad = input()
+            if(vacio):
+                print("No hay ninguna habilidad activa actualmente\n")
+                codigo_habilidad = "0"
+            else:
+                codigo_habilidad = input()
+                
             if(codigo_habilidad == "0"):
                 return [False, False]
             elif(codigo_habilidad not in self.arbol):
@@ -454,17 +461,17 @@ class Personaje(Individuo):
             zona = zonas.index(self.zona)
             for lista_objetos in range (0, len(objetos)):
                 objetos_nombres.append([])
-                for objeto in range (0, len(objetos[lista_objetos])):
+                for objeto_indice in range (0, len(objetos[lista_objetos])):
                     objetos_nombres[lista_objetos].append(objetos[
-                        lista_objetos][objeto].nombre)
+                        lista_objetos][objeto_indice].nombre)
     #        print(objetos_nombres)
     #        print(objeto.nombre)
-            objeto = objetos_nombres[zona].index(objeto.nombre)
-    #        print(self.ubicacion.objetos[z])
-            indice = self.ubicacion.objetos[zona].index(objeto.nombre)
-            self.ubicacion.cantidades[zona][indice] -= 1
-    #        self.ubicacion.cantidades_objetos_activos[z][j] -= 1
-            objeto = objetos[zona][objeto]
+            objeto_seleccionado_indice = objetos_nombres[zona].index(
+                                                                 objeto.nombre)
+            cantidad_seleccionado_indice = self.ubicacion.objetos[zona].index(
+                                                                 objeto.nombre)
+            self.ubicacion.cantidades[zona][cantidad_seleccionado_indice] -= 1
+            objeto = objetos[zona][objeto_seleccionado_indice]
             if(objeto.nombre == "Cartucho de magnum"):
                 for bala in range(0, 16):
                     gm.anadir_obj_manual("Bala de magnum", self)
@@ -481,11 +488,10 @@ class Personaje(Individuo):
 # =============================================================================
             indice_nombre = objetos_nombres[zona].index(objeto.nombre)
             objetos_nombres[zona].remove(objeto.nombre)
-            if(self.ubicacion.cantidades[zona][indice] <= 0):
+            if(self.ubicacion.cantidades[zona][indice_nombre] <= 0):
                 self.ubicacion.objetos_activos[zona].pop(indice_nombre)
-                self.ubicacion.objetos[zona].pop(indice)
-                self.ubicacion.cantidades[zona].pop(indice)
-    #            self.ubicacion.cantidades_objetos_activos[z].pop(ind)
+                self.ubicacion.objetos[zona].pop(indice_nombre)
+                self.ubicacion.cantidades[zona].pop(indice_nombre)
             self.quitar_equipo(objeto)
             
             self.actualizar_stats()
@@ -693,14 +699,21 @@ class Personaje(Individuo):
         if(lugar.nombre == "Fondo del mar"):
             iluminacion = iluminacion[3:]
             
-        if(lugar == self.ubicacion and self.zona not in gm.iluminados):
-            print("Quieres usar algun objeto para ayudarte a buscar?")
+        if(lugar == self.ubicacion and self.zona not in gm.lugares_iluminados):
+            ningun_iluminado = True
             for indice_iluminacion in range(0, len(iluminacion)):
                 if(iluminacion[indice_iluminacion] in self.inventario_nombres):
-                    print(f"{indice_iluminacion+1}: "
-                          + "iluminacion[indice_iluminacion]")
-            print(f"{len(iluminacion)+1}: Nada")
-            objeto_usado = int(input())-1
+                    ningun_iluminado = False
+                    break
+            objeto_usado = len(iluminacion)
+            if(not ningun_iluminado):
+                print("Quieres usar algun objeto para ayudarte a buscar?")
+                for indice_iluminacion in range(0, len(iluminacion)):
+                    if(iluminacion[indice_iluminacion] in self.inventario_nombres):
+                        print(f"{indice_iluminacion+1}: "
+                              + "iluminacion[indice_iluminacion]")
+                print(f"{len(iluminacion)+1}: Nada")
+                objeto_usado = int(input())-1
             
             if(objeto_usado < len(iluminacion)):
                 for nombre in range(0, len(gm.Dfnombres_objetos)):
@@ -767,10 +780,9 @@ class Personaje(Individuo):
             #--------------------------------busca objeto con probabilidad alta
             if(probabilidad >= 15):
                 objeto_buscado = objeto
-#        print()
-#        for i in self.ubicacion.objetos_activos[z]:
-#            print(i.nombre, end = ", ")
-#        print()
+        
+        print(objeto_buscado)
+        print(objeto_buscado.nombre)
         if(objeto_buscado == ""):
             print("Que mala suerte shavo, no encontraste el amor de tu bida")
         elif(objeto.nombre == "Dinero"):
@@ -1343,7 +1355,7 @@ class Personaje(Individuo):
         for asistente in self.asistentes:
             asistente.zona = zona
         
-        print(f"{self.nombre} se ha movido a {lugar.nombre} en {zona}")
+        print(f"{self.nombre} se ha movido a {zona} en {lugar.nombre}")
 #        print(self.ubicacion.enemigos_activos)
 #        print(self.ubicacion.objetos_activos)
         return True

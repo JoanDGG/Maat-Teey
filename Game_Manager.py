@@ -509,15 +509,14 @@ def mezclar_listas(lista1, lista2, tipo):
     
     for i in range (0, len(lista1)):
         if(tipo == 1):
+            lista3.append("")
+            lista4.append("")
+        elif(tipo == 2):
             lista3.append([])
             lista4.append([])
             for j in range(0, len(lista1[i])):
                 lista3[i].append("")
                 lista4[i].append("")
-        elif(tipo == 2):
-            lista3.append("")
-            lista4.append("")
-    
     
     if(tipo == 1):
         c=0
@@ -539,7 +538,7 @@ def mezclar_listas(lista1, lista2, tipo):
 
     return (lista3,lista4)
 
-def repetido(self, lugar, zona:int, jefe:str):
+def repetido(lugar, zona:int, jefe:str):
     for enemigo in lugar.enemigos_activos[zona]:
         if(enemigo.nombre == jefe):
             return True
@@ -612,9 +611,9 @@ def separar(entidades, lugar, zonas, tipo):
     elif(tipo == "cantidades"):
         return cantidad
 
-def transformar_objeto(self, nombre: str, cantidad_manual = None):
+def transformar_objeto(nombre: str, cantidad_manual = None):
     #DEBUG
-#        print("------------------------------------Metodo transformar objeto")
+#    print("----------------------------------------Metodo transformar objeto")
     for indice_nombre in range (0, len(Dfnombres_objetos)):
         if (Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
             multiples = False
@@ -639,12 +638,12 @@ def transformar_objeto(self, nombre: str, cantidad_manual = None):
                 boosteo = consejos[dados(1, len(consejos))[0]-1]
             objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
                             cantidad, precio)
-#                objeto.stats()
+#            print(objeto)
             break
 #        print("-------------------------------------------------------------")
     return objeto
 
-def ubicar(self):
+def ubicar():
     #DEBUG
 #    print("----------------------------------------------------Metodo ubicar")
     for personaje in personajes:
@@ -818,6 +817,7 @@ arbol_norman  = {"A1": [0, 1, "Vision nocturna"],
                  "B2": [0, 2, "Pociones"],
                  "B3": [0, 3, "Boosteo"]}
 
+generar_carneables()
 
 mirek   = None
 bugatti = None
@@ -828,10 +828,13 @@ norman  = None
 master  = None
 ninja   = None
 
-personajes = [mirek, bugatti, ruben, sebas, norman]
+personaje_malo = None
+
+personajes = []
+#personajes = [mirek, bugatti, ruben, sebas, norman]
 #personajes = [master, ninja]
 #personajes = [ninja]
 #personajes = [mirek, bugatti, ruben, sebas, norman, master, ninja]
 personajes_muertos = []
 
-personaje_malo = malo()
+#personaje_malo = malo()

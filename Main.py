@@ -2,41 +2,95 @@ import Game_Manager as gm
 from Personajes import Personaje
 from Juegos import Juego
 
-gm.generar_carneables()
 
 def main():
 
-    gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek",
-                       {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1,
-                       gm.mapa_mirek, 0, 10, gm.arbol_mirek)
+    gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek", {"Saludable": 1},
+                           20, [], gm.campamento, "Cabana", 1, gm.mapa_mirek,
+                           0, 10, gm.arbol_mirek)
     gm.bugatti = Personaje(39, 8, 7, 18, 16, 9,    "Turati", {"Saludable": 1}, 
                            25, [], gm.campamento, "Cabana", 1, gm.mapa_bugatti, 
                            0, 10, gm.arbol_bugatti)
-    gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 20,
-                           [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 0, 10,
-                           gm.arbol_ruben)
-    gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 25,
-                           [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 0, 10,
-                           gm.arbol_sebas)
-    gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 15,
-                           [], gm.campamento, "Cabana", 1, gm.mapa_norman, 0, 10,
-                           gm.arbol_norman)
+    gm.ruben   = Personaje(27, 13, 18, 8, 11, 15,  "Ruben",  {"Saludable": 1}, 
+                           20, [], gm.campamento, "Cabana", 1, gm.mapa_ruben, 
+                           0, 10, gm.arbol_ruben)
+    gm.sebas   = Personaje(29, 18, 8, 19, 7, 17,   "Sebas",  {"Saludable": 1}, 
+                           25, [], gm.campamento, "Cabana", 1, gm.mapa_sebas, 
+                           0, 10, gm.arbol_sebas)
+    gm.norman  = Personaje(31, 7, 20, 19, 18, 12,  "Norman", {"Saludable": 1}, 
+                           15, [], gm.campamento, "Cabana", 1, gm.mapa_norman, 
+                           0, 10, gm.arbol_norman)
     
-    gm.master  = Personaje(420, 5, 69, 69, 69, 69,  "Tu dios", {"Saludable": 1},
+    gm.master  = Personaje(420, 5, 69, 69, 69, 69, "Tu dios", {"Saludable": 1},
                            69, [], gm.bosque, "Aire libre", 69, gm.mapa_master,
                            666, 420, gm.arbol_norman)
-    gm.ninja   = Personaje(420, 69, 69, 69, 69, 69,  "Tu segundo dios",
+    gm.ninja   = Personaje(420, 69, 69, 69, 69, 69, "Tu segundo dios",
                            {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
                            69, gm.mapa_master, 666, 420, gm.arbol_norman)
     
     gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman]
+    #gm.personajes = [gm.master, gm.ninja]
+    #gm.personajes = [gm.ninja]
+    #gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, gm.master, gm.ninja]
+    gm.personaje_malo = gm.malo()
+    #print(gm.personaje_malo)
+
+#    gm.generar_carneables()
     juego = Juego()
+    
+    juego.generar_objetos_zona(gm.campamento, "Cabana")
+    juego.generar_objetos_zona(gm.campamento, "Comedor")
+    
     juego.menu(gm.mirek)
-#    dic = {"hola":[{ruben:sebas},1]}
+    
+# =============================================================================
+# PENDIENTES:
+# =============================================================================
 
-#    for n in dic["hola"][0]:
-#        print(dic["hola"][0][n].nombre)
+    # -----------------------Generales:
+    # Anadir funciones
+    # Reducir funciones
+    # Comentar TODO
+    # Arreglar docs
+    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
+    # Modo admin y funciones para todo(?)
+    # A prueba de bobos
+    # Mapa
+    # Tarjeta de enemigos/objetos
+    # Logica del juego en fisico
+    # Simulacion
+        # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
+            
+    # ---------------------Implementar:
+    # Ver equipo (print del inicio de desequipar)
+    # Generador de nombres 2000
+    # Metodo guardar y cargar
+    # str Lugares
+    # Dialogo intenso sala misteriosa
+    # Descripcion perra de wendigo
+    # Sabiduria del mas alla
+    # gm.dias ? 
+        #Cada jugador tiene cuenta de turnos, asi como el servidor
+        #El servidor tiene la menor cuenta de turnos. El servidor aumenta de
+        #turno cuando sea menor que el turno de todos (+1)
+        
+    # ------------------------Corregir:
+    # Enemigos.ataque_carisma es recursivo
+    # Personajes.arbol_habilidades es recursivo
+    # Personajes.equipar es recursivo
+    # Juegos.casino es recursivo
+    # Juegos.escalera no se usa en Personajes.moverse()
+    # Errores desconocidos por index error: (no pasa siempre)
+        # lugar.objetos_activos[indice].append(objeto) (Juegos, 431)
+        
+    
+    # Cambiar nombre variables Juegos COMPLETADO
+    # Llamar a casino COMPLETADO
 
+# =============================================================================
+#     Pendientes por probar:
+# =============================================================================
+    
     # Jaula 
     
     # Terminar domar
@@ -90,11 +144,11 @@ def main():
     
         ## Meter combinaciones de crafteos en el libro de los secretos
     
-    # Habilidades-------------------------------------------------------------------
+    # Habilidades--------------------------------------------------------------
         # Agregar las habilidades (en orden)
         # Costo de energia de cada habilidad
         
-#        Jugar: 0
+#        Jugar:
     #        Sabiduria del mas alla
         #        anadir_obj_manual(norman, "Nota de consejo sabia")
         #        Dentro de anadir manual, if(o == nota y sabia in nombre):
@@ -222,55 +276,10 @@ def main():
     #        Alquimista
         #        si es buggati, si tiene la habilidad desbloqueada, y no esta en el lugar de la maquina, dejar que se haga el metodo maquina con peor probabilidad
 
-# PENDIENTES:
 # Costo de energia de cada habilidad (quitar energia en returns) COMPLETADO
 # Recuperan 20% y 30% energia COMPLETADO
-
-
-    # Separar codigo por documentos COMPLETADO
-    # Anadir funciones
-    # Reducir funciones
-    # Comentar TODO
     
-    # Ver equipo (print del inicio de desequipar)
-    
-    # Personajes.arbol_habilidades es recursivo
-    # Personajes.equipar es recursivo
-    # Juegos.casino es recursivo
-    
-    # Juegos.escalera no se usa en Personajes.moverse()
-    # Enemigos.ataque_carisma es recursivo
-    
-    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
-    
-    # str Lugares
-    # Generador de nombres 2000
-
-    # Cambiar nombre variables Juegos COMPLETADO
-    # Llamar a casino COMPLETADO
-    # gm.dias ? 
-        #Cada jugador tiene cuenta de turnos, asi como el servidor
-        #El servidor tiene la menor cuenta de turnos. El servidor aumenta de
-        #turno cuando sea menor que el turno de todos (+1)
-    # Dialogo intenso sala misteriosa
-    # Descripcion perra de wendigo
-    # Sabiduria del mas alla
-
-    # Arreglar docs
-    
-    # Metodo guardar y cargar
-    # ------------------------------------------------------------------------------
-    # Modo admin y funciones para todo(?)
-    # A prueba de bobos
-    
-    # Mapa
-    # Tarjeta de enemigos/objetos
-    # Logica del juego en fisico
-    
-    # Simulacion
-        # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
-    
-    print("------------------------------------------------------------------JUEGO")
+    print("-------------------------------------------------------------JUEGO")
 #    print(revisar_string("%3 Hierro/4 Carbon/2 Oro"))
     
 #    Juego.generar_enemigos_zona(bosque, "Pradera")
@@ -358,10 +367,10 @@ def main():
     
 #    Juego.generar_objetos_zona(viaje_astral, "cabana")
     
-    print("----------------------------------------------------------------PRUEBAS")
-    print("---------------------------------------------------------------Enemigos")
+    print("-----------------------------------------------------------PRUEBAS")
+    print("----------------------------------------------------------Enemigos")
     
-    #----------------------- Generar enemigos --------------------------------------
+    #----------------------- Generar enemigos ---------------------------------
 #    Juego.generar_enemigos_zona(campamento, "Cabana")
 #    Juego.generar_enemigos_zona(bosque, "Aire libre")
 #    Juego.generar_enemigos_zona(mercado, "Mercado")
@@ -372,7 +381,7 @@ def main():
 #    print(separar_enemigos("Campamento", ["Cabana", "Comedor", "Almacen", "Cabanas vecinas", "Puesto de seguridad"], 2))
 #    print(separar_enemigos("Edificio Abandonado", ["Entrada", "Maquina", "Escalera", "Laboratorio", "Sala de investigacion"], 1))
 
-    #----------------------- Lista e_presentes -------------------------------------
+    #----------------------- Lista e_presentes --------------------------------
 #    e_presentes = []
 #    enemigo = Enemigo(15, 11, 7, 15, 8, 10, "Zombie base", "Saludable", "%hola/adios", "Zombie", 1, 10)
 #    enemigo.stats()
@@ -403,7 +412,7 @@ def main():
 #    e_presentes.append(enemigo)
 #    print(e_presentes)
     
-    #----------------------- Lista p_presentes -------------------------------------
+    #----------------------- Lista p_presentes --------------------------------
 #    p_presentes = [mirek, ruben, sebas]
 #    print(p_presentes)
 #    Juego.pelea(p_presentes, e_presentes)
@@ -411,9 +420,9 @@ def main():
 #    for i in qwerty:
 #        print(i.nombre)
 
-    print("----------------------------------------------------------------Objetos")
+    print("-----------------------------------------------------------Objetos")
 
-    #----------------------- Generar objetos ---------------------------------------
+    #----------------------- Generar objetos ----------------------------------
 #    Juego.generar_objetos(campamento)
 #    Juego.generar_objetos(mercado)
 #    print(pueblo.objetos_activos())
@@ -426,7 +435,7 @@ def main():
 #    print(separar_objetos("Montana", ["Cabana doctor", "Cima", "Subida"]))
 #    print(separar_objetos("Edificio Abandonado", ["Entrada", "Maquina", "Escalera", "Laboratorio", "Sala de investigacion"], 1))
 
-    #----------------------- Generar objeto manual ---------------------------------
+    #----------------------- Generar objeto manual ----------------------------
 #    o = Objeto("Disfraz", 1, 'I', 10, 0, 1, 1)
 #    o = Objeto("Fragmento de libro de secretos", 0, 'Habilidad', 0, 1, 1, 300)
 #    o = Juego.tranformar_objeto("Comida")
@@ -439,8 +448,8 @@ def main():
 #    campamento.cantidades()[1].append(1)
 #    o.stats()
 
-    print("----------------------------------------------------------------Pruebas")
-    #----------------------- Stats personajes --------------------------------------
+    print("-----------------------------------------------------------Pruebas")
+    #----------------------- Stats personajes ---------------------------------
 #    mirek.stats()
 #    ruben.stats()
 #    sebas.stats()
@@ -454,7 +463,7 @@ def main():
 #    master.moverse()
 #    master.moverse()
     
-    #----------------------- Prueba pelear -------------------------------------
+    #----------------------- Prueba pelear ------------------------------------
 #    enemigo = Enemigo(120, 17, 17, 17, 13, 17, "Sub Bismark", "Saludable", "Fragmento de libro de secretos", "SCP", 9, 1, "zona")
 #    e_presentes.append(enemigo)
 #    campamento.enemigos_activos()[0].append(enemigo)
@@ -474,7 +483,7 @@ def main():
 #    Juego.pelea([sebas],e_presentes)
 #    asistente = Asistente(120, 17, 17, 17, 13, 17, "Sub Bismark", "Saludable", "Fragmento de libro de secretos", "SCP", 9, 1, "Cabana", ruben, "Queso")
 #    print(type(asistente) == Asistente)
-    #----------------------- Usar objeto especial ----------------------------------
+    #----------------------- Usar objeto especial -----------------------------
 #    e_presentes = []
 #    enemigo = Enemigo(120, 17, 17, 17, 13, 17, "Sub Bismark", "Saludable", "Fragmento de libro de secretos", "SCP", 9, 1)
 #    e_presentes.append(enemigo)
@@ -489,12 +498,12 @@ def main():
 #    enemigo.stats()
 #    Juego.pelea([master],e_presentes)
     
-    #----------------------- Usar binoculares --------------------------------------
+    #----------------------- Usar binoculares ---------------------------------
 #    master.moverse()
 #    anadir_obj_manual("Binoculares", master)
 #    master.usar_obj()
     
-    #----------------------- Metodo casino -----------------------------------------
+    #----------------------- Metodo casino ------------------------------------
 #    for i in range(0,5):
 #        o = Juego.tranformar_objeto("Comida")
 #        master.ubicacion.objetos_activos()[2].append(o)
@@ -503,25 +512,25 @@ def main():
 #    Juego.casino(master)
 #    master.stats()
     
-    #----------------------- Metodo monopoly ---------------------------------------
+    #----------------------- Metodo monopoly ----------------------------------
 #    o = Juego.tranformar_objeto("Fragmento de libro de secretos")
 #    mercado.objetos_activos()[0].append(o)
 #    master.anadir_obj(o)
 #    master.comprar()
 #    master.stats()
     
-    #----------------------- Metodo escalera ---------------------------------------
+    #----------------------- Metodo escalera ----------------------------------
 #    esc = [mirek, 0, 0, 0, 0]
 #    for i in range(0, 25):
 #        print(esc)
 #        esc = Juego.escalera(esc[0], esc[1], esc[2], esc[3], esc[4])
 
-    #----------------------- Minar -------------------------------------------------
+    #----------------------- Minar --------------------------------------------
 #    mirek.moverse(mina, "Tuneles")
 #    mirek.buscar("Oro")
 #    mirek.stats()
 
-    #----------------------- Moverse -----------------------------------------------
+    #----------------------- Moverse ------------------------------------------
 #    mirek.moverse()
 #    mirek.stats()
 #    mirek.moverse()
@@ -532,13 +541,13 @@ def main():
 #    ninja.stats()
 #    ninja.moverse()
 
-    #----------------------- Buscar ------------------------------------------------
+    #----------------------- Buscar -------------------------------------------
 #    mirek.buscar("Disfraz")
 #    mirek.buscar()
 #    mirek.stats()
 #    print(busca_lugar("Cabana").nombre)
     
-    #----------------------- Condiciones de batalla --------------------------------
+    #----------------------- Condiciones de batalla ---------------------------
 #    mirek.condicion.pop('Saludable')
 #    mirek.condicion.update({"Envenenado III": 3})
 #    for i in range(0,4):
@@ -548,17 +557,17 @@ def main():
 #    mirek.cambiar_hp(-26)
 #    mirek.stats()
     
-    #----------------------- Subir de nivel ----------------------------------------
+    #----------------------- Subir de nivel -----------------------------------
 #    norman.subir_nivel()
 
-    #----------------------- Obtener objeto ----------------------------------------
+    #----------------------- Obtener objeto -----------------------------------
 #    mirek.moverse(pueblo, "Ayuntamiento")
 #    mirek.stats()
 #    mirek.cambiar_hp(-16)
 #    mirek.anadir_obj(o)
 #    mirek.usar_obj(o)
 #    mirek.stats()
-#    print("----------------------------------------------------------------------")
+#    print("-----------------------------------------------------------------")
 #    ruben.moverse(pueblo, "Ayuntamiento")
 #    mirek.stats()
 #    ruben.stats()
@@ -567,7 +576,7 @@ def main():
 #    mirek.stats()
 #    mirek.usar_obj(o, "Ruben")
 #    ruben.stats()
-#    print("----------------------------------------------------------------------")
+#    print("-----------------------------------------------------------------")
 #    ruben.moverse(pueblo, "Comunidad")
 #    mirek.stats()
 #    ruben.stats()
@@ -575,32 +584,32 @@ def main():
 #    mirek.anadir_obj(o)
 #    mirek.usar_obj(o, "Ruben")
 #    ruben.stats()
-#    print("----------------------------------------------------------------------")
+#    print("-----------------------------------------------------------------")
     
-    #----------------------- Cadaver de usuario ------------------------------------
+    #----------------------- Cadaver de usuario -------------------------------
 #    mirek.cambiar_hp(-100)
 #    o = Juego.tranformar_objeto("Cadaver de Mirek")
 #    sebas.anadir_obj(o)
 #    sebas.stats()
     
-    #----------------------- Metodo maquina ----------------------------------------
+    #----------------------- Metodo maquina -----------------------------------
 #    anadir_obj_manual("Fragmento de libro de secretos", master)
 #    Juego.maquina("Fragmento de libro de secretos", master)
     
 #    master.arbol_habilidades()
     
-    #----------------------- Metodo atacar -----------------------------------------
+    #----------------------- Metodo atacar ------------------------------------
 #    mirek.atacar(e_presentes)
 #    bugatti.moverse(campamento, "Comedor")
 #    mirek.moverse(campamento, "Comedor")
 #    bugatti.anadir_obj(o)
 
-    #----------------------- Metodo shuffleproplus ---------------------------------
+    #----------------------- Metodo shuffleproplus ----------------------------
 #    shuffleproplus([bugatti])
 #    mirek.stats()
 #    bugatti.stats()
     
-    #----------------------- Metodo explorar ---------------------------------------
+    #----------------------- Metodo explorar ----------------------------------
 #    print(mirek.mapa)
 #    print(mirek.explorar())
 #    mirek.moverse(campamento, "Almacen")

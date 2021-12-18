@@ -394,14 +394,20 @@ class Juego:
             and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
             lugar.objetos_activos[0].append(fragmento)
             
-        indice = lugar.zonas.index(zona)
-        objetos,cantidades = gm.mezclar_listas(lugar.objetos[indice],
-                                               lugar.cantidades()[indice], 1)
-        lugar.objetos_zona_s(objetos, zona)
-        lugar.cantidades_objetos_zona_s(cantidades, zona)
-        
+#        print("-------------------------------------------------------------")
+#        print(f"{zona:^50s}")
+#        print("-------------------------------------------------------------")
 #        print(lugar.objetos)
-#        print(objetos)
+
+        indice = lugar.zonas.index(zona)
+        objetos, cantidades = gm.mezclar_listas(lugar.objetos[indice],
+                                               lugar.cantidades[indice], 1)
+        lugar.objetos_zona_setter(objetos, zona)
+        lugar.cantidades_objetos_zona_setter(cantidades, zona)
+        
+#        print(len(objetos))
+#        print(len(lugar.objetos_activos))
+        
         if(len(objetos) == 0):
             contador = 0
         elif(len(objetos) == 1):
@@ -410,11 +416,8 @@ class Juego:
             contador = gm.dados(1, len(objetos))[0]//2
 #        if(contador<1):
 #            contador+=1
+#       print("contador: " + str(contador))
             
-#        print("----------------------------------------------------------")
-#        print("\t\t"+zona)
-#        print("----------------------------------------------------------")
-#                print("contador: " + str(contador))
         for indice in range(0, len(objetos)):
             for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
                 if(contador<=0):
@@ -426,7 +429,7 @@ class Juego:
                     nombre = objetos[indice]
                     objeto = gm.transformar_objeto(nombre, cantidades[indice])
                     lugar.objetos_activos[indice].append(objeto)
-#                    o.stats()
+#                    print(objeto)
                     contador -= 1
                     break
 
@@ -877,7 +880,7 @@ class Juego:
                 print("No hay ninguna opcion disponible de momento")
             print("<-- I | D -->")
             
-            decision = input()
+            decision = input().upper()
             if(decision.isnumeric()):
                 if(int(decision) < 1 or int(decision) > len(
                                                    lista_menu[indice_titulo])):
@@ -888,14 +891,16 @@ class Juego:
             elif(decision != "I" and decision != "D" and decision != "Quedarse aqui"):
                 print("tas tonto shavo")
                 decision = "Quedarse aqui"
-                    
-        if(decision == "Administrar hablidades"):
+        
+        print(decision + " seleccionado")
+        if(decision == "Administrar habilidades"):
+            print(personaje)
             personaje.arbol_habilidades()
         elif(decision == "Curarse"):
             personaje.energetizar()
         elif(decision == "Esperar"):
             personaje.energia = personaje.energia_max
-            print("Energia restaurada!!")
+            print(f"Energia restaurada!!\nEnergia actual: {personaje.energia}")
         elif(decision == "Moverse"):
             personaje.moverse()
         elif(decision == "Usar habilidad"):
@@ -903,8 +908,7 @@ class Juego:
         elif(decision == "Ver status"):
             print(personaje)
         elif(decision == "Buscar"):
-            objeto = input("¿Que quieres " + accion_lugar.lower() 
-                           + "? (0 para nada en especifico)\n")
+            objeto = input("¿Que quieres buscar? (0 para nada en especifico)\n")
             if(objeto == "0"):
                 personaje.buscar()
             else:
@@ -927,31 +931,34 @@ class Juego:
                    and personaje.inventario_nombres[indice] != "SCP 427"):
                     objetos_permitidos.append(personaje.
                                               inventario[indice].nombre)
-            print("¿Que quieres usar?")
-            print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
-            contador = 0
-            for llave in personaje.cartera_obj:
-                if(llave in objetos_permitidos):
-                    print(str(contador + 1) + f", \t{llave:.<24s}: " 
-                          + str(personaje.cartera_obj[llave]) + " | \t\t" 
-                          + personaje.inventario[
-                            self.inventario_nombres.index(
-                            llave)].estadistica + " | \t" 
-                          + personaje.inventario[
-                            personaje.inventario_nombres.index(
-                                    llave)].boosteo)
-                    contador += 1
-            
-            indice_objeto = int(input())-1
-            for llave in personaje.cartera_obj:
-                if(llave in objetos_permitidos):
-                    if(indice_objeto == 0):
-                        break
-                    indice_objeto -= 1
-            objeto = personaje.inventario[
-                    personaje.inventario_nombres.index(llave)]
-            
-            personaje.usar_objeto(objeto)
+            if(len(objetos_permitidos) == 0):
+                print("No hay ningun objeto disponible")
+            else:
+                print("¿Que quieres usar?")
+                print("INDICE \t NOMBRE \t CANTIDAD \t ESTADISTICA \t BOOSTEO")      
+                contador = 0
+                for llave in personaje.cartera_obj:
+                    if(llave in objetos_permitidos):
+                        print(str(contador + 1) + f", \t{llave:.<24s}: " 
+                              + str(personaje.cartera_obj[llave]) + " | \t\t" 
+                              + personaje.inventario[
+                                self.inventario_nombres.index(
+                                llave)].estadistica + " | \t" 
+                              + personaje.inventario[
+                                personaje.inventario_nombres.index(
+                                        llave)].boosteo)
+                        contador += 1
+                
+                indice_objeto = int(input())-1
+                for llave in personaje.cartera_obj:
+                    if(llave in objetos_permitidos):
+                        if(indice_objeto == 0):
+                            break
+                        indice_objeto -= 1
+                objeto = personaje.inventario[
+                        personaje.inventario_nombres.index(llave)]
+                
+                personaje.usar_objeto(objeto)
         elif(decision == "Apostar"):
             self.casino(personaje)
         elif(decision == "Comprar"):
