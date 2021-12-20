@@ -427,7 +427,7 @@ def anadir_obj_manual(nombre, personaje, cantidad = None):
     indice = personaje.ubicacion.zonas.index(personaje.zona)    
     if("sabia" in nombre):
         boosteo = sabiduria_del_mas_alla[dados(1, 
-                                             len(sabiduria_del_mas_alla))[0]-1]
+                                                len(sabiduria_del_mas_alla))-1]
         nombre = "Nota de consejo"
         objeto = transformar_objeto(nombre, cantidad)
         objeto.boosteo = boosteo
@@ -435,7 +435,7 @@ def anadir_obj_manual(nombre, personaje, cantidad = None):
         objeto = transformar_objeto(nombre, cantidad)
     
     if(objeto.nombre == "Nota de consejo" and "sabia" not in objeto.nombre):
-        objeto.boosteo = consejos[dados(1, len(consejos))[0]-1]
+        objeto.boosteo = consejos[dados(1, len(consejos))-1]
     
     personaje.ubicacion.objetos_activos[indice].append(objeto)
     personaje.ubicacion.cantidades[indice].append(1)
@@ -459,6 +459,8 @@ def dados(cantidad_dados: int, cantidad_caras: int):
     tiradas = []
     for indice in range (0, cantidad_dados):
         tiradas.append(np.random.randint(1, cantidad_caras + 1))
+    if(cantidad_dados == 1):
+        return tiradas[0]
     return tiradas
 
 def eliminar(lista):
@@ -499,7 +501,7 @@ def queso():
     print("Queso")
 
 def malo():
-    personaje_malo = personajes[dados(1, len(personajes))[0]-1]
+    personaje_malo = personajes[dados(1, len(personajes))-1]
     return personaje_malo
 
 def mezclar_listas(lista1, lista2, tipo):
@@ -548,7 +550,7 @@ def revisar_string(nombre):
     # Revisa el texto dividido por diagonales
     salida = ""
     cantidad_diagonales = nombre.count("/")
-    tirada = dados(1, cantidad_diagonales + 1)[0]
+    tirada = dados(1, cantidad_diagonales + 1)
     contador = 0
     for indice in range(0, len(nombre)):
         if(nombre[indice] == "/"):
@@ -635,7 +637,7 @@ def transformar_objeto(nombre: str, cantidad_manual = None):
             if(cantidad_manual != None):
                 cantidad = cantidad_manual
             if(nombre == "Nota de consejo"):
-                boosteo = consejos[dados(1, len(consejos))[0]-1]
+                boosteo = consejos[dados(1, len(consejos))-1]
             objeto = Objeto(nombre, boosteo, estadistica, peso, usos, 
                             cantidad, precio)
 #            print(objeto)

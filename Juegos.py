@@ -180,9 +180,9 @@ class Juego:
 #        print("----------------------------------------------Metodo escalera")
         print(f"{personaje.nombre}, estas en el nivel {nivel}")
         if(nivel == 0):
-            niv_maquina = gm.dados(1, 10)[0]
-            niv_nina = gm.dados(1, 20)[0]
-            niv_monstruo = gm.dados(1, 25)[0]
+            niv_maquina = gm.dados(1, 10)
+            niv_nina = gm.dados(1, 20)
+            niv_monstruo = gm.dados(1, 25)
         seleccion = input(f"{personaje.nombre}, ¿quieres bajar? (S/N)\n")
         if(seleccion == "S"):
             nivel += 1
@@ -194,7 +194,7 @@ class Juego:
         if(nivel == niv_monstruo):
             print("Has encontrado al monstruo!! :O")
             probabilidad = (nivel*100)/25
-            tirada = gm.dados(1, 100)[0]
+            tirada = gm.dados(1, 100)
             if(tirada <= probabilidad):
                 print("Empiezas a oir un llanto en la distancia...")
                 personaje.cambiar_hp(-2000)
@@ -251,7 +251,7 @@ class Juego:
         maximo_enemigos = len(enemigos)//4
         if(maximo_enemigos == 0):
             maximo_enemigos = 1
-        contador = minimo_enemigos + gm.dados(1, maximo_enemigos)[0]
+        contador = minimo_enemigos + gm.dados(1, maximo_enemigos)
         if(sum(cantidades) < contador):
             contador = sum(cantidades) + contador
         contador -= contador
@@ -262,7 +262,7 @@ class Juego:
         enemigos_activos = []
         enemigos_activos_aux = []
         for indice_enemigo in range(0, len(enemigos)):
-            enemigos_activos.append(enemigos[gm.dados(1, len(enemigos))[0]-1])
+            enemigos_activos.append(enemigos[gm.dados(1, len(enemigos))-1])
 #                print("contador: " + str(contador))
         
         for enemigo in enemigos_activos:
@@ -413,7 +413,7 @@ class Juego:
         elif(len(objetos) == 1):
             contador = 1
         else:
-            contador = gm.dados(1, len(objetos))[0]//2
+            contador = gm.dados(1, len(objetos))//2
 #        if(contador<1):
 #            contador+=1
 #       print("contador: " + str(contador))
@@ -512,7 +512,7 @@ class Juego:
                         zonas = personaje.ubicacion.zonas
                         zona = zonas.index(personaje.zona)
                         tirada = gm.dados(1, 
-                            len(personaje.ubicacion.enemigos_activos[zona]))[0]
+                               len(personaje.ubicacion.enemigos_activos[zona]))
                         print(f"{personaje.nombre}, " 
                               + f"has avistado a {tirada} enemigos...")
                         enemigos_vistos = []
@@ -533,7 +533,7 @@ class Juego:
                         ataque = personaje.atacar(enemigos_vistos, 1.5)
                         ataque[0].cambiar_hp(-ataque[1], personaje)
                         if(personaje.sabiduria < e_sabiduria+gm.dados(1, 
-                                    (e_sabiduria//2)+1)[0] or jefes_presentes):
+                                       (e_sabiduria//2)+1) or jefes_presentes):
                             p_pelea.append(personaje)
                             for asistente in personaje.asistentes:
                                 p_pelea.append(asistente)
@@ -554,7 +554,7 @@ class Juego:
                         personaje.moverse()
                     else:
                         print(f"{personaje.nombre} se esconde...")
-                        for i in range(tirada, tirada + gm.dados(1, 3)[0]):
+                        for i in range(tirada, tirada + gm.dados(1, 3)):
                             if(i>=len(personaje.ubicacion.enemigos_activos[
                                                                     zona])):
                                 break
@@ -588,17 +588,19 @@ class Juego:
             if(domar[0]):
                domar_nuevo.append(domar)
                self.peleas_doma = domar_nuevo
-#        print("-----------------"+ str(self.oso_marino.carisma))
         fin = False
         personajes_peleando = []
-#        print("Per")
+#        print("Resultados de peleas actuales")
 #        print(resultados)
+        
+        # Añadir a personajes que esten dentro de peleas
         for resultado in resultados:
             for personaje in resultado[1]:
-                print(personaje.nombre)
+                print(personaje.nombre + " esta peleando")
 #                print("-.-.-.-.-.-.-.-.-.")
                 personajes_peleando.append(personaje)
-#        print(per)
+                
+        # Ordenar personajes por su velocidad para turnos
         turnos = gm.personajes
         for personaje in range(len(gm.personajes)-1,0,-1):
             for indice in range(personaje):
@@ -608,15 +610,17 @@ class Juego:
                     turnos[indice] = turnos[indice + 1]
                     turnos[indice + 1] = temp
         
+        # Se crea turnos aux para voltear el orden de turnos originales
         turnos_aux = []
         for turno in range(len(turnos)-1, 0, -1):
             turnos_aux.append(turnos[turno])
         turnos_aux.append(turnos[0])
-        
         turnos = turnos_aux
         
         for turno in range(0, len(turnos)):
             personaje = turnos[turno]
+
+            # Añadir personajes que esten domando en lista
             if("Domando" in personaje.condicion):
                 print(personaje.nombre + "esta domando...")
                 for doma in range (0, len(self.peleas_doma)):
@@ -632,6 +636,7 @@ class Juego:
                         break
                 continue
             
+            # Realizar efectos y menu para turno de personaje
             personaje.stats()
             personaje.efecto() # efecto a personajes que no esten peleando
             self.menu(personaje)
@@ -641,6 +646,8 @@ class Juego:
         
         for personaje in gm.personajes:
             personaje.actualizar_stats()
+            
+            # Actualizar efectos de armas de carga
             for objeto in personaje.inventario_nombres:
                 if(objeto == "Pistola laser"):
                     indice = personaje.inventario_nombres.index("Pistola "
@@ -651,40 +658,42 @@ class Juego:
                             "Pistola laser mejorada")
                     personaje.inventario[indice].uso -= 2
             
+            # Añadir personajes en p_presentes de su zona actual
             zona = personaje.ubicacion.zonas.index(personaje.zona)
             if(personaje.ubicacion.enemigos_activos[zona] != []):
                 p_presentes.append(personaje)
 #                print(personaje.nombre)
 #                print(personaje.ubicacion.enemigos_activos)
                 
-            # revisar zonas vistas de todos
+            # Revisar zonas vistas de todos
             for zona in personaje.mapa[personaje.zona]:
                 zonas_vistas.append(zona)
             zonas_vistas.append(personaje.zona)
         
-        #Listas de enemigos activos de zonas vistas
+        # Listas de enemigos activos de zonas vistas
         for zona_vista in zonas_vistas:
             lugar_visto = gm.busca_lugar(zona_vista)
             zona = lugar_visto.index(zona_vista)
             #Obtener las jaulas de todos los tipos de jaula de la zona actual
-            jaulas_activas=[]
+            jaulas_activas = []
             for jaulas in lugar_visto[zona].jaulas:
                 for jaula in jaulas:
-                    if(gm.dados(1, 2)[0] == 1 and jaulas[jaula] != ""):
+                    if(gm.dados(1, 2) == 1 and jaulas[jaula] != ""):
                         jaulas_activas.append(jaula)
             
+            # Calcular si algun enemigo cae en trampa
             if(jaulas_activas != []):
                 for enemigo in lugar_visto.enemgios_activos()[zona]:
                     for trampa in jaulas_activas:
                         if((trampa.nombre == "Trampa de osos") 
                         and (enemigo in gm.atrapables_trampa_osos)):
-                                tirada = gm.dados(1, 10)[0]
+                                tirada = gm.dados(1, 10)
                         elif((trampa.nombre == "Jaula")
                         and (enemigo in gm.atrapables_medianos)):
-                                tirada = gm.dados(1, 10)[0]
+                                tirada = gm.dados(1, 10)
                         elif((trampa.nombre == "Jaula mas grande")
                         and (enemigo in gm.atrapables)):
-                                tirada = gm.dados(1, 20)[0]
+                                tirada = gm.dados(1, 20)
                         if(enemigo.sabiduria + tirada <= 20):
                             #Enemigo atrapado
                             enemigo.condicion.update({"Atrapado": 1})
@@ -695,11 +704,9 @@ class Juego:
         
         peleas = []
         zonas = []
-        
         if(p_presentes != []):
             for personaje in p_presentes:
                 zonas.append(personaje.zona)
-                
             zona_personaje = ""
             cantidad_peleas = 0  # Numero de pelea
             personajes_peleando = 0 # Cuantos personajes ha anadido a peleas
@@ -801,7 +808,7 @@ class Juego:
         usuario.inventario_nombres.pop(indice)
         usuario.inventario.pop(indice)
         
-        tirada = gm.dados(1, 4)[0]
+        tirada = gm.dados(1, 4)
         for indice_nombre in range(0, len(gm.Dfnombres_objetos)):
             if(gm.Dfnombres_objetos.iloc[indice_nombre,0] == nombre):
                 break
@@ -1354,7 +1361,7 @@ class Juego:
                 if(eleccion == "S"):
                     if("Confundido" in personaje.condicion):
                         resultado[0] = turnos_aux[
-                                gm.dados(1, len(turnos_aux))[0]-1]
+                                gm.dados(1, len(turnos_aux))-1]
                     print(f"{personaje.nombre} ataca a"
                           + " {resultado[0].nombre} con "
                           + f"{resultado[2].nombre} con una increible fuerza " 
@@ -1435,7 +1442,7 @@ class Juego:
                         personaje.inventario_nombres.index(llave)]
                 if("Confundido" in personaje.condicion):
                     objeto = personaje.inventario[gm.dados(1, 
-                                               len(personaje.inventario))[0]-1]
+                                                  len(personaje.inventario))-1]
                 #----------------------------------------Objeto seleccionado
                 revivir = False
                 if(objeto.nombre in gm.multiples):
@@ -1470,8 +1477,7 @@ class Juego:
                     
                 if(not revivir): # Uso normal de objeto, callate
                     if("Confundido" in personaje.condicion):
-                        seleccion = turnos_aux[gm.dados(1, len(
-                                                             turnos_aux))[0]-1]
+                        seleccion = turnos_aux[gm.dados(1, len(turnos_aux))-1]
                     if(seleccion == len(turnos_aux)): # Regresar
                         continue
                     elif(seleccion == -1): # Objetivo multiple
@@ -1529,7 +1535,7 @@ class Juego:
                             pelear = ((enemigo.salud/enemigo.salud_max) 
                                  * (enemigo.agresividad/agresividad_max) * 100)
                             if(enemigo.nombre in gm.domables 
-                               and gm.dados(1, 100)[0] <= pelear):
+                               and gm.dados(1, 100) <= pelear):
                                 if(personaje in turnos):
                                     indice = turnos.index(personaje)
                                     turnos.pop(indice)
@@ -1551,7 +1557,7 @@ class Juego:
                     else:
                         lugar = personaje.mapa[personaje.zona][
                            gm.dados(1, len(personaje.mapa[
-                                   personaje.zona]))[0]-1]
+                                   personaje.zona]))-1]
                         personaje.moverse(lugar)
                 else:
                     print("...y fracaso!! Como siempre")
@@ -1566,7 +1572,7 @@ class Juego:
                 capturar = ((enemigo.salud/enemigo.salud_max) 
                             * (enemigo.agresividad/agresividad_max) * 100)
                 if(enemigo.nombre in gm.domables 
-                   and gm.dados(1, 100)[0] <= capturar):
+                   and gm.dados(1, 100) <= capturar):
                     personaje.reclutar(enemigo)
             elif(decision == 7 and habilidad[0] == "7" 
                  or decision == 8 and habilidad[0] == "8"):

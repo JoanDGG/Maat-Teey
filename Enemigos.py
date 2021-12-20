@@ -39,21 +39,21 @@ class Enemigo(Individuo):
         #DEBUG
 #    print("----------------------------------------------------Metodo atacar")
         objetivo = ""
-        dano = self.fuerza + gm.dados(1, 10)[0]
+        dano = self.fuerza + gm.dados(1, 10)
         no_faccion = self.no_faccion(turnos_aux, p_presentes)
         if(self.inteligencia <= 9):
             #-------------------------------------ataque aleatorio a cualquiera
             objetivos = turnos_aux
             if(self.nombre in gm.jefes):
                 objetivos = p_presentes
-            tirada = gm.dados(1, len(objetivos))[0]
+            tirada = gm.dados(1, len(objetivos))
             objetivo = objetivos[tirada-1]
         elif(self.inteligencia > 9 and self.inteligencia <= 19):
             #------------------------------ataque aleatorio a rival o el ultimo
             objetivos = no_faccion
             if(self.nombre in gm.jefes):
                 objetivos = p_presentes
-            tirada = gm.dados(1, len(objetivos))[0]
+            tirada = gm.dados(1, len(objetivos))
             objetivo = objetivos[tirada-1]
             
             # Si eres jefe, revisa si el atacante es personaje, si no, no
@@ -95,7 +95,7 @@ class Enemigo(Individuo):
              and "Kaio ken" in objetivo.condicion):
             dano *= 2
         if("Cegado" in self.condicion):
-            tirada = gm.dados(1, 10)[0]
+            tirada = gm.dados(1, 10)
             if(tirada >= 8):
                 dano = 0
                 print(f"{self.nombre} ha fallado el ataque!")
@@ -134,14 +134,14 @@ class Enemigo(Individuo):
                 objetivos = turnos_aux
                 if(self.nombre in gm.jefes):
                     objetivos = p_presentes
-                tirada = gm.dados(1, len(objetivos))[0]
+                tirada = gm.dados(1, len(objetivos))
                 objetivo = objetivos[tirada-1]
             elif(self.inteligencia > 9 and self.inteligencia <= 19):
                 #--------------------------ataque aleatorio a rival o el ultimo
                 objetivos = no_faccion
                 if(self.nombre in gm.jefes):
                     objetivos = p_presentes
-                tirada = gm.dados(1, len(objetivos))[0]
+                tirada = gm.dados(1, len(objetivos))
                 objetivo = objetivos[tirada-1]
                 
                 # Si eres jefe, revisa si el atacante es personaje, si no, no
@@ -161,14 +161,14 @@ class Enemigo(Individuo):
                 for individuo in objetivos:
                     if(objetivo.carisma > individuo.carisma):
                         objetivo = individuo
-        tirada = gm.dados(1, 10)[0]
+        tirada = gm.dados(1, 10)
         if(tirada >= 5):
             dano += 5
         elif(tirada >= 3):
             dano += 3
         else:
             dano += 1
-        dano -= gm.dados(1, dano/10)[0]
+        dano -= gm.dados(1, dano/10)
         if(objetivo.nombre == "Mirek" and self.categoria == "Animal" 
            and objetivo.arbol["B1"][0] == 1):
             if(len(p_presentes) > 1):
@@ -187,7 +187,7 @@ class Enemigo(Individuo):
     
     def ataque_especial(self, p_presentes):
         print(f"{self.nombre} ha usado su habilidad especial!!")
-        dano = self.fuerza + gm.dados(1, 10)[0]
+        dano = self.fuerza + gm.dados(1, 10)
         if(len(p_presentes) == 1):
              dano *= 2
         
@@ -212,7 +212,7 @@ class Enemigo(Individuo):
         #DEBUG
 #    print("---------------------------------------------------Metodo decidir")
         porcentaje = 10 + 5*self.agresividad
-        tirada = gm.dados(1, 100)[0]
+        tirada = gm.dados(1, 100)
         presentes = []
         for turno in range(0, len(turnos_aux)):
             if(turnos_aux[turno] in p_presentes):
@@ -276,7 +276,7 @@ class Enemigo(Individuo):
             return self.mover_enemigo(turnos[personaje].zona)
         else:
             prob = (self.velocidad/turnos[personaje].velocidad)*100
-            tirada = gm.dados(1, 100)[0]
+            tirada = gm.dados(1, 100)
             if(tirada <= prob):
                 return self.mover_enemigo(turnos[personaje].zona)
             else:
@@ -306,7 +306,7 @@ class Enemigo(Individuo):
         self.condicion.update({"Huyendo": 1})
         origen = gm.busca_lugar(zona)
         zonas = gm.mapa_master[zona]
-        tirada = gm.dados(1, len(zonas))[0]
+        tirada = gm.dados(1, len(zonas))
         destino = gm.busca_lugar(zonas[tirada])
         origen.enemigos_activos[origen.indice_zona(zona)].remove(self)
         destino.enemigos_activos[destino.indice_zona(zonas[tirada

@@ -36,23 +36,23 @@ def main():
     #print(gm.personaje_malo)
 
 #    gm.generar_carneables()
-    juego = Juego()
+    partida = Juego()
     
-    juego.generar_objetos_zona(gm.campamento, "Cabana")
-    juego.generar_objetos_zona(gm.campamento, "Comedor")
+    partida.generar_objetos_zona(gm.campamento, "Cabana")
+    partida.generar_objetos_zona(gm.campamento, "Comedor")
     
-    juego.menu(gm.mirek)
+    partida.menu(gm.mirek)
     
 # =============================================================================
 # PENDIENTES:
 # =============================================================================
 
     # -----------------------Generales:
+    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
     # Anadir funciones
     # Reducir funciones
     # Comentar TODO
     # Arreglar docs
-    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
     # Modo admin y funciones para todo(?)
     # A prueba de bobos
     # Mapa
@@ -82,10 +82,6 @@ def main():
     # Juegos.escalera no se usa en Personajes.moverse()
     # Errores desconocidos por index error: (no pasa siempre)
         # lugar.objetos_activos[indice].append(objeto) (Juegos, 431)
-        
-    
-    # Cambiar nombre variables Juegos COMPLETADO
-    # Llamar a casino COMPLETADO
 
 # =============================================================================
 #     Pendientes por probar:
@@ -357,14 +353,16 @@ def main():
 #    partida.generar_enemigos_zona(lugar = campamento, zona = "Almacen")
 #    partida.generar_enemigos_zona(lugar = campamento, zona = "Comedor")
 #    partida.generar_enemigos_zona(lugar = campamento, zona = "Puesto de seguridad")
-#    
+
+# =============================================================================
 #    fin = False
 #    res = []
 #    while(not fin):
 #        res = partida.jugar(res)
 #        if(type(res) != list):
-#            fin = True
-    
+#            fin = True  
+# =============================================================================
+
 #    Juego.generar_objetos_zona(viaje_astral, "cabana")
     
     print("-----------------------------------------------------------PRUEBAS")
