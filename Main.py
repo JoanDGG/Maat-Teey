@@ -2,7 +2,6 @@ import Game_Manager as gm
 from Personajes import Personaje
 from Juegos import Juego
 
-
 def main():
 
     gm.mirek   = Personaje(27, 14, 13, 15, 16, 18, "Mirek", {"Saludable": 1},
@@ -36,6 +35,7 @@ def main():
     #print(gm.personaje_malo)
 
 #    gm.generar_carneables()
+    
     partida = Juego()
     
     partida.generar_objetos_zona(gm.campamento, "Cabana")
@@ -82,6 +82,8 @@ def main():
     # Juegos.escalera no se usa en Personajes.moverse()
     # Errores desconocidos por index error: (no pasa siempre)
         # lugar.objetos_activos[indice].append(objeto) (Juegos, 431)
+    # Error desconocido por ValueError:
+        # 'Hielo' not in list (Personajes, anadir_objeto, 472)
 
 # =============================================================================
 #     Pendientes por probar:
