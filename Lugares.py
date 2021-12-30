@@ -28,5 +28,32 @@ class Lugar:
     def indice_zona(self, zona):
         indice = self.zonas.index(zona)
         return indice
+    
+    def __str__(self):
+        texto = f"\n{self.nombre:.^50}"
+        texto += "\n Zonas:\n"
+        texto += ", ".join(self.zonas)
+        texto += "\n Jaulas:\n"
+        jaulas = [[self.jaulas[jaula][jaula_enemigo].nombre 
+                   for jaula_enemigo in jaula] for jaula in self.jaulas]
+#        print(jaulas)
+        texto += " | ".join([", ".join(jaulas[zona]) 
+                                        for zona in range(0, len(self.zonas))])
+        texto += "\n Enemigos activos:\n"
+        enemigos = [[enemigo.nombre 
+                  for enemigo in self.enemigos_activos[self.indice_zona(zona)]]
+                  for zona in self.zonas]
+#        print(enemigos)
+        texto += " | ".join([", ".join(enemigos[zona]) 
+                                        for zona in range(0, len(self.zonas))])
+        texto += "\n Objetos activos:\n"
+        objetos = [[objeto.nombre 
+                 for objeto in self.objetos_activos[self.indice_zona(zona)]]
+                 for zona in self.zonas]
+#        print(objetos)
+        texto += " | ".join([", ".join(objetos[zona]) 
+                                        for zona in range(0, len(self.zonas))])
+        texto += "\n"
+        return texto
 
 #lug = Lugar("A", [], [], [], [], [], [], [])

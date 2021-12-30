@@ -1012,32 +1012,29 @@ class Personaje(Individuo):
                 
     def desequipar(self):
         print("Que objeto quieres desequiparte?")
-        for equipo in range(0, len(self.equipo_nombres)):
-            print(f"{equipo+1}: {self.equipo_nombres[equipo]} | "
-                  + f"{self.equipo[equipo].estadistica}: "
-                  + f"{self.equipo[equipo].boosteo}")
+        self.ver_equipo()
         print(f"{len(self.equipo_nombres)+1}: Salir")    
-        objeto = int(input())
-        if(objeto == len(self.equipo_nombres)+1):
+        objeto_indice = int(input())
+        if(objeto_indice == len(self.equipo_nombres)+1):
             return False
-        if(self.equipo[objeto-1].estadistica == "F"):
-            self.fuerza -= self.equipo[objeto-1].boosteo
-        elif(self.equipo[objeto-1].estadistica == "R"):
-            self.resistencia -= self.equipo[objeto-1].boosteo
-        elif(self.equipo[objeto-1].estadistica == "C"):
-            self.carisma -= self.equipo[objeto-1].boosteo
-        elif(self.equipo[objeto-1].estadistica == "I"):
-            self.inteligencia -= self.equipo[objeto-1].boosteo
-        elif(self.equipo[objeto-1].estadistica == "S"):
-            self.sabiduria -= self.equipo[objeto-1].boosteo
-        elif(self.equipo[objeto-1].estadistica == "V"):
+        objeto = self.equipo[objeto_indice-1]
+        if(objeto.estadistica == "F"):
+            self.fuerza -= objeto.boosteo
+        elif(objeto.estadistica == "R"):
+            self.resistencia -= objeto.boosteo
+        elif(objeto.estadistica == "C"):
+            self.carisma -= objeto.boosteo
+        elif(objeto.estadistica == "I"):
+            self.inteligencia -= objeto.boosteo
+        elif(objeto.estadistica == "S"):
+            self.sabiduria -= objeto.boosteo
+        elif(objeto.estadistica == "V"):
             if(self.zona in gm.agua):
-                self.velocidad -= self.equipo[objeto-1].boosteo
-        print(f"{self.nombre} se ha quitado {equipo.nombre}")
-        self.quitar_equipo(equipo)
-        self.equipo.pop(objeto-1)
-        self.equipo_nombres.pop(objeto-1)
-        
+                self.velocidad -= objeto.boosteo
+        print(f"{self.nombre} se ha quitado {objeto.nombre}")
+        self.quitar_equipo(objeto)
+        self.equipo.pop(objeto_indice-1)
+        self.equipo_nombres.pop(objeto_indice-1)
         self.actualizar_stats()
         print("--------------------------------------------------------------")
         return True
@@ -1161,7 +1158,7 @@ class Personaje(Individuo):
         if("Shaed" in objeto.nombre):
             self.condicion.update({"Invisible": 10})
         self.anadir_equipo(objeto, indice)
-        
+        self.ver_equipo()
         self.actualizar_stats()
         print("--------------------------------------------------------------")
     
@@ -2183,6 +2180,15 @@ class Personaje(Individuo):
             self.inventario.pop(indice)
             self.inventario_nombres.pop(indice)
             return True
+    
+    def ver_equipo(self):
+        if(len(self.equipo_nombres) == 0):
+            print("No tiene nada equipado de momento caballero")
+        else:
+            for equipo in range(0, len(self.equipo_nombres)):
+                print(f"{equipo+1}: {self.equipo_nombres[equipo]} | "
+                      + f"{self.equipo[equipo].estadistica}: "
+                      + f"{self.equipo[equipo].boosteo}")
 
 from Juegos import Juego
 import Game_Manager as gm

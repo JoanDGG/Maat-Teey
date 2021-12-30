@@ -417,8 +417,7 @@ class Juego:
 #        if(contador<1):
 #            contador+=1
 #       print("contador: " + str(contador))
-            
-        for indice in range(0, len(objetos)):
+        for indice in range(0, len(lugar.objetos_activos)):
             for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
                 if(contador<=0):
                     break
@@ -428,10 +427,14 @@ class Juego:
                 != "Fragmento de Libro de Secretos")):
                     nombre = objetos[indice]
                     objeto = gm.transformar_objeto(nombre, cantidades[indice])
+#                    print(indice)
+#                    print(lugar.objetos_activos)
                     lugar.objetos_activos[indice].append(objeto)
+#                    print(lugar.objetos_activos)
 #                    print(objeto)
                     contador -= 1
                     break
+#        print(lugar.objetos_activos)
 
     def iniciar_pelea(self, p_presentes, e_presentes, omitidos=[], defensas=[], 
                    turnos=[], personajes_peleando=[], victima = None, mult =1):
@@ -619,6 +622,8 @@ class Juego:
         
         for turno in range(0, len(turnos)):
             personaje = turnos[turno]
+            
+#            print(personaje.ubicacion)
 
             # Añadir personajes que esten domando en lista
             if("Domando" in personaje.condicion):
@@ -639,7 +644,10 @@ class Juego:
             # Realizar efectos y menu para turno de personaje
             personaje.stats()
             personaje.efecto() # efecto a personajes que no esten peleando
-            self.menu(personaje)
+            print(f"Turno actual: {personaje.nombre:~^18s}")
+            accion = self.menu(personaje)
+            if(accion == "Salir"):
+                return True
             
         p_presentes = []
         zonas_vistas = []
@@ -673,10 +681,10 @@ class Juego:
         # Listas de enemigos activos de zonas vistas
         for zona_vista in zonas_vistas:
             lugar_visto = gm.busca_lugar(zona_vista)
-            zona = lugar_visto.index(zona_vista)
+            zona = lugar_visto.zonas.index(zona_vista)
             #Obtener las jaulas de todos los tipos de jaula de la zona actual
             jaulas_activas = []
-            for jaulas in lugar_visto[zona].jaulas:
+            for jaulas in lugar_visto.jaulas:
                 for jaula in jaulas:
                     if(gm.dados(1, 2) == 1 and jaulas[jaula] != ""):
                         jaulas_activas.append(jaula)
@@ -697,9 +705,9 @@ class Juego:
                         if(enemigo.sabiduria + tirada <= 20):
                             #Enemigo atrapado
                             enemigo.condicion.update({"Atrapado": 1})
-                            lugar_visto[zona].jaulas[
+                            lugar_visto.jaulas[
                                     trampa.nombre][trampa] = enemigo.nombre
-                            lugar_visto[zona].objetos_activos.remove(trampa)
+                            lugar_visto.objetos_activos.remove(trampa)
                             break
         
         peleas = []
@@ -853,7 +861,8 @@ class Juego:
         lista_menu = [["Administrar habilidades", "Curarse", "Esperar", 
                        "Moverse", "Usar habilidad", "Ver status"], 
                      ["Buscar", "Explorar"], 
-                     ["Craftear", "Desequipar", "Tirar objeto", "Usar objeto"],
+                     ["Craftear", "Ver equipo", "Desequipar", "Tirar objeto", 
+                      "Usar objeto"],
                      [],
                      ["Guardar", "Guardar y salir", "Salir"]]
         
@@ -924,6 +933,8 @@ class Juego:
             personaje.explorar()
         elif(decision == "Craftear"):
             personaje.craftear()
+        elif(decision == "Ver equipo"):
+            personaje.ver_equipo()
         elif(decision == "Desequipar"):
             personaje.desequipar()
         elif(decision == "Tirar objeto"):

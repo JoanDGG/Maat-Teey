@@ -33,22 +33,24 @@ def main():
     #gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, gm.master, gm.ninja]
     gm.personaje_malo = gm.malo()
     #print(gm.personaje_malo)
-
-#    gm.generar_carneables()
     
     partida = Juego()
     
     partida.generar_objetos_zona(gm.campamento, "Cabana")
     partida.generar_objetos_zona(gm.campamento, "Comedor")
     
-    partida.menu(gm.mirek)
+    fin = False
+    res = []
+    while(not fin):
+        res = partida.jugar(res)
+        if(type(res) != list):
+            fin = True
     
 # =============================================================================
 # PENDIENTES:
 # =============================================================================
 
     # -----------------------Generales:
-    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo)
     # Anadir funciones
     # Reducir funciones
     # Comentar TODO
@@ -62,10 +64,8 @@ def main():
         # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
             
     # ---------------------Implementar:
-    # Ver equipo (print del inicio de desequipar)
     # Generador de nombres 2000
     # Metodo guardar y cargar
-    # str Lugares
     # Dialogo intenso sala misteriosa
     # Descripcion perra de wendigo
     # Sabiduria del mas alla
@@ -89,6 +89,10 @@ def main():
 #     Pendientes por probar:
 # =============================================================================
     
+    # Revisar el resto de metodo jugar (probar con varios personajes un ciclo) COMPLETADO
+    # Ver equipo (print del inicio de desequipar) COMPLETADO
+    # str Lugares COMPLETADO
+
     # Jaula 
     
     # Terminar domar
