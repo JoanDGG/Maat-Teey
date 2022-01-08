@@ -21,16 +21,17 @@ def main():
                            0, 10, gm.arbol_norman)
     
     gm.master  = Personaje(420, 5, 69, 69, 69, 69, "Tu dios", {"Saludable": 1},
-                           69, [], gm.bosque, "Aire libre", 69, gm.mapa_master,
+                           69, [], gm.pueblo, "Ayuntamiento", 69, gm.mapa_master,
                            666, 420, gm.arbol_norman)
     gm.ninja   = Personaje(420, 69, 69, 69, 69, 69, "Tu segundo dios",
-                           {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
+                           {"Saludable": 1}, 69, [], gm.edificio, "Entrada",
                            69, gm.mapa_master, 666, 420, gm.arbol_norman)
     
-    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman]
-    #gm.personajes = [gm.master, gm.ninja]
-    #gm.personajes = [gm.ninja]
-    #gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, gm.master, gm.ninja]
+#    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman]
+#    gm.personajes = [gm.master, gm.ninja]
+#    gm.personajes = [gm.ninja]
+    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, 
+                     gm.master, gm.ninja]
     gm.personaje_malo = gm.malo()
     #print(gm.personaje_malo)
     
@@ -64,7 +65,6 @@ def main():
         # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
             
     # ---------------------Implementar:
-    # Generador de nombres 2000
     # Metodo guardar y cargar
     # Dialogo intenso sala misteriosa
     # Descripcion perra de wendigo
@@ -75,20 +75,18 @@ def main():
         #turno cuando sea menor que el turno de todos (+1)
         
     # ------------------------Corregir:
-    # Enemigos.ataque_carisma es recursivo
-    # Personajes.arbol_habilidades es recursivo
-    # Personajes.equipar es recursivo
-    # Juegos.casino es recursivo
-    # Juegos.escalera no se usa en Personajes.moverse()
-    # Errores desconocidos por index error: (no pasa siempre)
-        # lugar.objetos_activos[indice].append(objeto) (Juegos, 431)
-    # Error desconocido por ValueError:
-        # 'Hielo' not in list (Personajes, anadir_objeto, 472)
 
 # =============================================================================
 #     Pendientes por probar:
 # =============================================================================
     
+    # Generador de nombres 2000
+    # Juegos.casino es recursivo COMPLETADO
+    # Juegos.escalera no se usa en Personajes.moverse() COMPLETADO
+    # Error desconocido por ValueError: COMPLETADO
+        # 'Hielo' not in list (Personajes, anadir_objeto, 472)
+    # Errores desconocidos por index error: (no pasa siempre) COMPLETADO
+        # lugar.objetos_activos[indice].append(objeto) (Juegos, 431)
     # Revisar el resto de metodo jugar (probar con varios personajes un ciclo) COMPLETADO
     # Ver equipo (print del inicio de desequipar) COMPLETADO
     # str Lugares COMPLETADO

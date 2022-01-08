@@ -17,13 +17,14 @@ class Juego:
         print(f"-------- {personaje.nombre}, bienvenido al casino!! -------- "
               + f"Premio actual: {premio}")
         print("¿Que quieres hacer?")
-        seleccion = int(input("1: Jugar una ronda\n2: Ver premios\n3:Salir\n"))
+        seleccion =int(input("1: Jugar una ronda\n2: Ver premios\n3: Salir\n"))
         if(premio <= -500):
             seleccion = 3
         if(seleccion == 1):
             apuesta = int(input("\n----- A jugar! ----- "
                                 + f"Premio actual: {premio}"
-                                + "\n¿Cuánto deseas apostar?\n"))
+                                + "\n¿Cuánto deseas apostar?"))
+            print(f" Saldo: {personaje.cartera}\n")
             premio -= apuesta    
             
             lista1 = [1, 2, 3, 4, 5]
@@ -96,6 +97,7 @@ class Juego:
                   + "\n 1 - 21    puntos: apuesta x 1"
                   + "\n 0         puntos: 0\n")
         elif(seleccion == 3):
+            personaje.condicion.pop("Apostando")
             presupuesto = personaje.cartera
             if(premio >= 0):
                 personaje.anadir_obj(premio)
@@ -127,7 +129,8 @@ class Juego:
                 else:
                     personaje.anadir_obj(-premio)
             return True
-        self.casino(personaje, premio)
+
+        personaje.condicion.update({"Apostando": premio})
         
     def domar(self, personaje, enemigo, jaula, defensas, omitidos, historial):
         personaje.condicion.update({"Domando": 1})
@@ -186,9 +189,15 @@ class Juego:
         seleccion = input(f"{personaje.nombre}, ¿quieres bajar? (S/N)\n")
         if(seleccion == "S"):
             nivel += 1
+            print(f"Bajaste al nivel {nivel}...\n")
         elif(seleccion == "N"):
-            print("Has vuelto al inicio de las escaleras")
-            nivel = 0
+            if(nivel == 0):
+                personaje.moverse(personaje.lugar_previo)
+                personaje.condicion.pop("Escalando")
+                return False
+            else:
+                print("Has vuelto al inicio de las escaleras")
+                nivel = 0
         else:
             print("Tas tonto shavo")
         if(nivel == niv_monstruo):
@@ -218,19 +227,21 @@ class Juego:
             seleccion = input("Has encontrado la sala de la maquina!! "
                       + "¿Quieres entrar? (S/N)\n")
             if(seleccion == "S"):
-                personaje.moverse(gm.edificio, "Maquina")
+                personaje.moverse("Maquina")
                 personaje.usar_maquina()
-        return [personaje, nivel, niv_maquina, niv_nina, niv_monstruo]
+        
+        personaje.condicion.update({"Escalando": [nivel, niv_maquina, 
+                                                  niv_nina, niv_monstruo]})
 
     def generar_enemigos_zona(self, lugar:Lugar, zona:str):
         #DEBUG
 #        print("---------------------------------Metodo generar enemigos zona")
-        self.generar_jefes(lugar, zona)
+        self.generar_jefes(self, lugar, zona)
         indice = lugar.zonas.index(zona)
         enemigos, cantidades = gm.mezclar_listas(lugar.enemigos[indice],
                                           lugar.cantidades_enemigos[indice], 1)
-        lugar.enemigos_zona_s(enemigos, zona)
-        lugar.cantidades_enemigos_zona_s(cantidades, zona)
+        lugar.enemigos_zona_setter(enemigos, zona)
+        lugar.cantidades_enemigos_zona_setter(cantidades, zona)
         from Enemigos import Enemigo
         
         enemigos_aux = []
@@ -271,8 +282,8 @@ class Juego:
             else:
                 contador -= 1
         enemigos_activos = enemigos_activos_aux
-        print(enemigos_activos)
-        print(contador)
+#        print(enemigos_activos)
+#        print(contador)
         while(contador > 0):
             for indice in range(0, len(enemigos_activos)):
                 for indice_nombre in range (0, len(gm.Dfnombres_enemigos)):
@@ -329,7 +340,7 @@ class Juego:
                 gm.objetos_lugares.index(lugar)]
         from Enemigos import Enemigo
         
-        print(lugar.enemigos[indice_zona])
+#        print(lugar.enemigos[indice_zona])
         
         for enemigo in lugar.enemigos[indice_zona]:
             if(enemigo in gm.jefes_no_jefes):
@@ -341,7 +352,7 @@ class Juego:
             if(abs(contador) > len(jefes)):
                 break
             if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
-                and (lugar_original.cantidades()[indice_zona][contador] > 0) 
+                and (lugar_original.cantidades[indice_zona][contador] > 0) 
                 and (not gm.repetido(lugar, indice_zona, 
                                 gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
                 nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
@@ -408,33 +419,36 @@ class Juego:
 #        print(len(objetos))
 #        print(len(lugar.objetos_activos))
         
+#        if(contador<1):
+#            contador+=1
+#       print("contador: " + str(contador))
+        
         if(len(objetos) == 0):
             contador = 0
         elif(len(objetos) == 1):
             contador = 1
         else:
             contador = gm.dados(1, len(objetos))//2
-#        if(contador<1):
-#            contador+=1
-#       print("contador: " + str(contador))
-        for indice in range(0, len(lugar.objetos_activos)):
-            for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
-                if(contador<=0):
-                    break
-                if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == objetos[
-                indice]) and (cantidades[indice] > 0.0) 
-                and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
-                != "Fragmento de Libro de Secretos")):
-                    nombre = objetos[indice]
-                    objeto = gm.transformar_objeto(nombre, cantidades[indice])
+
+        for indice_nombre in range (0, len(gm.Dfnombres_objetos)):
+            if(contador<=0):
+                break
+            if((gm.Dfnombres_objetos.iloc[indice_nombre,0] == objetos[
+            indice]) and (cantidades[indice] > 0.0) 
+            and (gm.Dfnombres_objetos.iloc[indice_nombre,0] 
+            != "Fragmento de Libro de Secretos")):
+                nombre = objetos[indice]
+                objeto = gm.transformar_objeto(nombre, cantidades[indice])
 #                    print(indice)
 #                    print(lugar.objetos_activos)
-                    lugar.objetos_activos[indice].append(objeto)
+                lugar.objetos_activos[indice].append(objeto)
 #                    print(lugar.objetos_activos)
-#                    print(objeto)
-                    contador -= 1
-                    break
-#        print(lugar.objetos_activos)
+#                print(objeto)
+#                print(f" Cantidad: {int(cantidades[indice])}")
+                contador -= 1
+                break
+#        for objeto in lugar.objetos_activos[indice]:
+#            print(objeto)
 
     def iniciar_pelea(self, p_presentes, e_presentes, omitidos=[], defensas=[], 
                    turnos=[], personajes_peleando=[], victima = None, mult =1):
@@ -623,7 +637,7 @@ class Juego:
         for turno in range(0, len(turnos)):
             personaje = turnos[turno]
             
-#            print(personaje.ubicacion)
+            print(personaje.ubicacion)
 
             # Añadir personajes que esten domando en lista
             if("Domando" in personaje.condicion):
@@ -639,6 +653,16 @@ class Juego:
                                   self.peleas_doma[doma][5], 
                                   self.peleas_doma[doma][6])
                         break
+                continue
+            elif("Apostando" in personaje.condicion):
+                self.casino(personaje, personaje.condicion["Apostando"])
+                continue
+            elif("Escalando" in personaje.condicion):
+                (nivel, niv_maquina, 
+                 niv_nina, niv_monstruo) = personaje.condicion["Escalando"]
+                
+                self.escalera(personaje, nivel, niv_maquina, 
+                               niv_nina, niv_monstruo)
                 continue
             
             # Realizar efectos y menu para turno de personaje
@@ -866,7 +890,7 @@ class Juego:
                      [],
                      ["Guardar", "Guardar y salir", "Salir"]]
         
-        if(personaje.zona == "Casino"):
+        if(personaje.zona == "Ayuntamiento"):
             lista_menu[3].append("Apostar")
         elif(personaje.zona == "Mercado"):
             lista_menu[3].append("Comprar")

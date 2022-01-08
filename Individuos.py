@@ -62,7 +62,10 @@ class Individuo:
         for condicion in self.condicion:
             if(condicion != "Saludable" and condicion != "Muerto" 
                and condicion != "Bloqueado" 
-               and condicion != "Temporal" and condicion != "Super Sayain"):
+               and condicion != "Temporal" 
+               and condicion != "Escalando"
+               and condicion != "Apostando" 
+               and condicion != "Super Sayain"):
                 self.condicion[condicion] -= 1
             if(self.condicion[condicion] == 0 or condicion == "Bloqueado"):
                 if(condicion == "Indefenso"):

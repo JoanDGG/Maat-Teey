@@ -214,7 +214,7 @@ mapa_master  = {#----------------------------------------------------Campamento
                 "Casa ogro": ["Exterior", "Entrada mina pantano"],
                 "Entrada mina pantano": ["Casa ogro", "Tunel salida pantano"],
                 #-------------------------------------------------Fondo del mar
-                "Submarino": ["Entrada", "Profundidades"],
+                "Submarino": ["Profundidades"],
                 "Profundidades": ["Submarino", "Mar"],
                 "Mar": ["Profundidades", "Bahia","Carguero","Entrada mistica"],
                 #-------------------------------------------------------Mercado
@@ -455,7 +455,9 @@ def dados(cantidad_dados: int, cantidad_caras: int):
     #DEBUG
 #    print("-----------------------------------------------------Metodo dados")
     if(cantidad_dados == 0):
-        return 0
+        return 1
+    if(cantidad_caras == 1):
+        return 1
     tiradas = []
     for indice in range (0, cantidad_dados):
         tiradas.append(np.random.randint(1, cantidad_caras + 1))

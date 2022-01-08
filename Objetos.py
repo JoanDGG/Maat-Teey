@@ -18,8 +18,8 @@ class Objeto:
     def __str__(self):
         texto = (f"\n\t{self.nombre} \n "
                 +f"Boosteo: {self.boosteo} \t| Estadistica: {self.estadistica}"
-                +f" \nPeso: {self.peso} \t| Usos: {self.usos} \n "
-                +f"Cantidad: {self.cantidad}\t| Precio: {self.precio}")
+                +f"\n Peso: {self.peso} \t| Usos: {self.usos} "
+                +f"\t| Precio: {self.precio}")
         return texto
 
 # =============================================================================

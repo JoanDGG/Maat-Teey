@@ -1,5 +1,6 @@
 # -*- coding: ISO-8859-1 -*-
 from Enemigos import Enemigo
+import random
 
 class Asistente(Enemigo):
     
@@ -13,6 +14,14 @@ class Asistente(Enemigo):
         self.dueno = dueno
         self.apodo = apodo
 
+    def bautizo(self):
+        archivo = open("Nombres.txt", "r")
+        texto = archivo.read()
+        nombres = texto.split(",")
+        archivo.close()
+        nombre = random.choice(nombres).split()[0].replace('"', '')
+        self.apodo = nombre
+    
     def is_ded(self):
         self.dueno.asistentes.remove(self)
         mensaje = input("Escribe un mensaje de despedida "

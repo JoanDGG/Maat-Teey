@@ -542,7 +542,7 @@ class Personaje(Individuo):
                 self.arbol_habilidades()
         elif(self.arbol[seleccion_habilidad][1] > self.puntos_habilidad):
             print("No tienes puntos de habilidad suficientes")
-            self.arbol_habilidades()
+#            self.arbol_habilidades()
         else:
             print(f"Has desbloqueado {self.arbol[seleccion_habilidad][2]}!!")
             self.arbol[seleccion_habilidad][0] = 1
@@ -665,7 +665,6 @@ class Personaje(Individuo):
                 elif(ataque == 2):
                     dano -= gm.Dfpersuadir_enemigos.iloc[nombre,0]
         return[enemigo, dano]
-        
     
     def buscar(self, objeto = None, zona = None):
         #DEBUG
@@ -781,8 +780,8 @@ class Personaje(Individuo):
             if(probabilidad >= 15):
                 objeto_buscado = objeto
         
-        print(objeto_buscado)
-        print(objeto_buscado.nombre)
+        print(probabilidad)
+        print(objeto_buscado, "\n")
         if(objeto_buscado == ""):
             print("Que mala suerte shavo, no encontraste el amor de tu bida")
         elif(objeto.nombre == "Dinero"):
@@ -793,6 +792,10 @@ class Personaje(Individuo):
                 if(objeto.nombre == lugar.objetos_activos[indice_zona][
                         indice_objeto]):
                     break
+            
+            print("Quedan "
+                  + f"{int(lugar.cantidades[indice_zona][indice_objeto])-1}"
+                  + f" {objeto.nombre}s")
             
             if(self.ubicacion != lugar):
                 lugar.cantidades[indice_zona][indice_objeto] -= 1
@@ -1290,15 +1293,17 @@ class Personaje(Individuo):
             if(nueva_zona not in zonas_vistas):
                 for indice_lugar in range(0, len(gm.objetos_lugares)):
                     zonas_lugar = gm.objetos_lugares[indice_lugar].zonas
-                    print(nueva_zona)
-                    print(zonas_lugar)
+#                    print(nueva_zona)
+#                    print(zonas_lugar)
                     if(nueva_zona in zonas_lugar):
                         zona_ubicacion = gm.objetos_lugares[indice_lugar]
                         break
-                Juego.generar_enemigos_zona(zona_ubicacion, nueva_zona)
-                Juego.generar_objetos_zona(zona_ubicacion, nueva_zona)
+#                print(type(zona_ubicacion))
+#                print(type(nueva_zona))
+                Juego.generar_enemigos_zona(Juego, zona_ubicacion, nueva_zona)
+                Juego.generar_objetos_zona(Juego, zona_ubicacion, nueva_zona)
         
-        if(lugar.nombre == "Edificio Abandonado"):
+        if(zona == "Entrada"):
             if("Submarino" not in [
                     x for v in values for x in v if type(v)==list] 
                     or "Submarino" not in values):
@@ -1308,12 +1313,18 @@ class Personaje(Individuo):
                 self.viaje_astral = True
                 lugar = gm.viaje_astral
                 zona = "camion" #----------------------------------------------
-        if(zona == "Profundidades" 
+        elif(zona == "Profundidades" 
            and "Pin de bob esponja" in self.equipo_nombres):
             print("Escuchas a lo lejos una voz que dice: ""EsToY LiStO"" "
                   + "seguido de una risa infantil...")
-        if(zona == "Sala principal"):
+        elif(zona == "Sala principal"):
             gm.dificultad = 2
+        elif(zona == "Escalera"):
+            niv_maquina = gm.dados(1, 10)
+            niv_nina = gm.dados(1, 20)
+            niv_monstruo = gm.dados(1, 25)
+            self.condicion.update({"Escalando": [0, niv_maquina, niv_nina, 
+                                                 niv_monstruo]})
         
         for zona_adyacente_futura in self.mapa[zona]:
             zonas_vistas.append(zona_adyacente_futura)
@@ -1331,7 +1342,7 @@ class Personaje(Individuo):
                 gm.eliminar(ubicacion_adyacente.objetos_activos[indice_zona])
                 ubicacion_adyacente.enemigos_activos[indice_zona] = []
                 ubicacion_adyacente.objetos_activos[indice_zona] = []
-                print(f"enemigos y objetos eliminados de: {zona_adyacente}")
+#                print(f"enemigos y objetos eliminados de: {zona_adyacente}")
         
         if(self.zona in gm.zonas_agua 
            and "Traje de buzo mejorado" in self.equipo_nombres 
@@ -1344,7 +1355,7 @@ class Personaje(Individuo):
             self.velocidad += self.equipo[self.equipo_nombres.index(
                 "Traje de buzo mejorado")].boosteo
         
-        print(lugar.jaulas)
+#        print(lugar.jaulas)
         
         self.ubicacion = lugar
         self.zona = zona
@@ -1392,18 +1403,20 @@ class Personaje(Individuo):
         # reclutado
         print("Asistente adquirido!")
         from Enemigos import Enemigo
+        renombrar = False
         if(type(asistente) == Enemigo):
             decision = input("Quieres ponerle un nombre?(S/N)\n")
             if(decision == "S"):
                 nombre = input("Como quieres llamarlo?\n")
-    #        else:
-                #Generador de nombres 2000
+            else:
+#                Generador de nombres 2000
+                renombrar = True
         elif(issubclass(asistente, Enemigo)): # Si ya tiene apodo
             nombre = asistente.apodo
         print(f"Felicidades! {nombre} se ha unido a tu aventura!!")
         agresividad_max = (((Juego.oso_marino.carisma 
                              + Juego.oso_marino.fuerza)
-                           -(Juego.oso_marino.inteligencia 
+                             - (Juego.oso_marino.inteligencia 
                              + Juego.oso_marino.resistencia))+4)
         suma = (asistente.salud_max + asistente.fuerza + asistente.resistencia
         + asistente.carisma_max + asistente.inteligencia + asistente.sabiduria)
@@ -1433,7 +1446,10 @@ class Personaje(Individuo):
                           asistente.dropeo, asistente.categoria,
                           asistente.rango, asistente.cantidad,
                           asistente.zona, self, nombre)
+        if(renombrar):
+            nuevo_asistente.bautizo()
         self.asistentes.append(nuevo_asistente)
+        
         return True
     
     def subir_nivel(self):
