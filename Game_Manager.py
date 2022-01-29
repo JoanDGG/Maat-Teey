@@ -438,7 +438,7 @@ def anadir_obj_manual(nombre, personaje, cantidad = None):
         objeto.boosteo = consejos[dados(1, len(consejos))-1]
     
     personaje.ubicacion.objetos_activos[indice].append(objeto)
-    personaje.ubicacion.cantidades[indice].append(1)
+    personaje.ubicacion.cantidades_objetos[indice].append(1)
     personaje.ubicacion.objetos[indice].append(objeto.nombre)
     personaje.anadir_obj(objeto)
     return True
@@ -492,8 +492,6 @@ def generar_lugar(nombre, zonas):
                   separar("objetos", nombre, zonas, "elementos"), 
                   separar("objetos", nombre, zonas, "cantidades"), 
                   enemigos_activos, objetos_activos)
-    for i in range (0, len(zonas)):
-        lugar.jaulas.append({})
     return lugar
 
 def jamon():

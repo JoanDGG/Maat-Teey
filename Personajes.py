@@ -470,7 +470,8 @@ class Personaje(Individuo):
                                                                  objeto.nombre)
             cantidad_seleccionado_indice = self.ubicacion.objetos[zona].index(
                                                                  objeto.nombre)
-            self.ubicacion.cantidades[zona][cantidad_seleccionado_indice] -= 1
+            self.ubicacion.cantidades_objetos[zona][
+                                            cantidad_seleccionado_indice] -= 1
             objeto = objetos[zona][objeto_seleccionado_indice]
             if(objeto.nombre == "Cartucho de magnum"):
                 for bala in range(0, 16):
@@ -484,14 +485,14 @@ class Personaje(Individuo):
 #              print(self.ubicacion.cantidades_objetos_activos()[z][j])
 #              print(self.ubicacion.cantidades_objetos_activos()[z])
 #              print(f"\nFelicidades!! Obtuviste {objeto.nombre}, quedan
-#              {self.ubicacion.cantidades()[z][h]} restantes")
+#              {self.ubicacion.cantidades_objetos[z][h]} restantes")
 # =============================================================================
             indice_nombre = objetos_nombres[zona].index(objeto.nombre)
             objetos_nombres[zona].remove(objeto.nombre)
-            if(self.ubicacion.cantidades[zona][indice_nombre] <= 0):
+            if(self.ubicacion.cantidades_objetos[zona][indice_nombre] <= 0):
                 self.ubicacion.objetos_activos[zona].pop(indice_nombre)
                 self.ubicacion.objetos[zona].pop(indice_nombre)
-                self.ubicacion.cantidades[zona].pop(indice_nombre)
+                self.ubicacion.cantidades_objetos[zona].pop(indice_nombre)
             self.quitar_equipo(objeto)
             
             self.actualizar_stats()
@@ -679,7 +680,6 @@ class Personaje(Individuo):
                        "Telefono con senal infinita", "Linterna",
                        "Casco con linterna"]
         
-        
         if(zona == None):
             lugar = self.ubicacion
             zonas = self.ubicacion.zonas
@@ -794,12 +794,12 @@ class Personaje(Individuo):
                     break
             
             print("Quedan "
-                  + f"{int(lugar.cantidades[indice_zona][indice_objeto])-1}"
+                  + f"{int(lugar.cantidades_objetos[indice_zona][indice_objeto])-1}"
                   + f" {objeto.nombre}s")
             
             if(self.ubicacion != lugar):
-                lugar.cantidades[indice_zona][indice_objeto] -= 1
-                if(lugar.cantidades[indice_zona][indice_objeto] <= 0):
+                lugar.cantidades_objetos[indice_zona][indice_objeto] -= 1
+                if(lugar.cantidades_objetos[indice_zona][indice_objeto] <= 0):
                     lugar.objetos_activos[indice_zona].pop(indice)
                 gm.anadir_obj_manual(objeto.nombre, self)
                 return True
@@ -1217,7 +1217,7 @@ class Personaje(Individuo):
         self.ubicacion.objetos_activos[zona].append(objeto)
 #        self.ubicacion.cantidades_objetos_activos[z].append(1)
         self.ubicacion.objetos[zona].append(objeto.nombre)
-        self.ubicacion.cantidades[zona].append(1)
+        self.ubicacion.cantidades_objetos[zona].append(1)
         
         if(self != gm.personaje_malo):
             for objeto_inventario in self.inventario:
@@ -1226,25 +1226,26 @@ class Personaje(Individuo):
                         zona]):
                     self.ubicacion.objetos[zona].append(
                         objeto_inventario.nombre)
-                    self.ubicacion.cantidades[zona].append(1)
+                    self.ubicacion.cantidades_objetos[zona].append(1)
                 else:
                     indice = self.ubicacion.objetos[zona].index(
                         objeto_inventario.nombre)
-                    self.ubicacion.cantidades[zona][indice] += 1
+                    self.ubicacion.cantidades_objetos[zona][indice] += 1
             self.inventario = []
             self.inventario_nombres = []
             for equipo in self.equipo:
                 self.ubicacion.objetos_activos[zona].append(equipo)
                 if(equipo.nombre not in self.ubicacion.objetos[zona]):
                     self.ubicacion.objetos[zona].append(equipo.nombre)
-                    self.ubicacion.cantidades[zona].append(1)
+                    self.ubicacion.cantidades_objetos[zona].append(1)
                 else:
                     indice = self.ubicacion.objetos[zona].index(equipo.nombre)
-                    self.ubicacion.cantidades[zona][indice] += 1
+                    self.ubicacion.cantidades_objetos[zona][indice] += 1
             self.equipo = []
             self.equipo_nombres = []
             self.cartera_obj = {}
             self.cartera = 0
+        super().is_ded()
         return True
     
     def liberar(self, asistente):
@@ -1536,11 +1537,11 @@ class Personaje(Individuo):
         self.ubicacion.objetos_activos[zona].append(objeto)
         if(objeto.nombre not in self.ubicacion.objetos[zona]):
             self.ubicacion.objetos[zona].append(objeto.nombre)
-            self.ubicacion.cantidades[zona].append(1)
+            self.ubicacion.cantidades_objetos[zona].append(1)
         else:
             indice_objeto_zona = self.ubicacion.objetos[zona].index(
                 objeto.nombre)
-            self.ubicacion.cantidades[zona][indice_objeto_zona] += 1
+            self.ubicacion.cantidades_objetos[zona][indice_objeto_zona] += 1
         
         self.anadir_equipo(objeto, indice)
         
@@ -1848,13 +1849,13 @@ class Personaje(Individuo):
                         objeto_inventario)
                     self.ubicacion.objetos[zona].append(
                         objeto_inventario.nombre)
-                    self.ubicacion.cantidades[zona].append(1)
+                    self.ubicacion.cantidades_objetos[zona].append(1)
                 self.inventario = []
                 self.inventario_nombres = []
                 for equipo in self.equipo:
                     self.ubicacion.objetos_activos[zona].append(equipo)
                     self.ubicacion.objetos[zona].append(equipo.nombre)
-                    self.ubicacion.cantidades[zona].append(1)
+                    self.ubicacion.cantidades_objetos[zona].append(1)
                 self.equipo = []
                 self.equipo_nombres = []
                 self.cartera_obj = {}

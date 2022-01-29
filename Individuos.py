@@ -15,13 +15,16 @@ class Individuo:
         self.condicion = condicion
         self.salud_max = salud
         self.carisma_max = carisma
+        self.velocidad = 0
         self.energia_max = 0
         self.energia = self.energia_max
             
     def cambiar_hp(self, hp:int):
         #DEBUG
 #    print("------------------------------------------------Metodo cambiar hp")
-        self.salud += round(hp)
+#        Returnea True si esta muerto y False si esta vivo
+        if(self.salud + hp <= self.salud_max):
+            self.salud += round(hp)
         if(self.salud <= 0):
             print("\n"+self.nombre + " murió, F")
             return self.is_ded()
@@ -92,6 +95,11 @@ class Individuo:
         self.condicion.update({condicion: duracion})
         return True
     
+    def is_ded(self):
+        if(self.salud < 0):
+            self.salud = 0
+        return True
+    
     def stats(self):
         espacio_en_texto = 18-(len(str(int(self.energia_max))))
         espacio_en_texto_2 = 19-(len(str(int(self.salud_max))))
@@ -105,3 +113,15 @@ class Individuo:
         + f"{self.condicion}\n Energia: {int(self.energia)}/"
         + f"{int(self.energia_max):<{espacio_en_texto}}")
         return texto
+    
+    def __str__(self):
+        return self.stats()
+
+# =============================================================================
+fulanito = Individuo(101, 69, 69, 69, 69, 69, "Fulanito", {"Saludable": 1})
+print(fulanito)
+fulanito.cambiar_hp(1)
+print(fulanito)
+fulanito.cambiar_hp(-666)
+print(fulanito)
+# =============================================================================

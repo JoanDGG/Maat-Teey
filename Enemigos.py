@@ -293,13 +293,14 @@ class Enemigo(Individuo):
         lugar.cantidades_enemigos[indice_zona][indice] -= 1
         
         dropeos = self.dropear()
-        
         for dropeo in dropeos:
             indice = lugar.zonas.index(self.zona)
             objeto = gm.transformar_objeto(dropeo)
             lugar.objetos_activos[indice].append(objeto)
             lugar.cantidades[indice].append(1)
             lugar.objetos[indice].append(objeto.nombre)
+        
+        super().is_ded()
         return True
     
     def mover_enemigo(self, zona):

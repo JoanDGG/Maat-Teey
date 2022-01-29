@@ -63,7 +63,26 @@ def main():
     # Logica del juego en fisico
     # Simulacion
         # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
-            
+    # Hacer generales las habilidades
+    
+    # Clases zona
+    # Clases objetos con usar_obj()
+    # Clases habilidades
+    # Clases enemigos
+    # Nuevo sistema de combate
+    # Explorar descrubre y te mueve a nueva zona, nuevo sistema de mapa?
+    # Implementar en Unity
+    # Conexion Python a Unity
+    # 2D
+    # Generalizar a los personajes (clases)
+    # X cantidad de personajes
+    # Malo en modo solo
+    # Habilidades menu personalizable y prefabricadas
+    # Turnos y días (tiempo)
+    # Añadir más acciones
+    # Documentar desde el principio
+    
+
     # ---------------------Implementar:
     # Metodo guardar y cargar
     # Dialogo intenso sala misteriosa
@@ -73,14 +92,14 @@ def main():
         #Cada jugador tiene cuenta de turnos, asi como el servidor
         #El servidor tiene la menor cuenta de turnos. El servidor aumenta de
         #turno cuando sea menor que el turno de todos (+1)
-        
+
     # ------------------------Corregir:
 
 # =============================================================================
 #     Pendientes por probar:
 # =============================================================================
     
-    # Generador de nombres 2000
+    # Generador de nombres 2000 COMPLETADO
     # Juegos.casino es recursivo COMPLETADO
     # Juegos.escalera no se usa en Personajes.moverse() COMPLETADO
     # Error desconocido por ValueError: COMPLETADO

@@ -221,7 +221,7 @@ class Juego:
                 zona = zonas.index(personaje.zona)
                 personaje.ubicacion.objetos[zona].append(objeto.nombre)
                 personaje.ubicacion.objetos_activos[zona].append(objeto)
-                personaje.ubicacion.cantidades[zona].append(10000)
+                personaje.ubicacion.cantidades_objetos[zona].append(10000)
                 personaje.anadir_obj(objeto)
         if(nivel == niv_maquina):
             seleccion = input("Has encontrado la sala de la maquina!! "
@@ -242,7 +242,7 @@ class Juego:
                                           lugar.cantidades_enemigos[indice], 1)
         lugar.enemigos_zona_setter(enemigos, zona)
         lugar.cantidades_enemigos_zona_setter(cantidades, zona)
-        from Enemigos import Enemigo
+#        from Enemigos import Enemigo
         
         enemigos_aux = []
         cantidades_aux = []
@@ -338,7 +338,7 @@ class Juego:
         jefes = []
         lugar_original = gm.lugares_o_originales[
                 gm.objetos_lugares.index(lugar)]
-        from Enemigos import Enemigo
+#        from Enemigos import Enemigo
         
 #        print(lugar.enemigos[indice_zona])
         
@@ -352,7 +352,7 @@ class Juego:
             if(abs(contador) > len(jefes)):
                 break
             if ((gm.Dfnombres_enemigos.iloc[indice_nombre,0] in jefes) 
-                and (lugar_original.cantidades[indice_zona][contador] > 0) 
+                and (lugar_original.cantidades_objetos[indice_zona][contador] > 0) 
                 and (not gm.repetido(lugar, indice_zona, 
                                 gm.Dfnombres_enemigos.iloc[indice_nombre,0]))):
                 nombre = gm.Dfnombres_enemigos.iloc[indice_nombre,0]
@@ -394,15 +394,17 @@ class Juego:
 #        print("---------------------------------------Metodo generar objetos")
         fragmento = Objeto("Fragmento de libro de secretos", 
                            0, "Habilidad", 0, 1, 1, 300)
-        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades()[1][0] > 0):
+        if(lugar == gm.pueblo) and (gm.pueblo_original.cantidades_objetos[
+                                                                    1][0] > 0):
             lugar.objetos_activos[1].append(fragmento)
-        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades()[1][0]>0):
+        elif(lugar == gm.bosque) and (gm.bosque_original.cantidades_objetos[
+                                                                    1][0] > 0):
             lugar.objetos_activos[1].append(fragmento)
         elif((lugar == gm.normancueva) 
-            and (gm.normancueva_original.cantidades()[1][0] > 0)):
+            and (gm.normancueva_original.cantidades_objetos[1][0] > 0)):
             lugar.objetos_activos[1].append(fragmento)
         elif((lugar == gm.fondo_del_mar) 
-            and (gm.fondo_del_mar_original.cantidades()[0][0] > 0)):
+            and (gm.fondo_del_mar_original.cantidades_objetos[0][0] > 0)):
             lugar.objetos_activos[0].append(fragmento)
             
 #        print("-------------------------------------------------------------")
@@ -412,7 +414,7 @@ class Juego:
 
         indice = lugar.zonas.index(zona)
         objetos, cantidades = gm.mezclar_listas(lugar.objetos[indice],
-                                               lugar.cantidades[indice], 1)
+                                           lugar.cantidades_objetos[indice], 1)
         lugar.objetos_zona_setter(objetos, zona)
         lugar.cantidades_objetos_zona_setter(cantidades, zona)
         
@@ -875,7 +877,7 @@ class Juego:
 #        o = gm.transformar_objeto(nombre, 9999)
 #        edificio.objetos_activos[1].append(o)
 #        edificio.objetos[1].append(o.nombre)
-#        edificio.cantidades()[1].append(o.cantidad)
+#        edificio.cantidades_objetos[1].append(o.cantidad)
         gm.anadir_obj_manual(nombre, usuario, 9999)
 #        print("-------------------------------------------------------------")
 
