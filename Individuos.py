@@ -124,4 +124,5 @@ fulanito.cambiar_hp(1)
 print(fulanito)
 fulanito.cambiar_hp(-666)
 print(fulanito)
+fulanito.enfermar()
 # =============================================================================
