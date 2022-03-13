@@ -24,10 +24,11 @@ class Enemigo(Individuo):
         self.energia = self.energia_max
         
     def __str__(self):
+        dropeo_texto = self.dropeo[1:] if self.dropeo[0] == "%" else self.dropeo
         return(super().stats() + f"| Categoria: {self.categoria} \n Rango: "
               + f"{int(self.rango):<20} | Peso: {int(self.peso)} \n "
               + f"Agresividad: {int(self.agresividad):<15} \n Dropeos: "
-              + f"\n {self.dropeo}")
+              + f"\n {dropeo_texto}")
     
     def actualizar_stats(self):
         self.peso = self.resistencia*(self.salud_max/self.salud)
@@ -199,13 +200,14 @@ class Enemigo(Individuo):
         self.condicion.update({"Atacando especial": 1})
         return [p_presentes, dano]
     
-    def cambiar_hp(self, hp:int, atacante: Individuo):
+    def cambiar_hp(self, hp:int):
         #DEBUG
 #    print("------------------------------------------------Metodo cambiar hp")
-        self.salud += round(hp)
+        if(self.salud + hp <= self.salud_max):
+            self.salud += round(hp)
         if(self.salud <= 0):
             print("\n"+self.nombre + " murio, F")
-            return self.is_ded(atacante)
+            return self.is_ded()
         return False
     
     def decidir(self, p_presentes, historial, turnos_aux, defensas):
@@ -282,12 +284,12 @@ class Enemigo(Individuo):
             else:
                 return False
             
-    def is_ded(self, atacante: Individuo):
+    def is_ded(self):
         #DEBUG
 #        print("------------------------------------------------Metodo is_ded")
-        lugar = gm.busca_lugar(atacante.zona)
+        lugar = gm.busca_lugar(self.zona)
         zonas = lugar.zonas
-        indice_zona = zonas.index(atacante.zona)
+        indice_zona = zonas.index(self.zona)
         indice = lugar.enemigos_activos[indice_zona].index(self)
         lugar.enemigos_activos[indice_zona].remove(self)
         lugar.cantidades_enemigos[indice_zona][indice] -= 1
@@ -326,10 +328,10 @@ class Enemigo(Individuo):
             no_faccion_lista = p_presentes.copy()
             for turno in turnos_aux:
                 # Si sus categorias no son iguales
-                #Si es animal y el otro tambien
-                #Si es scp y el otro tambien
-                #si el objetivo no es un jefe
-                #si el objetivo no esta en la lista aun
+                # Si es animal y el otro tambien
+                # Si es scp y el otro tambien
+                # Si el objetivo no es un jefe
+                # Si el objetivo no esta en la lista aun
                 if((turno not in gm.personajes) 
                    and (turno.categoria != self.categoria) 
                    and (((self.categoria == "Animal") 
@@ -341,3 +343,12 @@ class Enemigo(Individuo):
                     no_faccion_lista.append(turno)
                     # animales, scp y no jefes
         return no_faccion_lista
+    
+# =============================================================================
+#compa = Enemigo(15, 14, 13, 10, 11, 15, "Aguila", "Saludable", "%Esencia velocidad II/Esencia sabiduria II", "Animal", 3, 1, "Cabana")
+#print(compa)
+#compa.cambiar_hp(-20)
+#compa.carisma -= 1
+#compa.actualizar_stats()
+#print(compa)
+# =============================================================================

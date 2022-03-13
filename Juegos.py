@@ -11,7 +11,6 @@ class Juego:
     def __init__(self):
         self.funcional = True
         self.peleas_doma = []
-        self.oso_marino = None
     
     def casino(self, personaje, premio = 0):
         print(f"-------- {personaje.nombre}, bienvenido al casino!! -------- "
@@ -325,7 +324,7 @@ class Juego:
                                   dropeos, categoria, rango, cantidad, zona)
                         lugar.enemigos_activos[indice].append(enemigo)
                         if(enemigo.nombre == "Oso marino"):
-                            self.oso_marino = enemigo
+                            gm.oso_marino = enemigo
 #                            print("AAAAAAAAAAAAA")
 #                        e.stats()
                         contador -= 1
@@ -550,7 +549,7 @@ class Juego:
                                          + "\n4: Moverte\n5: Esperar\n"))
                     if(decision == 0):
                         ataque = personaje.atacar(enemigos_vistos, 1.5)
-                        ataque[0].cambiar_hp(-ataque[1], personaje)
+                        ataque[0].cambiar_hp(-ataque[1])
                         if(personaje.sabiduria < e_sabiduria+gm.dados(1, 
                                        (e_sabiduria//2)+1) or jefes_presentes):
                             p_pelea.append(personaje)
@@ -887,7 +886,7 @@ class Juego:
         lista_menu = [["Administrar habilidades", "Curarse", "Esperar", 
                        "Moverse", "Usar habilidad", "Ver status"], 
                      ["Buscar", "Explorar"], 
-                     ["Craftear", "Ver equipo", "Desequipar", "Tirar objeto", 
+                     ["Craftear", "Ver equipo", "Ver asistentes", "Ver in memoriams", "Desequipar", "Tirar objeto", 
                       "Usar objeto"],
                      [],
                      ["Guardar", "Guardar y salir", "Salir"]]
@@ -961,6 +960,12 @@ class Juego:
             personaje.craftear()
         elif(decision == "Ver equipo"):
             personaje.ver_equipo()
+        elif(decision == "Ver asistentes"):
+            for asistente in personaje.asistentes:
+                print(asistente)
+        elif(decision == "Ver in memoriams"):
+            for muerto in personaje.in_memoriam:
+                print(f" {muerto}: '{personaje.in_memoriam[muerto]}' ")
         elif(decision == "Desequipar"):
             personaje.desequipar()
         elif(decision == "Tirar objeto"):
@@ -1330,7 +1335,7 @@ class Juego:
                 if(dano < 0):
                     print(f"{personaje.nombre} recibio {abs(dano)} de dano!\n")
                     defensas[indice_aux] = 0
-                    muerto = personaje.cambiar_hp(dano, enemigo)
+                    muerto = personaje.cambiar_hp(dano)
                     if(muerto):
                         if(personaje in turnos):
                             turnos.pop(indice)
@@ -1414,7 +1419,7 @@ class Juego:
 #                print(defensas)
                 if(dano < 0):
                     defensas[indice_enemigo_aux] = 0
-                    muerto = resultado[0].cambiar_hp(dano, personaje)
+                    muerto = resultado[0].cambiar_hp(dano)
                     print(f"{resultado[0].nombre} recibio {dano} de dano!")
 #                    print(e_presentes)
                     if(muerto):
@@ -1621,7 +1626,7 @@ class Juego:
                     dano = defensas[indice_enemigo_aux] - resultado[1][1]
                     if(dano < 0):
                         defensas[indice_enemigo_aux] = 0
-                        muerto = resultado[1][0].cambiar_hp(dano, personaje)
+                        muerto = resultado[1][0].cambiar_hp(dano)
                         print(f"{resultado[1][0].nombre} recibio {dano} "
                                  +"puntos de dano!")
                         if(muerto):

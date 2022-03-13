@@ -118,11 +118,13 @@ class Individuo:
         return self.stats()
 
 # =============================================================================
-fulanito = Individuo(101, 69, 69, 69, 69, 69, "Fulanito", {"Saludable": 1})
-print(fulanito)
-fulanito.cambiar_hp(1)
-print(fulanito)
-fulanito.cambiar_hp(-666)
-print(fulanito)
-fulanito.enfermar()
+#fulanito = Individuo(101, 65, 66, 67, 68, 69, "Fulanito", {"Saludable": 1})
+#print(fulanito)
+#fulanito.cambiar_hp(1)
+#fulanito.cambiar_hp(-666)
+#fulanito.enfermar("Envenenado III", 1)
+#print(fulanito)
+#fulanito.efecto()
+#print(fulanito.defender())
+#print(fulanito)
 # =============================================================================

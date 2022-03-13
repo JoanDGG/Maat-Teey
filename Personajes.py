@@ -45,6 +45,7 @@ class Personaje(Individuo):
         self.lugar_previo = "Cabana"
         self.asistentes = []
         self.espacio_asistentes = 7
+        self.in_memoriam = {}
     
     def __str__(self):
         texto = (super().stats() + f"| Peso: {self.peso} \n Nivel: "
@@ -905,7 +906,7 @@ class Personaje(Individuo):
             print("Estas solito no hay nadie aqui a tu lado")
             return False
     
-    def cambiar_hp(self, hp:int, atacante:Individuo):
+    def cambiar_hp(self, hp:int):
         #DEBUG
 #    print("------------------------------------------------Metodo cambiar hp")
         self.salud += round(hp)
@@ -1412,16 +1413,17 @@ class Personaje(Individuo):
             else:
 #                Generador de nombres 2000
                 renombrar = True
-        elif(issubclass(asistente, Enemigo)): # Si ya tiene apodo
+        elif(issubclass(type(asistente), Enemigo)): # Si ya tiene apodo
             nombre = asistente.apodo
         print(f"Felicidades! {nombre} se ha unido a tu aventura!!")
-        agresividad_max = (((Juego.oso_marino.carisma 
-                             + Juego.oso_marino.fuerza)
-                             - (Juego.oso_marino.inteligencia 
-                             + Juego.oso_marino.resistencia))+4)
+#        agresividad_max = (((gm.oso_marino.carisma 
+#                             + gm.oso_marino.fuerza)
+#                             - (gm.oso_marino.inteligencia 
+#                             + gm.oso_marino.resistencia))+4)
+        agresividad_max = 11
         suma = (asistente.salud_max + asistente.fuerza + asistente.resistencia
         + asistente.carisma_max + asistente.inteligencia + asistente.sabiduria)
-        boosteo = ((asistente.salud/asistente.salud_maxima 
+        boosteo = int((asistente.salud/asistente.salud_max
                    - asistente.agresividad/agresividad_max) * suma / 4)
         for punto in range(0, boosteo):
             tirada = gm.dados(1, 6)
@@ -1439,17 +1441,18 @@ class Personaje(Individuo):
                 asistente.sabiduria += 1
         
         zona = self.ubicacion.zonas.index(self.zona)
-        self.ubicacion.enemigos_activos[zona].remove(asistente)
-        nuevo_asistente = Asistente(asistente.salud_max, asistente.fuerza,
-                          asistente.resistencia, asistente.carisma_max,
-                          asistente.inteligencia, asistente.sabiduria,
-                          asistente.nombre, asistente.condicion,
-                          asistente.dropeo, asistente.categoria,
-                          asistente.rango, asistente.cantidad,
-                          asistente.zona, self, nombre)
+        if(asistente in self.ubicacion.enemigos_activos[zona]):
+            self.ubicacion.enemigos_activos[zona].remove(asistente)
+            asistente = Asistente(asistente.salud_max, asistente.fuerza,
+                              asistente.resistencia, asistente.carisma_max,
+                              asistente.inteligencia, asistente.sabiduria,
+                              asistente.nombre, asistente.condicion,
+                              asistente.dropeo, asistente.categoria,
+                              asistente.rango, asistente.cantidad,
+                              asistente.zona, self, nombre)
         if(renombrar):
-            nuevo_asistente.bautizo()
-        self.asistentes.append(nuevo_asistente)
+            asistente.bautizo()
+        self.asistentes.append(asistente)
         
         return True
     
@@ -1811,7 +1814,7 @@ class Personaje(Individuo):
                     if(tirada >= 4):
                         dano = 0
                         print("Has fallado tu ataque!")
-                    objetivo.cambiar_hp(-dano, self)
+                    objetivo.cambiar_hp(-dano)
                     indice = self.inventario_nombres.index("Bala de sniper")
                     self.anadir_equipo(self.inventario[indice], indice)
             else:
@@ -2209,3 +2212,15 @@ class Personaje(Individuo):
 
 from Juegos import Juego
 import Game_Manager as gm
+
+# =============================================================================
+mirek = Personaje(27, 14, 13, 15, 16, 18, "Mirek", {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1, gm.mapa_mirek, 0, 10, gm.arbol_mirek)
+compa = Asistente(15, 14, 13, 10, 11, 15, "Aguila", "Saludable", "%Esencia velocidad II/Esencia sabiduria II", "Animal", 3, 1, "Cabana", mirek, "El compa")
+#mirek.reclutar(compa)
+#print(mirek)
+#print(compa)
+#compa.cambiar_hp(-690, mirek)
+#print(compa)
+compa.bautizo()
+print(compa)
+# =============================================================================

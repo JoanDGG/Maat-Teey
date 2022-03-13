@@ -422,6 +422,8 @@ mochilas = ["Mochila", "Mochila campista",
          
 zonas_agua = ["Profundidades", "Mar"]
 
+oso_marino = None
+
 def anadir_obj_manual(nombre, personaje, cantidad = None):
 
     indice = personaje.ubicacion.zonas.index(personaje.zona)    

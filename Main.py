@@ -47,10 +47,30 @@ def main():
         if(type(res) != list):
             fin = True
     
+    
 # =============================================================================
 # PENDIENTES:
 # =============================================================================
-
+    # --------------------NUEVA VERSION:
+    # Clases zona
+    # Clases objetos con usar_obj()
+    # Clases habilidades
+    # Clases enemigos
+    # Enemigo con historial de atacantes con límite de espacio
+    # Añadir cementerio (in_memoriam)
+    # Nuevo sistema de combate
+    # Explorar descrubre y te mueve a nueva zona, nuevo sistema de mapa?
+    # Implementar en Unity
+    # Conexion Python a Unity
+    # 2D
+    # Generalizar a los personajes (clases)
+    # X cantidad de personajes
+    # Malo en modo solo
+    # Habilidades menu personalizable y prefabricadas
+    # Turnos y días (tiempo)
+    # Añadir más acciones
+    # Documentar desde el principio
+    
     # -----------------------Generales:
     # Anadir funciones
     # Reducir funciones
@@ -65,24 +85,6 @@ def main():
         # Checar estadisticas enemigos/boosteo de objetos/cantidad de objetos
     # Hacer generales las habilidades
     
-    # Clases zona
-    # Clases objetos con usar_obj()
-    # Clases habilidades
-    # Clases enemigos
-    # Nuevo sistema de combate
-    # Explorar descrubre y te mueve a nueva zona, nuevo sistema de mapa?
-    # Implementar en Unity
-    # Conexion Python a Unity
-    # 2D
-    # Generalizar a los personajes (clases)
-    # X cantidad de personajes
-    # Malo en modo solo
-    # Habilidades menu personalizable y prefabricadas
-    # Turnos y días (tiempo)
-    # Añadir más acciones
-    # Documentar desde el principio
-    
-
     # ---------------------Implementar:
     # Metodo guardar y cargar
     # Dialogo intenso sala misteriosa

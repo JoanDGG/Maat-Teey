@@ -57,7 +57,8 @@ class Lugar:
         return texto
 
 # =============================================================================
-#lug = Lugar("A", ["zona a", "zona b"], ["ea ", "eb"], [69, 96], ["oa", "ob"], [101, 1010], [[], []], [[], []])
+#lug = Lugar("A", ["zona a", "zona b"], ["ea ", "eb"], [69, 96], ["oa", "ob"], 
+# [101, 1010], [[], []], [[], []])
 #print(lug)
 #lug.enemigos_zona_setter(["uwu", "lol"], "zona a")
 #print(lug.enemigos[lug.indice_zona("zona a")])
