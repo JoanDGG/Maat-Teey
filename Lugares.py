@@ -37,8 +37,30 @@ class Lugar:
         texto += "\n Zonas:\n"
         texto += ", ".join(self.zonas)
         texto += "\n Jaulas:\n"
-        jaulas = [[self.jaulas[jaula][jaula_enemigo].nombre 
-                   for jaula_enemigo in jaula] for jaula in self.jaulas]
+        
+        jaulas = []
+        contador_jaulas = 0
+        contador_self_jaulas = 0
+        for jaula in self.jaulas:
+            jaulas.append([])
+            for jaula_enemigo in jaula:
+                for enemigo in jaula[jaula_enemigo]:
+                    if(jaula[jaula_enemigo][enemigo] != ""):
+                        jaulas[contador_jaulas].append(f"{jaula_enemigo}: "
+                                          + f"{jaula[jaula_enemigo][enemigo]}")
+                    else:
+                        jaulas[contador_jaulas].append(f"{jaula_enemigo}: vacio")
+                contador_self_jaulas += 1
+            contador_jaulas += 1
+        
+#        jaulas = [[self.jaulas[jaula][jaula_enemigo].nombre 
+#                   for jaula_enemigo in jaula] for jaula in self.jaulas]
+        
+#        for zona in range(0, len(self.zonas)):
+#            print(f"jaulas zona {jaulas[zona]}")
+#            lista_jaulas_zona = ", ".join(jaulas[zona])
+#            texto += " | ".join(lista_jaulas_zona)
+        
         texto += " | ".join([", ".join(jaulas[zona]) 
                                         for zona in range(0, len(self.zonas))])
         texto += "\n Enemigos activos:\n"

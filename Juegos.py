@@ -15,14 +15,14 @@ class Juego:
     def casino(self, personaje, premio = 0):
         print(f"-------- {personaje.nombre}, bienvenido al casino!! -------- "
               + f"Premio actual: {premio}")
-        print("¿Que quieres hacer?")
+        print("¿Que quieres hacer?\n")
         seleccion =int(input("1: Jugar una ronda\n2: Ver premios\n3: Salir\n"))
         if(premio <= -500):
             seleccion = 3
         if(seleccion == 1):
             apuesta = int(input("\n----- A jugar! ----- "
                                 + f"Premio actual: {premio}"
-                                + "\n¿Cuánto deseas apostar?"))
+                                + "\n¿Cuánto deseas apostar?\n"))
             print(f" Saldo: {personaje.cartera}\n")
             premio -= apuesta    
             
@@ -69,9 +69,18 @@ class Juego:
             mult_final = 0
             if(max(mult) >= 3):
                 mult_final = mult.index(max(mult))+1
+                
+            # premio_base = suma de numeros en hilera de en medio
+            # mult_final = numero mas repetido (si el numero es >= 3)
+            # max(mult) = cantidad que se repite el numero mas repetido
             premio_actual = premio_base * mult_final * max(mult)
-            print(f"Ganaste {premio_actual} puntos!!")
             
+            if(premio_actual == 625):
+                print(". . .")
+                gm.anadir_obj_manual("Padalustro", personaje)
+                return True
+            
+            print(f"Ganaste {premio_actual} puntos!!")
             # calculo automatico de dineros
             rangos = [0, 1, 22, 46, 190, 335, 480]
             multi = [0, 1, 2, 4, 6, 8, 10]
@@ -88,7 +97,7 @@ class Juego:
                 premio += bonificacion * apuesta
         elif(seleccion == 2):
             print(f"\n----- Premios ----- Premio actual: {premio}"
-                  + "\n 481 - 625 puntos: apuesta x 10 (PREMIO MAXIMO!!!!!!!)"
+                  + "\n 481 - 625 puntos: PREMIO MAXIMO!!!!!!!"
                   + "\n 336 - 480 puntos: apuesta x 8"
                   + "\n 191 - 335 puntos: apuesta x 6"
                   + "\n 46 - 190  puntos: apuesta x 4"
@@ -716,7 +725,7 @@ class Juego:
             
             # Calcular si algun enemigo cae en trampa
             if(jaulas_activas != []):
-                for enemigo in lugar_visto.enemgios_activos()[zona]:
+                for enemigo in lugar_visto.enemigos_activos[zona]:
                     for trampa in jaulas_activas:
                         if((trampa.nombre == "Trampa de osos") 
                         and (enemigo in gm.atrapables_trampa_osos)):
@@ -991,11 +1000,11 @@ class Juego:
                         print(str(contador + 1) + f", \t{llave:.<24s}: " 
                               + str(personaje.cartera_obj[llave]) + " | \t\t" 
                               + personaje.inventario[
-                                self.inventario_nombres.index(
-                                llave)].estadistica + " | \t" 
-                              + personaje.inventario[
                                 personaje.inventario_nombres.index(
-                                        llave)].boosteo)
+                                llave)].estadistica + " | \t" 
+                              + str(personaje.inventario[
+                                personaje.inventario_nombres.index(
+                                        llave)].boosteo))
                         contador += 1
                 
                 indice_objeto = int(input())-1
@@ -1007,7 +1016,7 @@ class Juego:
                 objeto = personaje.inventario[
                         personaje.inventario_nombres.index(llave)]
                 
-                personaje.usar_objeto(objeto)
+                personaje.usar_objeto(objeto = objeto)
         elif(decision == "Apostar"):
             self.casino(personaje)
         elif(decision == "Comprar"):
@@ -1652,7 +1661,8 @@ class Juego:
                 turnos.pop(indice)
         return p_presentes, e_presentes, defensas, turnos, omitidos, historial
 
-#lugar = Lugar("A", [], [3], [], [], [], [], [])
-#print(lugar.enemigos)
-juego = Juego()
-#juego.jugar()
+# =============================================================================
+#juego = Juego()
+#print(juego)
+#juego.casino()
+# =============================================================================

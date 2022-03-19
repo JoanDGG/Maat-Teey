@@ -424,29 +424,36 @@ zonas_agua = ["Profundidades", "Mar"]
 
 oso_marino = None
 
-def anadir_obj_manual(nombre, personaje, cantidad = None):
+def anadir_obj_manual(nombre, personaje, cantidad = 1):
 
+    if(cantidad <= 0):
+        return False
+    
     indice = personaje.ubicacion.zonas.index(personaje.zona)    
-    if("sabia" in nombre):
-        boosteo = sabiduria_del_mas_alla[dados(1, 
-                                                len(sabiduria_del_mas_alla))-1]
-        nombre = "Nota de consejo"
-        objeto = transformar_objeto(nombre, cantidad)
-        objeto.boosteo = boosteo
-    else:
-        objeto = transformar_objeto(nombre, cantidad)
     
-    if(objeto.nombre == "Nota de consejo" and "sabia" not in objeto.nombre):
-        objeto.boosteo = consejos[dados(1, len(consejos))-1]
+    for indice_cantidad in range(0, cantidad):
+        if("sabia" in nombre):
+            boosteo = sabiduria_del_mas_alla[dados(1, 
+                                                    len(sabiduria_del_mas_alla))-1]
+            nombre = "Nota de consejo"
+            objeto = transformar_objeto(nombre)
+            objeto.boosteo = boosteo
+        else:
+            objeto = transformar_objeto(nombre)
+        
+        if(objeto.nombre == "Nota de consejo" and "sabia" not in objeto.nombre):
+            objeto.boosteo = consejos[dados(1, len(consejos))-1]
+        
+        personaje.ubicacion.objetos_activos[indice].append(objeto)
+        personaje.ubicacion.cantidades_objetos[indice].append(1)
+        personaje.ubicacion.objetos[indice].append(objeto.nombre)
+        personaje.anadir_obj(objeto)
     
-    personaje.ubicacion.objetos_activos[indice].append(objeto)
-    personaje.ubicacion.cantidades_objetos[indice].append(1)
-    personaje.ubicacion.objetos[indice].append(objeto.nombre)
-    personaje.anadir_obj(objeto)
     return True
 
 def busca_lugar(zona: str):
     # Sacar lugar a partir de zona
+    lugar = None
     for lugar_original in range(0, len(objetos_lugares)):
             if(zona in objetos_lugares[lugar_original].zonas):
                 lugar = objetos_lugares[lugar_original]
@@ -456,9 +463,7 @@ def busca_lugar(zona: str):
 def dados(cantidad_dados: int, cantidad_caras: int):
     #DEBUG
 #    print("-----------------------------------------------------Metodo dados")
-    if(cantidad_dados == 0):
-        return 1
-    if(cantidad_caras == 1):
+    if(cantidad_dados == 0 or cantidad_caras == 1):
         return 1
     tiradas = []
     for indice in range (0, cantidad_dados):
@@ -466,11 +471,6 @@ def dados(cantidad_dados: int, cantidad_caras: int):
     if(cantidad_dados == 1):
         return tiradas[0]
     return tiradas
-
-def eliminar(lista):
-    for elemento in lista:
-        del(elemento)
-    return True
 
 def generar_carneables():
     categorias_si = ["Animal", "Monstruo", "Zombie"]
@@ -500,7 +500,17 @@ def jamon():
     print("JAMON")
 
 def queso():
-    print("Queso")
+    print("QUESO")
+    
+def pan():
+    print("PAN")
+    
+def sandwich():
+    pan()
+    queso()
+    jamon()
+    pan()
+    print("\t\t\t sandwich :)")
 
 def malo():
     personaje_malo = personajes[dados(1, len(personajes))-1]
@@ -542,9 +552,9 @@ def mezclar_listas(lista1, lista2, tipo):
 
     return (lista3,lista4)
 
-def repetido(lugar, zona:int, jefe:str):
+def repetido(lugar, zona:int, nombre_jefe:str):
     for enemigo in lugar.enemigos_activos[zona]:
-        if(enemigo.nombre == jefe):
+        if(enemigo.nombre == nombre_jefe):
             return True
     return False
 
@@ -842,3 +852,13 @@ personajes = []
 personajes_muertos = []
 
 #personaje_malo = malo()
+
+# =============================================================================
+#print(busca_lugar("Casa ogro"))
+#print(dados(0, 2))
+#generar_carneables()
+#fondo_del_mar_original = generar_lugar("Fondo del mar", ["Submarino", "Mar", 
+#                                                             "Profundidades"])
+#sandwich()
+#print(revisar_string("a/b/c/d"))
+# =============================================================================

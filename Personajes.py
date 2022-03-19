@@ -502,7 +502,7 @@ class Personaje(Individuo):
         else:
             print(f"Has encontrado {objeto} dineros en el suelo!!")
             self.cartera += objeto
-        print(self)
+#        print(self)
         return True
         
     def arbol_habilidades(self):
@@ -1340,8 +1340,8 @@ class Personaje(Individuo):
             zonas = ubicacion_adyacente.zonas
             indice_zona = zonas.index(zona_adyacente)
             if(zona_adyacente not in zonas_vistas):
-                gm.eliminar(ubicacion_adyacente.enemigos_activos[indice_zona])
-                gm.eliminar(ubicacion_adyacente.objetos_activos[indice_zona])
+                del (ubicacion_adyacente.enemigos_activos[indice_zona][:])
+                del (ubicacion_adyacente.objetos_activos[indice_zona][:])
                 ubicacion_adyacente.enemigos_activos[indice_zona] = []
                 ubicacion_adyacente.objetos_activos[indice_zona] = []
 #                print(f"enemigos y objetos eliminados de: {zona_adyacente}")
@@ -1625,8 +1625,8 @@ class Personaje(Individuo):
             print("Pues no tienes eso shavo")
             return False
         
-        for nombre in range(0, len(gm.Dfnombres_o)):
-            if(gm.Dfnombres_o.iloc[nombre,0] == objeto.nombre):
+        for nombre in range(0, len(gm.Dfnombres_objetos)):
+            if(gm.Dfnombres_objetos.iloc[nombre,0] == objeto.nombre):
                 break
             
         zonas = self.ubicacion.zonas
@@ -2214,13 +2214,16 @@ from Juegos import Juego
 import Game_Manager as gm
 
 # =============================================================================
-mirek = Personaje(27, 14, 13, 15, 16, 18, "Mirek", {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1, gm.mapa_mirek, 0, 10, gm.arbol_mirek)
-compa = Asistente(15, 14, 13, 10, 11, 15, "Aguila", "Saludable", "%Esencia velocidad II/Esencia sabiduria II", "Animal", 3, 1, "Cabana", mirek, "El compa")
+#mirek = Personaje(27, 14, 13, 15, 16, 18, "Mirek", {"Saludable": 1}, 20, [], gm.campamento, "Cabana", 1, gm.mapa_mirek, 0, 10, gm.arbol_mirek)
+#compa = Asistente(15, 14, 13, 10, 11, 15, "Aguila", "Saludable", "%Esencia velocidad II/Esencia sabiduria II", "Animal", 3, 1, "Cabana", mirek, "El compa")
 #mirek.reclutar(compa)
 #print(mirek)
 #print(compa)
 #compa.cambiar_hp(-690, mirek)
 #print(compa)
-compa.bautizo()
-print(compa)
+#compa.bautizo()
+#print(compa)
+
+#gm.anadir_obj_manual("Tenedor", mirek, 3)
+#print(mirek)
 # =============================================================================

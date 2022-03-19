@@ -24,18 +24,24 @@ def main():
                            69, [], gm.pueblo, "Ayuntamiento", 69, gm.mapa_master,
                            666, 420, gm.arbol_norman)
     gm.ninja   = Personaje(420, 69, 69, 69, 69, 69, "Tu segundo dios",
-                           {"Saludable": 1}, 69, [], gm.edificio, "Entrada",
+                           {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
                            69, gm.mapa_master, 666, 420, gm.arbol_norman)
+    
+    gm.anadir_obj_manual("Jaula", gm.ninja, 1)
     
 #    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman]
 #    gm.personajes = [gm.master, gm.ninja]
-#    gm.personajes = [gm.ninja]
-    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, 
-                     gm.master, gm.ninja]
-    gm.personaje_malo = gm.malo()
-    #print(gm.personaje_malo)
+    gm.personajes = [gm.ninja]
+#    gm.personajes = [gm.mirek, gm.bugatti, gm.ruben, gm.sebas, gm.norman, 
+#                     gm.master, gm.ninja]
+#    gm.personaje_malo = gm.malo()
+#    print(gm.personaje_malo)
     
     partida = Juego()
+    
+#    partida.casino(gm.mirek)
+#    for i in range(0, 10000):
+#        partida.casino(gm.mirek)
     
     partida.generar_objetos_zona(gm.campamento, "Cabana")
     partida.generar_objetos_zona(gm.campamento, "Comedor")
