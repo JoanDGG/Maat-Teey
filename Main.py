@@ -20,9 +20,9 @@ def main():
                            15, [], gm.campamento, "Cabana", 1, gm.mapa_norman, 
                            0, 10, gm.arbol_norman)
     
-    gm.master  = Personaje(420, 5, 69, 69, 69, 69, "Tu dios", {"Saludable": 1},
-                           69, [], gm.pueblo, "Ayuntamiento", 69, gm.mapa_master,
-                           666, 420, gm.arbol_norman)
+    gm.master  = Personaje(420, 5, 69, 69, 69, 69, "Tu dios", 
+                           {"Saludable": 1}, 69, [], gm.pueblo, "Ayuntamiento",
+                           69, gm.mapa_master, 666, 420, gm.arbol_norman)
     gm.ninja   = Personaje(420, 69, 69, 69, 69, 69, "Tu segundo dios",
                            {"Saludable": 1}, 69, [], gm.bosque, "Aire libre",
                            69, gm.mapa_master, 666, 420, gm.arbol_norman)
